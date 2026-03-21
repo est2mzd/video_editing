@@ -1,0 +1,18 @@
+[submodule "third_party/VACE"]
+	path = third_party/VACE
+	url = https://github.com/ali-vilab/VACE.git
+[submodule "third_party/sam2"]
+	path = third_party/sam2
+	url = https://github.com/facebookresearch/sam2.git
+[submodule "third_party/segment-anything"]
+	path = third_party/segment-anything
+	url = https://github.com/facebookresearch/segment-anything.git
+[submodule "third_party/GroundingDINO"]
+	path = third_party/GroundingDINO
+	url = https://github.com/IDEA-Research/GroundingDINO.git
+[submodule "third_party/recognize-anything"]
+	path = third_party/recognize-anything
+	url = https://github.com/xinyu1205/recognize-anything.git
+[submodule "third_party/RAFT"]
+	path = third_party/RAFT
+	url = https://github.com/martin-chobanyan-sdc/RAFT.git
