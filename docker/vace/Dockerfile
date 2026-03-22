@@ -144,6 +144,13 @@ RUN python3 -m pip install \
     supervision \
     addict yapf pyarrow
 
+# Codexのインストール（修正版）
+RUN apt update && \
+    apt install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt install -y nodejs && \
+    npm install -g @openai/codex
+
 ENV LD_LIBRARY_PATH=/usr/local/lib/python3.10/dist-packages/torch/lib:$LD_LIBRARY_PATH
 ENV PYTHONPATH=/workspace/third_party/VACE:$PYTHONPATH
 ENV PYTHONPATH=/workspace/third_party/GroundingDINO:$PYTHONPATH
