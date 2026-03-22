@@ -1,0 +1,15 @@
+{
+    "git.ignoreLimitWarning": true,
+    "python.analysis.extraPaths": [
+        "/workspace/src",
+        "/workspace/third_party/GroundingDINO",
+        "/workspace/third_party/RAFT",
+        "/workspace/third_party/recognize-anything",
+        "/workspace/third_party/sam2",
+        "/workspace/third_party/segment-anything",
+        "/workspace/third_party/VACE",
+        "/workspace/third_party/Wan2.1",
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda"
+}
