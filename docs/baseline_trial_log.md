@@ -9,7 +9,7 @@
 
 ## Trial 002 - parquet エンジン導入
 - Time: 2026-03-22
-- Command: `/usr/bin/python3 -m pip install pyarrow`
+- Command: `bash scripts/download_pyarrow_system.sh`
 - Result: 成功
 - Installed: `pyarrow-23.0.1`
 - Next: parquet の列構造を再確認し、`scripts/run.sh` 実行経路に接続
@@ -134,7 +134,7 @@
 
 ## Trial 016 - 本番Pythonへ pyarrow 導入
 - Time: 2026-03-22
-- Command: `/usr/bin/python3 -m pip install pyarrow`
+- Command: `bash scripts/download_pyarrow_system.sh`
 - Result: 成功
 - Installed: `pyarrow-23.0.1`
 
@@ -323,7 +323,7 @@
 ## Trial 031 - VACEモデルの実ダウンロード
 - Time: 2026-03-22
 - Source: Hugging Face `ali-vilab/VACE-Wan2.1-1.3B-Preview`
-- Command: `/usr/bin/python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='ali-vilab/VACE-Wan2.1-1.3B-Preview', local_dir='third_party/VACE/models/VACE-Wan2.1-1.3B-Preview', local_dir_use_symlinks=False)"`
+- Command: `bash scripts/download_vace_wan21_13b_preview.sh`
 - Result: 成功
 - Output dir: `third_party/VACE/models/VACE-Wan2.1-1.3B-Preview`
 - Download size(log): 約 `19.0GB`
@@ -584,7 +584,7 @@ model_path        = ./third_party/VACE/models/VACE-Wan2.1-1.3B-Preview  (実在)
 - `configs/base.yaml` の `model_path` を実在する VACE モデルへ更新済み
 	- 取得元: Hugging Face `ali-vilab/VACE-Wan2.1-1.3B-Preview`
 	- 保存先: `third_party/VACE/models/VACE-Wan2.1-1.3B-Preview`
-	- ダウンロード方法: `/usr/bin/python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='ali-vilab/VACE-Wan2.1-1.3B-Preview', local_dir='third_party/VACE/models/VACE-Wan2.1-1.3B-Preview', local_dir_use_symlinks=False)"`（Trial 031 で実施）
+	- ダウンロード方法: `bash scripts/download_vace_wan21_13b_preview.sh`（Trial 031 で実施）
 	- 背景意図: ダミーパス依存を排除し、実推論へ遷移するため
 - `scripts/run.sh` で parquet 入力から zip 提出（`<id>.mp4`）を作る経路は実装済み
 	- ただし重要: これは「提出フォーマットを満たす」ための経路であり、編集品質を担保するものではない
