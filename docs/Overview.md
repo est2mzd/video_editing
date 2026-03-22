@@ -1,0 +1,76 @@
+https://www.codabench.org/competitions/14065/#/pages-tab
+
+https://xiangbogaobarry.github.io/GIVE-CVPR-VGBE-2026/
+
+Text-conditioned General Video Editing. Please download the dataset from GIVE-Challenge-Dataset
+
+This challenge is jointly organized by Texas A&M University, Visko Platform, and Abaka AI.
+
+Important Dates
+2026.02.20: Release of Validation Data (Video + editing prompt); validation submission opens.
+2026.03.25: Submission deadline.
+2026.04.03: Technical report deadline for eligibility for the innovation award.
+2026.04.06: Competition results released to participants.
+
+Challenge Overview
+The 1st Workshop on Video Generative Models: Benchmarks and Evaluation (VGBE) will be held in June 2026 in conjunction with CVPR 2026.
+
+Recent advances in video generative models, such as Sora, Veo, and Wan, have demonstrated an unprecedented ability to generate high-fidelity, visually stunning content from simple text prompts. As these models move from pure generation toward practical creative workflows, the focus is shifting to video editing. This transition is crucial because real-world applications—ranging from film production to robotics simulation—require granular control and creative iteration. Editing allows for the refinement of specific elements, like swapping a character's outfit or changing the weather.
+
+However, precise video editing remains a significant challenge due to the strict requirements of video quality, temporal consistency and exclusivity of edit. Unlike static image editing, a video edit must remain perfectly stable across time to avoid "flickering" or "drifting" pixels. Furthermore, ensuring a model modifies only the intended content—such as changing a car's color without altering the background or lighting—requires a deep semantic understanding of 3D geometry and physical interactions. Achieving this level of robust, instruction-driven control while maintaining visual realism is very challenging.
+
+Hosting this challenge accelerates the development of video models that can move beyond simple generation toward precise, instruction-based controllability. It provides a standardized benchmark to evaluate how effectively these systems can maintain temporal consistency and spatial exclusivity in diverse, real-world editing scenarios.
+
+The top ranked participants will be awarded and invited to describe their solution to the associated VGBE workshop at CVPR 2026.
+The results of the challenge will be published at VGBE 2026 workshop (CVPR Proceedings).
+
+
+Task Definition
+Task: Text-conditioned General Video Editing
+
+Given an Original Image and an Editing Text Prompt the model must generate a video that:
+
+Instruction Following: Does the edited video accurately reflect the semantic intent of the instruction?
+Rendering Quality: Is the edited video temporally consistent and visually realistic?
+Exclusivity of Edit: Has the model modified only the intended content without introducing unnecessary changes?
+Output Specifications
+To ensure fairness and standardized evaluation, all submissions must adhere to the following technical constraints:
+
+Frame: The generated video sequence must have strictly the same number of frames as the original video.
+Resolution: Minimum: 480p (e.g., 854×480).
+Recommended: 720p (e.g., 1280×720) or higher for optimal evaluation of fine-grained details.
+Aspect Ratio: The output video must preserve the aspect ratio of the input video. Cropping or distorting the input aspect ratio will result in great score deduction.
+Recommended Baselines / Architectures
+We encourage participants to explore or build upon recent efficient architectures, such as:
+
+PISCO : Precise Video Instance Insertion with Sparse Control
+VACE: All-in-One Video Creation and Editing
+Any closed-source or open-source model / pipeline is welcome.
+
+
+Evaluation
+The evaluation process consists of two primary components to ensure both technical excellence and practical utility:
+
+Automated Evaluation (VBench): We utilize VBench to provide an objective assessment of video quality, focusing on technical metrics and perceptual fidelity.
+Human Evaluation: Following the April 20 submission deadline, a panel of experts will score each entry across three key dimensions:
+Instruction Following: Does the edited video accurately reflect the semantic intent of the text prompt?
+Rendering Quality: Is the video temporally consistent and visually realistic?
+Exclusivity of Edit: Did the model modify only the intended content without introducing artifacts or unnecessary changes?
+Human Evaluation Score: Calculated as the average of the three dimensions above. Detailed scoring rubrics will be released at a later date.
+
+Final Score Calculation
+To balance objective performance with human-centric quality, the final ranking is determined by: Final Score=0.2×VBench Score+0.8×Human Evaluation Score
+
+
+Awards
+We have established a total prize pool of $1,000 USD. The tentative distribution is as follows:
+
+Highest Score Award (Champion): $500 USD + Award Certificate
+
+Innovation Award: $500 USD + Award Certificate
+	This award recognizes technically novel, methodologically inspiring, or practically impactful contributions. A technical report is required to be eligible.
+
+
+Issues & Contact
+Technical Discussions: Please utilize the community forum on the official challenge page.
+Inquiries: For specific questions, contact the organizing committee at tcve-cvpr-2026@googlegroups.com.
