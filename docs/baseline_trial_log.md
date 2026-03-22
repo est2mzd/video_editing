@@ -66,7 +66,7 @@
 	- `[RESULT]` が返却
 	- `logs/<exp_id>/output.mp4` 生成
 - Note:
-	- 警告: `Model not found ... fallback=identity`
+	- 警告: `Model not found: third_party/VACE/checkpoints/model.pth, fallback=identity`
 	- 現在のベースラインは「入力動画をそのまま出力」
 
 ## Trial 009 - 作業ルール更新（随時ログ追記）
@@ -123,7 +123,7 @@
 
 ## Trial 015 - 本番Python実行で parquet エンジン不足
 - Time: 2026-03-22
-- Command: `bash scripts/run.sh ... data/default/train/0000.parquet ...`
+- Command: `bash scripts/run.sh configs/base.yaml data/default/train/0000.parquet "Make the scene more rainy" data/work/submission_0000.parquet`
 - Runtime: `/usr/bin/python3`
 - Result: 失敗
 - Error:
@@ -323,7 +323,7 @@
 ## Trial 031 - VACEモデルの実ダウンロード
 - Time: 2026-03-22
 - Source: Hugging Face `ali-vilab/VACE-Wan2.1-1.3B-Preview`
-- Command: `huggingface_hub.snapshot_download(...)`
+- Command: `/usr/bin/python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='ali-vilab/VACE-Wan2.1-1.3B-Preview', local_dir='third_party/VACE/models/VACE-Wan2.1-1.3B-Preview', local_dir_use_symlinks=False)"`
 - Result: 成功
 - Output dir: `third_party/VACE/models/VACE-Wan2.1-1.3B-Preview`
 - Download size(log): 約 `19.0GB`
@@ -584,7 +584,7 @@ model_path        = ./third_party/VACE/models/VACE-Wan2.1-1.3B-Preview  (実在)
 - `configs/base.yaml` の `model_path` を実在する VACE モデルへ更新済み
 	- 取得元: Hugging Face `ali-vilab/VACE-Wan2.1-1.3B-Preview`
 	- 保存先: `third_party/VACE/models/VACE-Wan2.1-1.3B-Preview`
-	- ダウンロード方法: `huggingface_hub.snapshot_download(...)`（Trial 031 で実施）
+	- ダウンロード方法: `/usr/bin/python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='ali-vilab/VACE-Wan2.1-1.3B-Preview', local_dir='third_party/VACE/models/VACE-Wan2.1-1.3B-Preview', local_dir_use_symlinks=False)"`（Trial 031 で実施）
 	- 背景意図: ダミーパス依存を排除し、実推論へ遷移するため
 - `scripts/run.sh` で parquet 入力から zip 提出（`<id>.mp4`）を作る経路は実装済み
 	- ただし重要: これは「提出フォーマットを満たす」ための経路であり、編集品質を担保するものではない
@@ -667,11 +667,11 @@ model_path        = ./third_party/VACE/models/VACE-Wan2.1-1.3B-Preview  (実在)
 	- `bash scripts/run.sh configs/base.yaml data/default/train/videos "Use instruction set" data/work/submission_vace_from_videos.zip`
 - Result: 失敗（即停止）
 - Error:
-	- `FileNotFoundError: ... third_party/VACE/models/VACE-Wan2.1-1.3B-Preview/models_t5_umt5-xxl-enc-bf16.pth`
+	- `FileNotFoundError: third_party/VACE/models/VACE-Wan2.1-1.3B-Preview/models_t5_umt5-xxl-enc-bf16.pth`
 - Analysis:
 	- `cwd=third_party/VACE` で実行しているため、`--ckpt_dir` の相対パス解決が二重化
 - Action:
-	- `vace_ckpt_dir = Path(...).resolve()` に修正
+	- `vace_ckpt_dir = Path(config["model"]["model_path"]).resolve()` に修正
 
 ## Trial 042 - strict実行 100本（v2）失敗
 - Time: 2026-03-22
@@ -679,7 +679,7 @@ model_path        = ./third_party/VACE/models/VACE-Wan2.1-1.3B-Preview  (実在)
 	- `bash scripts/run.sh configs/base.yaml data/default/train/videos "Use instruction set" data/work/submission_vace_from_videos_v2.zip`
 - Result: 失敗（即停止）
 - Error:
-	- `RuntimeError: Error reading data/default/train/videos/0.mp4...`
+	- `RuntimeError: Error reading data/default/train/videos/0.mp4`
 - Analysis:
 	- `--src_video` / `--save_dir` / `--save_file` も相対パスで、`cwd=third_party/VACE` 起点で参照失敗
 - Action:
@@ -890,13 +890,13 @@ model_path        = ./third_party/VACE/models/VACE-Wan2.1-1.3B-Preview  (実在)
 
 | 変数 | 現在値 | 説明 | 根拠（利用箇所） |
 |---|---|---|---|
-| `model.vace_repo` | `./third_party/VACE` | direct VACE 実行時の作業ディレクトリ基準 | `scripts/run.sh` で `cwd=str(vace_repo)` として `subprocess.run(...)` |
-| `model.model_path` | `./third_party/VACE/models/VACE-Wan2.1-1.3B-Preview` | 利用するチェックポイントの場所 | `scripts/run.sh` で `vace_ckpt_dir=Path(...).resolve()`→`--ckpt_dir` に渡す |
+| `model.vace_repo` | `./third_party/VACE` | direct VACE 実行時の作業ディレクトリ基準 | `scripts/run.sh` で `cwd=str(vace_repo)` として `subprocess.run(cmd, cwd=str(vace_repo))` |
+| `model.model_path` | `./third_party/VACE/models/VACE-Wan2.1-1.3B-Preview` | 利用するチェックポイントの場所 | `scripts/run.sh` で `vace_ckpt_dir=Path(config["model"]["model_path"]).resolve()`→`--ckpt_dir` に渡す |
 | `model.identity_fallback` | `true` | モデル未配置時に入力コピーへ切替える安全弁 | `scripts/run.sh` の `identity_direct_copy = identity_fallback and not model_path.exists()` |
 | `inference.seed` | `42` | 乱数シード（再現性） | `scripts/run.sh` で `--base_seed` に渡す |
 | `inference.steps` | `25` | サンプリングステップ数（品質/速度） | `scripts/run.sh` で `--sample_steps` に渡す |
-| `MAX_MODEL_ROWS` (env) | 直近 strict 実行は `1` | 何行を direct VACE で試すか | `scripts/run.sh` で `max_model_rows = int(...)` |
-| `STRICT_NO_FALLBACK_ARG` (CLI第6引数) | 直近 strict 実行は `1` | 失敗時に fallback せず即停止 | `scripts/run.sh` の `strict_no_fallback = ... == "1"` と `except` 分岐 |
+| `MAX_MODEL_ROWS` (env) | 直近 strict 実行は `1` | 何行を direct VACE で試すか | `scripts/run.sh` で `max_model_rows = int(os.getenv("MAX_MODEL_ROWS", "1"))` |
+| `STRICT_NO_FALLBACK_ARG` (CLI第6引数) | 直近 strict 実行は `1` | 失敗時に fallback せず即停止 | `scripts/run.sh` の `strict_no_fallback = (strict_arg == "1")` と `except` 分岐 |
 
 ### 2) VACE 側の「未指定でも効く既定値」
 
@@ -945,7 +945,6 @@ video_path, frame, fps, duration, width, height
 /workspace/data/default/train/videos/0.mp4, 125, 25.0, 5.0, 1920, 1080
 /workspace/data/default/train/videos/1.mp4, 125, 25.0, 5.0, 1920, 1080
 /workspace/data/default/train/videos/2.mp4, 120, 23.976, 5.005005005005005, 1920, 1080
-...
 ```
 - 各行に frame 情報が記録されている
 - フレーム数は 120, 125, 150 など複数バリエーション
@@ -970,9 +969,16 @@ frame_map = dict(zip(metadata_df['video_path'], metadata_df['frame']))
 for src_mp4 in video_files:
     input_frame_count = frame_map.get(str(src_mp4.resolve()), 81)  # デフォルト81
     cmd = [
-        ...,
+		"/usr/bin/python3",
+		"vace/vace_wan_inference.py",
+		"--ckpt_dir", "/workspace/third_party/VACE/models/VACE-Wan2.1-1.3B-Preview",
+		"--src_video", str(src_mp4.resolve()),
+		"--prompt", "Make the scene more rainy",
+		"--base_seed", "42",
+		"--sample_steps", "25",
         "--frame_num", str(input_frame_count),  # ← 追加：入力フレーム数を指定
-        ...
+		"--save_dir", "/workspace/data/work/parquet_tmp/vace_run_0000",
+		"--save_file", "/workspace/data/work/parquet_tmp/model_out_0000.mp4",
     ]
 ```
 
@@ -995,8 +1001,7 @@ import cv2
 cap = cv2.VideoCapture(output_mp4)
 actual_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 if actual_frames != input_frame_count:
-    # フレーム補間or削減処理
-    ...
+	raise RuntimeError(f"frame mismatch: expected={input_frame_count}, got={actual_frames}")
 ```
 
 ### 次のアクション（優先順）
@@ -1047,12 +1052,12 @@ if actual_frames != input_frame_count:
 | 5 | Style Change | 16 | "Transform the video style to look like an oil painting with visible brush strokes." |
 
 **分布**（round-robin）:
-- video 0, 6, 12, ... 96: Background Change
-- video 1, 7, 13, ... 97: Color Change
-- video 2, 8, 14, ... 98: Count Change
-- video 3, 9, 15, ... 99: Environmental Change
-- video 4, 10, 16, ... 94: Instance Insertion
-- video 5, 11, 17, ... 95: Style Change
+- video_id % 6 == 0: Background Change
+- video_id % 6 == 1: Color Change
+- video_id % 6 == 2: Count Change
+- video_id % 6 == 3: Environmental Change
+- video_id % 6 == 4: Instance Insertion
+- video_id % 6 == 5: Style Change
 
 ### 次の改修内容（Trial 052 以降）
 
@@ -1074,9 +1079,16 @@ if actual_frames != input_frame_count:
 	
 	# VACE コマンドに --frame_num を追加
 	cmd = [
-	    ...,
+	    "/usr/bin/python3",
+	    "vace/vace_wan_inference.py",
+	    "--ckpt_dir", "/workspace/third_party/VACE/models/VACE-Wan2.1-1.3B-Preview",
+	    "--src_video", str(src_mp4.resolve()),
+	    "--prompt", row_prompt,
+	    "--base_seed", "42",
+	    "--sample_steps", "25",
 	    "--frame_num", str(input_frame_count),  # ← 明示的指定
-	    ...,
+	    "--save_dir", str(row_save_dir.resolve()),
+	    "--save_file", str(row_out.resolve()),
 	]
 	```
 
@@ -1130,9 +1142,16 @@ if actual_frames != input_frame_count:
 4. **VACE コマンドに `--frame_num` を追加**
 	```python
 	cmd = [
-	    ...,
+	    "/usr/bin/python3",
+	    "vace/vace_wan_inference.py",
+	    "--ckpt_dir", str(vace_ckpt_dir.resolve()),
+	    "--src_video", str(src_mp4.resolve()),
+	    "--prompt", row_prompt,
+	    "--base_seed", str(seed),
+	    "--sample_steps", str(steps),
 	    "--frame_num", str(input_frame_count),  # ← 明示的指定
-	    ...,
+	    "--save_dir", str(row_save_dir.resolve()),
+	    "--save_file", str(row_out.resolve()),
 	]
 	```
 
@@ -1177,7 +1196,7 @@ bash scripts/run.sh \
 2. test_instructions.csv から 100 entries を読み込み
 3. video 0 に対して：
 	- input_frame_count = 125（metadata.csv より）
-	- row_prompt = "Change the background to ..." （test_instructions.csv より）
+	- row_prompt = "Change the background to a vibrant sunset cityscape while keeping the main subject unchanged." （test_instructions.csv より）
 	- `--frame_num 125` を VACE に渡す
 4. 出力フレーム数が 125 であることを確認
 
@@ -1185,7 +1204,7 @@ bash scripts/run.sh \
 1. **manifest.csv に input_frame_count が記録されるか**
 	```
 	row_index,row_id,instruction,input_frame_count,mode,status
-	0,0,"Change the background to...",125,model_direct_vace,ok
+	0,0,"Change the background to a vibrant sunset cityscape while keeping the main subject unchanged.",125,model_direct_vace,ok
 	```
 2. **出力フレーム数が入力と一致するか**
 	```bash
@@ -1245,25 +1264,42 @@ bash scripts/run.sh \
 **改修後のrun.sh構造**:
 ```bash
 # 1. 引数パース＆パス解決
-CONFIG_PATH=${1:-configs/base.yaml}
-INPUT_SOURCE=${2:-...}
-...
+ENTRY_PY=${1:-src/run_experiment.py}
+CONFIG_PATH=${2:-configs/base.yaml}
+shift 2
 
-# 2. 設定読み込み＆モジュール初期化
-config = yaml.load(CONFIG_PATH)
-vace_executor = VaceExecutor(...)
-processor = VideoProcessor(...)
+# 2. Pythonへ委譲（残り引数を透過）
+exec ${PYTHON_BIN:-/usr/bin/python3} "$ENTRY_PY" "$CONFIG_PATH" "$@"
+```
 
-# 3. 入力タイプで分岐
-if input_source.is_dir():
-    result = processor.process_directory(...)
-elif input_source.is_parquet():
-    # TODO: ParquetProcessor に切り出し予定
-elif input_source.is_mp4():
-    result = ExperimentRunner(...)
-
-# 4. 結果出力
-print("[RESULT]", result)
+**補足（Python側の実処理入口）**:
+```python
+# src/run_experiment.py
+if input_path.is_dir():
+	result = run_directory(
+		config=config,
+		input_dir=input_path,
+		output_target=output_path,
+		default_prompt=args.prompt,
+		python_bin=args.python_bin,
+		limit_rows=args.rows,
+		strict_no_fallback=strict_mode,
+	)
+elif input_path.suffix.lower() == ".mp4":
+	result = run_single_mp4(
+		config=config,
+		input_file=input_path,
+		prompt=args.prompt,
+	)
+elif input_path.suffix.lower() == ".parquet":
+	result = run_parquet(
+		config=config,
+		input_file=input_path,
+		output_target=output_path,
+		default_prompt=args.prompt,
+		python_bin=args.python_bin,
+		strict_no_fallback=strict_mode,
+	)
 ```
 
 ### 今後の改修予定（Trial 055以降）
@@ -1485,17 +1521,17 @@ bash scripts/run.sh \
 	- `third_party/VACE/vace/models/wan/configs/shared_config.py`
 		- `wan_shared_cfg.sample_fps = 16`
 	- `third_party/VACE/vace/vace_wan_inference.py`
-		- `cache_video(..., fps=cfg.sample_fps, ...)`
+		- `cache_video(tensor=video[None], save_file=save_file, fps=cfg.sample_fps, nrow=1, normalize=True, value_range=(-1, 1))`
 - 解釈:
 	- 書き出しFPSは入力fpsではなく、モデル設定 `sample_fps(=16)` で固定される。
 	- そのため入力25fpsでも出力16fpsになる。
 
 - 対応方法案:
 	1. `sample_fps` を入力fpsに合わせる
-		- `shared_config.py` の固定値依存をやめ、`src_video` のfpsを `cache_video(... fps=...)` に渡す。
+		- `shared_config.py` の固定値依存をやめ、`src_video` のfpsを `cache_video(..., fps=input_fps, ...)` に渡す。
 		- 変更先（最小）:
 			- `third_party/VACE/vace/vace_wan_inference.py`
-				- `main()` の `cache_video(... fps=cfg.sample_fps ...)` を `input_fps` ベースへ変更
+				- `main()` の `cache_video(..., fps=cfg.sample_fps, ...)` を `cache_video(..., fps=input_fps, ...)` へ変更
 				- `prepare_source()` の戻り値 `fps`（現在は未使用）を受けて `cache_video` に渡す
 			- 併せて必要なら `third_party/VACE/vace/models/wan/configs/shared_config.py` の `sample_fps=16` 固定を撤廃
 	2. 後処理で fps を入力へ揃える
@@ -1508,7 +1544,7 @@ bash scripts/run.sh \
 		- `output_fps == input_fps` を自動チェックし、不一致は失敗扱いにする。
 		- 変更先（検証追加）:
 			- `src/pipeline/video_processor.py`
-				- `process_directory()` の `out_mp4_path.write_bytes(...)` 直後に fps 比較を追加し、strict時は `RuntimeError`
+				- `process_directory()` の `out_mp4_path.write_bytes(result["output_path"].read_bytes())` 直後に fps 比較を追加し、strict時は `RuntimeError`
 			- 既存の共通チェックを使うなら `src/eval/constraints.py` の `ConstraintChecker.check()` を呼び出す分岐を追加
 
 ### 2) 解像度が 832x480 になる理由
@@ -1518,7 +1554,7 @@ bash scripts/run.sh \
 	- `third_party/VACE/vace/models/wan/configs/__init__.py`
 		- `SIZE_CONFIGS['480p'] = (480, 832)`
 	- `third_party/VACE/vace/models/wan/wan_vace.py`
-		- `prepare_source(... image_size=SIZE_CONFIGS[args.size] ...)`
+		- `prepare_source(src_video, src_mask, src_ref_images, args.frame_num, SIZE_CONFIGS[args.size], device)`
 		- `set_area(480*832)` で処理面積を固定
 - 解釈:
 	- 現行実装は入力解像度を保持せず、`--size` で指定した面積へ再サンプリングする。
@@ -1610,9 +1646,9 @@ bash scripts/run.sh \
 		- 変更先（本命）:
 			- `third_party/Wan2.1/wan/utils/utils.py`
 				- `cache_video()` に `bitrate` / `ffmpeg_params` / `quality` 引数を追加
-				- `imageio.get_writer(...)` に可変パラメータを反映
+				- `imageio.get_writer(cache_file, fps=fps, codec='libx264', quality=quality, ffmpeg_params=ffmpeg_params)` に可変パラメータを反映
 			- `third_party/VACE/vace/vace_wan_inference.py`
-				- `cache_video(...)` 呼び出しに上記引数を受け渡す
+				- `cache_video(tensor=video[None], save_file=save_file, fps=cfg.sample_fps, nrow=1, normalize=True, value_range=(-1, 1), quality=quality, ffmpeg_params=ffmpeg_params)` 呼び出しに上記引数を受け渡す
 	2. 実行設定（YAML）から制御する
 		- 実験ごとに bitrate 方針を切替できるようにする。
 		- 変更先（設定連携）:

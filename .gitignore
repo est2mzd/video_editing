@@ -226,3 +226,5 @@ notebook/data/
 notebook/ckpt/
 
 checkpoints/
+
+third_party/VACE/models/
