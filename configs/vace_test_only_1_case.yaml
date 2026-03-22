@@ -1,0 +1,3 @@
+output:
+  exp_name: vace_test_only_1_case
+  exp_content: 1個の.mp4だけ VACEで処理をして、instruction通りの変化担っているか？ コンペ出力になっているか？ を確認する
