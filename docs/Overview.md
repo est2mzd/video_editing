@@ -2,6 +2,8 @@ https://www.codabench.org/competitions/14065/#/pages-tab
 
 https://xiangbogaobarry.github.io/GIVE-CVPR-VGBE-2026/
 
+https://huggingface.co/datasets/xiangbog/Generic-Instructional-Video-Editing-Challenge-Dataset/tree/main
+
 Text-conditioned General Video Editing. Please download the dataset from GIVE-Challenge-Dataset
 
 This challenge is jointly organized by Texas A&M University, Visko Platform, and Abaka AI.
