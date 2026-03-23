@@ -211,6 +211,12 @@ class VaceExecutor:
         seed: int = 42,
         steps: int = 25,
         timeout_sec: int = 600,
+        src_mask: Path | None = None,
+        src_ref_images: list[str] | None = None,
+        guide_scale: float = 5.0,
+        sample_shift: float | None = None,
+        size: str = "480p",
+        use_prompt_extend: str = "plain",
     ) -> Dict[str, Any]:
         """VACE推論を実行.
 
@@ -251,21 +257,20 @@ class VaceExecutor:
             "save_dir": str(output_dir.resolve()),
             "save_file": str(output_file.resolve()),
             "model_name": "vace-1.3B",
-            "size": "480p",
+            "size": size,
             "offload_model": None,
             "ulysses_size": 1,
             "ring_size": 1,
             "t5_fsdp": False,
             "t5_cpu": False,
             "dit_fsdp": False,
-            "src_mask": None,
-            "src_ref_images": None,
-            "use_prompt_extend": "plain",
+            "src_mask": None if src_mask is None else str(Path(src_mask).resolve()),
+            "src_ref_images": None if not src_ref_images else ",".join(str(Path(p).resolve()) for p in src_ref_images),
+            "use_prompt_extend": use_prompt_extend,
             "sample_solver": "unipc",
-            "sample_shift": None,
-            "sample_guide_scale": 5.0,
+            "sample_shift": sample_shift,
+            "sample_guide_scale": float(guide_scale),
         }
-
         started_at = time.time()
         stdout_io = io.StringIO()
         stderr_io = io.StringIO()
@@ -274,7 +279,8 @@ class VaceExecutor:
                 module = self._load_inference_module()
                 with contextlib.redirect_stdout(stdout_io), contextlib.redirect_stderr(stderr_io):
                     with self._time_limit(timeout_sec):
-                        module.main(args)
+                        #module.main(args)
+                        module_ret = module.main(args)  # ←ここを変更
 
             duration_sec = time.time() - started_at
             stdout = stdout_io.getvalue()
@@ -292,6 +298,7 @@ class VaceExecutor:
                     "cmd": cmd,
                     "duration_sec": duration_sec,
                     "timed_out": False,
+                    "artifacts": module_ret if isinstance(module_ret, dict) else {},
                 }
 
             return {
@@ -304,6 +311,7 @@ class VaceExecutor:
                 "cmd": cmd,
                 "duration_sec": duration_sec,
                 "timed_out": False,
+                "artifacts": module_ret if isinstance(module_ret, dict) else {},
             }
         except TimeoutError:
             duration_sec = time.time() - started_at
@@ -319,6 +327,7 @@ class VaceExecutor:
                 "cmd": cmd,
                 "duration_sec": duration_sec,
                 "timed_out": True,
+                "artifacts": module_ret if isinstance(module_ret, dict) else {},
             }
         except Exception as e:
             duration_sec = time.time() - started_at
@@ -335,4 +344,5 @@ class VaceExecutor:
                 "cmd": cmd,
                 "duration_sec": duration_sec,
                 "timed_out": False,
+                "artifacts": module_ret if isinstance(module_ret, dict) else {},
             }
