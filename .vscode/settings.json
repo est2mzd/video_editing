@@ -8,8 +8,11 @@
         "/workspace/third_party/sam2",
         "/workspace/third_party/segment-anything",
         "/workspace/third_party/VACE",
-        "/workspace/third_party/Wan2.1",
+        "/workspace/third_party/Wan2.1"
     ],
     "python-envs.defaultEnvManager": "ms-python.python:conda",
-    "python-envs.defaultPackageManager": "ms-python.python:conda"
+    "python-envs.defaultPackageManager": "ms-python.python:conda",
+    "files.autoReload": "afterDelay",
+    "files.autoSave": "afterDelay",
+    "notebook.autoSave.enabled": true
 }
