@@ -1,0 +1,45 @@
+style_keywords:
+  cyberpunk: cyberpunk
+  anime: anime
+  watercolor: watercolor
+  ukiyo-e: ukiyo-e
+  ghibli: ghibli
+  oil painting: oil_painting
+  american comic style: american_comic
+  pixel: pixel
+
+color_keywords:
+  violet: violet
+  purple: purple
+  navy blue: navy blue
+  blue: blue
+  red: red
+  green: green
+  yellow: yellow
+  orange: orange
+  pink: pink
+  black: black
+  white: white
+  silver: silver
+
+preserve_targets:
+  identity: identity
+  logo: logo
+  lower-third text: lower_third_text
+  text: text
+  background: background
+  blouse: blouse
+  table: table
+  speaker: speaker
+  face: face
+
+quality_keywords:
+  flicker: temporal_consistency
+  temporally consistent: temporal_consistency
+  temporal consistency: temporal_consistency
+  clean edges: clean_edges
+  sharp edges: clean_edges
+  artifacts: artifact_free
+  no artifacts: artifact_free
+  realistic: realism
+  stable: stability

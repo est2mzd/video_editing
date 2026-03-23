@@ -93,6 +93,13 @@ def resolve_stage(input_path: Path) -> str:
     return "infer"
 
 
+def resolve_output_base_dir(config: Dict[str, Any]) -> Path:
+    """Resolve the configured experiment base directory."""
+    output_cfg = config.get("output", {})
+    base_dir = str(output_cfg.get("base_dir", "/workspace/logs")).strip()
+    return Path(base_dir or "/workspace/logs")
+
+
 def build_experiment_context(
     config: Dict[str, Any], input_path: Path
 ) -> Dict[str, str]:
@@ -108,7 +115,7 @@ def build_experiment_context(
     exp_id = f"{exp_name}_{now}"
     stage = resolve_stage(input_path)
 
-    exp_dir = Path("logs") / stage / exp_id
+    exp_dir = resolve_output_base_dir(config) / stage / exp_id
     exp_dir.mkdir(parents=True, exist_ok=True)
 
     return {
@@ -120,9 +127,11 @@ def build_experiment_context(
     }
 
 
-def append_experiment_summary(summary: Dict[str, str]) -> None:
-    """Append one record per run to logs/exp_summary/exp_summary.csv."""
-    summary_dir = Path("logs") / "exp_summary"
+def append_experiment_summary(
+    config: Dict[str, Any], summary: Dict[str, str]
+) -> None:
+    """Append one record per run to <base_dir>/exp_summary/exp_summary.csv."""
+    summary_dir = resolve_output_base_dir(config) / "exp_summary"
     summary_dir.mkdir(parents=True, exist_ok=True)
     summary_path = summary_dir / "exp_summary.csv"
 
@@ -269,6 +278,7 @@ def main(argv: list[str] | None = None) -> int:
     finally:
         if exp_ctx:
             append_experiment_summary(
+                config,
                 {
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "exp_id": exp_ctx.get("exp_id", ""),

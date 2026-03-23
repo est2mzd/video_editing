@@ -1,0 +1,26 @@
+zoom_in_max_scale: 1.24
+zoom_out_min_scale: 0.84
+arc_zoom_scale: 1.18
+low_angle_strength: 0.075
+high_angle_strength: 0.07
+zoom_anchor_mix: 0.0
+angle_anchor_mix: 0.28
+body_center_y_scale: 1.8
+body_radius_x_scale: 1.4
+body_radius_y_scale: 2.6
+grabcut_pad_x: 1.2
+grabcut_pad_top: 0.8
+grabcut_pad_bottom: 3.6
+grabcut_iter: 2
+center_subject_prior: 0.42
+subject_blur_sigma: 11
+fg_blur_sigma: 17
+bg_base_bgr: [60, 75, 90]
+bg_grad_b0: 90
+bg_grad_b_scale: 20
+bg_grad_g0: 90
+bg_grad_g_scale: 35
+bg_grad_r0: 105
+bg_grad_r_scale: 50
+bg_blur_mix: 0.42
+bg_overlay_mix: 0.58

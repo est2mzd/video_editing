@@ -24,4 +24,4 @@ PYTHON_BIN=/usr/bin/python3 bash scripts/run.sh \
   1 \
   1
 
-echo "[INFO] Done: $OUTPUT_ZIP (saved under logs/<stage>/<exp_id>/)"
+echo "[INFO] Done: $OUTPUT_ZIP (saved under /workspace/logs/<stage>/<exp_id>/)"

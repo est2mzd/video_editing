@@ -8,6 +8,7 @@ vace_executor.py
 """
 
 import subprocess
+import time
 from pathlib import Path
 from typing import Dict, Any
 
@@ -48,6 +49,7 @@ class VaceExecutor:
         frame_num: int,
         seed: int = 42,
         steps: int = 25,
+        timeout_sec: int = 600,
     ) -> Dict[str, Any]:
         """VACE推論を実行.
 
@@ -80,16 +82,19 @@ class VaceExecutor:
         ]
 
         try:
+            started_at = time.time()
             result = subprocess.run(
                 cmd,
                 cwd=str(self.vace_repo),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                timeout=600,
+                text=True,
+                timeout=timeout_sec,
             )
+            duration_sec = time.time() - started_at
 
             if result.returncode != 0 or not output_file.exists():
-                err_msg = result.stderr.decode(errors="ignore")[:1200]
+                err_msg = (result.stderr or "").strip()[:4000]
                 message = (
                     f"VACE failed (rc={result.returncode}): {err_msg}"
                 )
@@ -97,23 +102,47 @@ class VaceExecutor:
                     "status": "error",
                     "output_path": None,
                     "error_msg": message,
+                    "returncode": result.returncode,
+                    "stdout": result.stdout,
+                    "stderr": result.stderr,
+                    "cmd": cmd,
+                    "duration_sec": duration_sec,
+                    "timed_out": False,
                 }
 
             return {
                 "status": "ok",
                 "output_path": output_file,
                 "error_msg": None,
+                "returncode": result.returncode,
+                "stdout": result.stdout,
+                "stderr": result.stderr,
+                "cmd": cmd,
+                "duration_sec": duration_sec,
+                "timed_out": False,
             }
 
         except subprocess.TimeoutExpired:
             return {
                 "status": "error",
                 "output_path": None,
-                "error_msg": "VACE execution timeout",
+                "error_msg": f"VACE execution timeout ({timeout_sec}s)",
+                "returncode": None,
+                "stdout": None,
+                "stderr": None,
+                "cmd": cmd,
+                "duration_sec": float(timeout_sec),
+                "timed_out": True,
             }
         except Exception as e:
             return {
                 "status": "error",
                 "output_path": None,
                 "error_msg": str(e),
+                "returncode": None,
+                "stdout": None,
+                "stderr": None,
+                "cmd": cmd,
+                "duration_sec": None,
+                "timed_out": False,
             }
