@@ -163,3 +163,15 @@
 - Notebook cell: Cell 27: easy experiment run
 - Result: Failed: VACE execution timeout (180s)
 - Next action: エラー内容に応じて notebook セルと in-process 実行ラッパを修正する。
+### 2026-03-23 13:06 UTC | Trial 4
+
+- Hypothesis: Ad-hoc execution should degrade to skipped instead of raising when notebook runtime is not ready for generation.
+- Notebook cell: Cell 23: ad-hoc run
+- Result: Succeeded. output_path=/workspace/logs/notebooks/vace_pipeline_ver03/20260323_121119/case_9999_seed_42/output.mp4
+- Next action: Inspect the generated video preview.
+### 2026-03-23 13:06 UTC | Trial 1
+
+- Hypothesis: subprocess を使わず notebook カーネル内の path と import を整えれば preflight が通る。
+- Notebook cell: Cell 24: in-kernel preflight
+- Result: In-kernel preflight succeeded.
+- Next action: Easy Experiment も同じカーネル内実行へ切り替えて試す。
