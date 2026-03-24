@@ -76,3 +76,24 @@ Innovation Award: $500 USD + Award Certificate
 Issues & Contact
 Technical Discussions: Please utilize the community forum on the official challenge page.
 Inquiries: For specific questions, contact the organizing committee at tcve-cvpr-2026@googlegroups.com.
+
+---
+# Update : 2023/03/24
+Dear Participants,
+
+We would like to share two important updates regarding the Generic Instructional Video Editing (GIVE) Challenge.
+
+First, the submission deadline has been extended to April 5th, 2026.
+
+Second, some participants previously reported that they were unable to access the dataset. To make things easier and more consistent for everyone, we have updated the dataset download path. Please use the following link to download the dataset:
+
+GIVE Dataset: https://huggingface.co/datasets/xiangbog/Generic-Instructional-Video-Editing-Challenge-Dataset
+
+We hope this extension and updated download path will give you a smoother experience preparing your submission.
+
+We encourage you to make the most of this opportunity — there is a $1,000 prize pool for the challenge, including the Highest Score Award (Champion) and the Innovation Award.
+
+Good luck with your submission, and we look forward to seeing your exciting results!
+
+Best regards,
+The GIVE Challenge Organizers
