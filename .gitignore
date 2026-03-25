@@ -228,3 +228,5 @@ notebook/ckpt/
 checkpoints/
 
 third_party/VACE/models/
+weights/
+notebook/output/

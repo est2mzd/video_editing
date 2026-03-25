@@ -151,6 +151,10 @@ RUN apt update && \
     apt install -y nodejs && \
     npm install -g @openai/codex
 
+# WAN 2.1 用
+RUN apt update && \
+    python3 -m pip install "huggingface_hub[cli]" modelscope
+
 ENV LD_LIBRARY_PATH=/usr/local/lib/python3.10/dist-packages/torch/lib:$LD_LIBRARY_PATH
 ENV PYTHONPATH=/workspace/third_party/VACE:$PYTHONPATH
 ENV PYTHONPATH=/workspace/third_party/GroundingDINO:$PYTHONPATH
