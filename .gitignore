@@ -212,8 +212,11 @@ __marimo__/
 **backup**
 pretrained/
 *.tar
-/data/
 z_bk_*
+
+data/Local_Eval/
+data/videos/
+data/*.parquet
 
 /outputs/
 /submit/
