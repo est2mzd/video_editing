@@ -97,3 +97,30 @@ Good luck with your submission, and we look forward to seeing your exciting resu
 
 Best regards,
 The GIVE Challenge Organizers
+
+----------------------------------------------------------------------------------
+Dear Participants,
+
+We would like to share several important updates regarding the Image-to-Video Consistent Generation Challenge at CVPR VGBE 2026.
+
+The final submission deadline has been extended to April 5, 2026 (AOE). For the final phase, participants are required to submit their results together with the fact sheet.
+
+At this final stage, the validation set contains 70 samples. Please make sure your submission is prepared accordingly.
+
+For the fact sheet, please use the following template:
+Fact Sheet Template: https://www.overleaf.com/read/jpdrctbsbxcr#9c6e1c
+
+For the final submission, please include your videos, code, checkpoints(or accessible links to the checkpoints, e.g., Hugging Face), and execution instructions/README in one single ZIP file.
+We understand that model checkpoints can be very large, so you may instead provide us with your Hugging Face link for the model weights
+
+If you have difficulty submitting the materials through the platform, you may also share a Google Drive link by email at mingyang@tamu.edu.
+
+We also encourage you to make the most of this opportunity. The challenge features a total prize pool of $1,900 USD, with the following tentative awards:
+
+1st Place: $1,000 USD + Award Certificate
+2nd Place: $600 USD + Award Certificate
+3rd Place: $300 USD + Award Certificate
+Good luck with your submission, and we look forward to seeing your exciting results!
+
+Best regards,
+The CVPR 2026 VGBE Challenge Organizers

@@ -228,5 +228,7 @@ notebook/ckpt/
 checkpoints/
 
 third_party/VACE/models/
+third_party/VACE/cache/
+
 weights/
 notebook/output/

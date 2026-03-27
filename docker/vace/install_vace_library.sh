@@ -80,6 +80,20 @@ python3 setup.py build_ext --inplace
 # ・GroundingDINOは最後（壊れやすい）
 # -----------------------------------------
 
+cd /workspace/third_party
+
+# ① clone（バージョン固定）
+# git clone https://github.com/Lightricks/LTX-Video.git
+cd LTX-Video
+# git checkout ltx-video-0.9.1
+
+# ② ローカルインストール
+sudo python3 -m pip install -e . --no-deps --no-build-isolation
+
+# ③ 必須依存のみ個別に
+python3 -m pip install sentencepiece
+
+
 # =========================================
 # 5. VACE
 # =========================================
