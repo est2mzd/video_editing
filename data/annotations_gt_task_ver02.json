@@ -1,0 +1,3493 @@
+[
+  {
+    "video_path": "wyzi9GNZFMU_0_0to121.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Dolly in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "dolly_in",
+          "target": "face",
+          "framing": "center",
+          "start_scale": "medium",
+          "end_scale": "close_up"
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "8rKYl1CdXCc_5_276to660_scene02.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "tracking_object",
+        "params": {
+          "target": "person"
+        }
+      },
+      {
+        "task": "object_motion_edit",
+        "params": {
+          "target": "person",
+          "action": "raise_left_hand_wave",
+          "preserve": [
+            "identity",
+            "suit",
+            "background"
+          ]
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "region": [
+            "arm",
+            "hand"
+          ],
+          "motion_natural": true,
+          "artifact_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "1s9DER1bpm0_10_0to213.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "targets": [
+            "rhino",
+            "buffalo"
+          ],
+          "count": "increase",
+          "position": [
+            "midground",
+            "background"
+          ]
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_match": true,
+          "shadow_match": true,
+          "style_match": "3d_animation"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "motion": "static",
+          "layer_consistency": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "DaUJkmBvTKM_2_0to150.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "automotive_showroom",
+          "lighting": "soft_studio",
+          "depth_effect": "background_blur"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "speaker",
+            "lower_third_text",
+            "logo"
+          ],
+          "edge_quality": "high"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "artifact_free": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Xw9Zsc9A924_0_0to138.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": "hair",
+          "color": "violet"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_color_bleeding": true,
+          "preserve": [
+            "skin",
+            "background",
+            "clothing"
+          ]
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "lighting_consistency": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "94msufYZzaQ_26_0to273.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Ukiyo-e",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "ukiyoe",
+          "target": "full_frame",
+          "preserve": [
+            "identity",
+            "facial_expression",
+            "scene_layout"
+          ]
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "texture_consistency": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "A7wDe9rF7Xs_5_84to354.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": "face",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_distortion": true,
+          "preserve": [
+            "lighting",
+            "color"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "n7WSvDzNfaM_1_0to226.mp4",
+    "selected_class": "Instance Editing",
+    "selected_subclass": "Instance Replacement",
+    "tasks": [
+      {
+        "task": "replace_object",
+        "params": {
+          "target": "hat",
+          "source": "black_beanie",
+          "replacement": "red_wool_hat",
+          "fit": "head_aligned"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "texture_detail": "wool",
+          "color_match": "environment_lighting",
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "motion_alignment": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "-UcSvp9UkJk_16_0to152.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Cyberpunk",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "cyberpunk",
+          "target": "full_frame",
+          "effects": [
+            "neon_glow",
+            "high_contrast",
+            "dark_tone"
+          ]
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "hands",
+            "equipment_structure"
+          ],
+          "visibility": "clear"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "lighting_consistency": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "mKmpT3EWyfQ_4_18to209.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Dolly in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "dolly_in",
+          "target": "object",
+          "focus": "coffee_grinder",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "focus_stable": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "2s388uO1d-4_6_40to316.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Dolly in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "dolly_in",
+          "target": "face",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_distortion": true,
+          "focus_stable": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "gmc7SaIlX9A_45_0to124.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": "face",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "focus_stable": true,
+          "background_blur_consistent": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "KeT7K68NzLA_14_0to155.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Decoration effect",
+    "tasks": [
+      {
+        "task": "effect_visual",
+        "params": {
+          "effect": "neon_glow",
+          "target": "guitar_strings",
+          "dynamic": "pulse"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "light_interaction": true,
+          "preserve": [
+            "hands",
+            "clothing"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "tracking_precise": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "KXmC6uNtmJ8_8_0to127.mp4",
+    "selected_class": "Instance Editing",
+    "selected_subclass": "Instance Replacement",
+    "tasks": [
+      {
+        "task": "replace_object",
+        "params": {
+          "target": "car",
+          "source": "silver_sports_car",
+          "replacement": "red_lamborghini"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "background"
+          ],
+          "alignment": "scene_consistent"
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Q8lmpE8vAL0_1_0to314.mp4",
+    "selected_class": "Instance Editing",
+    "selected_subclass": "Instance Insertion",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "microphone",
+          "position": "desk_front",
+          "placement": "on_surface"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "shadow": "contact_shadow",
+          "reflection": "surface_reflection",
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "position_stable": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "cERS8z56GsU_18_46to365.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "tech_studio",
+          "depth_of_field": "shallow",
+          "lighting": "ambient_soft"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "subject",
+            "table",
+            "product_boxes"
+          ],
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "perspective_consistent": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "4HYLeL_r55Q_7_0to255_scene02.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background_right",
+          "new_scene": "professional_kitchen",
+          "lighting": "well_lit"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "presenter",
+            "left_screen_burger"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "lighting_consistent": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "zUofaGtC3mY_68_0to190.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Pixel",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "pixel",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "FbJTe47ndCU_10_0to371_scene03.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "library",
+          "lighting": "warm_soft"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "man",
+            "text_box"
+          ],
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "consistency": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "7G0ub3T0Alg_50_47to240.mp4",
+    "selected_class": "Instance Editing",
+    "selected_subclass": "Instance Removal",
+    "tasks": [
+      {
+        "task": "remove_object",
+        "params": {
+          "targets": [
+            "person_background",
+            "green_containers"
+          ],
+          "fill": "surrounding_texture"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "cockatoos",
+            "person_white_hoodie"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "no_artifacts": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "S_6ZfRhs0H4_35_97to426_scene02.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "jam",
+          "region": "plate_center",
+          "amount": "increase"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "surface_alignment": true,
+          "texture_consistent": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "motion": "static",
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "N51llmtWa8Q_10_0to160.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom out",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_out",
+          "target": "scene",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_distortion": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "5kV7UA9-r18_8_131to333.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": "necktie",
+          "color": "navy_blue"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_color_bleeding": true,
+          "preserve": [
+            "shirt",
+            "suit",
+            "background",
+            "graphics"
+          ]
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "lighting_consistent": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "rhXDtQCpp-0_40_0to130.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "tropical_beach"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "pyJBzKCvJrk_7_0to318.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "futuristic_city_night"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "un-L1Fo8-IU_19_0to341.mp4",
+    "selected_class": "Camera Angle Editing",
+    "selected_subclass": "Low angle",
+    "tasks": [
+      {
+        "task": "transform_camera",
+        "params": {
+          "mode": "low_angle",
+          "target": "subject",
+          "perspective": "upward"
+        }
+      },
+      {
+        "task": "adjustment_scene",
+        "params": {
+          "background_perspective": "adjusted",
+          "depth_of_field": "shallow"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "man",
+            "shirt_details"
+          ],
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "stable_details": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "pSV28NbGT-4_41_31to271.mp4",
+    "selected_class": "Instance Editing",
+    "selected_subclass": "Instance Replacement",
+    "tasks": [
+      {
+        "task": "replace_object",
+        "params": {
+          "target": "bed",
+          "replacement": "modern_metal_bed"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "alignment": "scene_consistent",
+          "lighting_consistent": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "EYkd6c6Gqyg_23_0to209.mp4",
+    "selected_class": "Camera Angle Editing",
+    "selected_subclass": "Low angle",
+    "tasks": [
+      {
+        "task": "transform_camera",
+        "params": {
+          "mode": "low_angle",
+          "target": "subjects",
+          "perspective": "upward"
+        }
+      },
+      {
+        "task": "adjustment_scene",
+        "params": {
+          "background_perspective": "adjusted"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_transition": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "0Th8ieWYQa0_78_0to142.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "panda",
+          "count": 1,
+          "position": "adjacent"
+        }
+      },
+      {
+        "task": "match_style",
+        "params": {
+          "reference": "existing_panda",
+          "consistency": "3d_animation"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "background_preserve": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "position_fixed": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "pLaTa5tXnqA_1_794to1006.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Anime",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "anime",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "enhancement_style",
+        "params": {
+          "line_emphasis": true,
+          "color_saturation": "high"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "LQ5umkrHY3g_1_847to1178.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Cyberpunk",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "cyberpunk",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "neon_circuitry",
+          "color_palette": [
+            "electric_blue",
+            "hot_pink"
+          ]
+        }
+      },
+      {
+        "task": "adjust_lighting",
+        "params": {
+          "target": "subject",
+          "rim_light": true,
+          "color_reflection": [
+            "electric_blue",
+            "hot_pink"
+          ]
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "face",
+            "posture",
+            "furniture"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "noise_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "CQTWpJ_NmkQ_7_0to168.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Decoration effect",
+    "tasks": [
+      {
+        "task": "add_effect",
+        "params": {
+          "target": "player",
+          "effect": "flame_aura",
+          "colors": [
+            "orange",
+            "blue"
+          ]
+        }
+      },
+      {
+        "task": "adjust_lighting",
+        "params": {
+          "target": "player",
+          "effect_light": true
+        }
+      },
+      {
+        "task": "adjust_background",
+        "params": {
+          "target": "spectators",
+          "brightness": "dimmed"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "jersey_text",
+            "arm_tattoo"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "dynamic_effect": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "p_DqjCTN6Fg_27_0to145.mp4",
+    "selected_class": "Instance Editing",
+    "selected_subclass": "Instance Replacement",
+    "tasks": [
+      {
+        "task": "replace_object",
+        "params": {
+          "target": "woman_left",
+          "replacement": "woman_beige_hat_suit"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "alignment": "scene_consistent",
+          "lighting_consistent": true,
+          "preserve": [
+            "man_top_hat",
+            "graphic_overlay"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "no_jitter": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "yHPualcu7wE_44_0to203.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "facial_expression_edit",
+        "params": {
+          "target": "baby_face",
+          "expression_from": "pensive",
+          "expression_to": "smile",
+          "progressive": true
+        }
+      },
+      {
+        "task": "preservation_identity",
+        "params": {
+          "face_identity": true,
+          "skin_texture_consistent": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "background_preserve": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "9TnWVIUAmQE_2_0to187.mp4",
+    "selected_class": "Camera Angle Editing",
+    "selected_subclass": "Low angle",
+    "tasks": [
+      {
+        "task": "transform_camera",
+        "params": {
+          "mode": "low_angle",
+          "target": "scene",
+          "perspective": "upward"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "target": "hands",
+          "maintain_focus": true
+        }
+      },
+      {
+        "task": "adjustment_scene",
+        "params": {
+          "background": "brick_wall",
+          "lighting_consistent": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "no_distortion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "2LB9h6ZM7Mc_6_0to173.mp4",
+    "selected_class": "Instance Editing",
+    "selected_subclass": "Instance Removal",
+    "tasks": [
+      {
+        "task": "remove_object",
+        "params": {
+          "target": "crochet_hook",
+          "region": "background",
+          "fill": "plain_surface"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_consistent": true,
+          "texture_consistent": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "no_ghosting": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "KlBsMy2HRas_37_19to283.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "edit_motion",
+        "params": {
+          "target": "woman",
+          "action": "head_rotate",
+          "angle": 90,
+          "direction": "left"
+        }
+      },
+      {
+        "task": "facial_expression_edit",
+        "params": {
+          "target": "woman_face",
+          "expression_from": "neutral",
+          "expression_to": "fear_shock",
+          "progressive": true
+        }
+      },
+      {
+        "task": "preservation_identity",
+        "params": {
+          "appearance_consistent": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "background_preserve": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "zm3KV2vomiQ_23_0to160.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": "car_exterior",
+          "color": "emerald_green"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_preserve": true,
+          "reflection_preserve": true,
+          "no_color_bleeding": true,
+          "preserve": [
+            "interior",
+            "dashboard",
+            "environment"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "KlCmBIwCGCs_32_0to287.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "pastries",
+          "region": "tray_middle",
+          "amount": "increase"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "placement_natural": true,
+          "lighting_consistent": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "motion": "static",
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "XXHUgddofPo_4_0to252.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "city_skyline_night",
+          "lighting": "neon"
+        }
+      },
+      {
+        "task": "adjust_lighting",
+        "params": {
+          "target": "subject",
+          "color_reflection": [
+            "blue",
+            "purple"
+          ]
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "man"
+          ],
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "background_stable": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "MPCQi8LEeOI_67_0to214.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "object motion",
+    "tasks": [
+      {
+        "task": "edit_motion",
+        "params": {
+          "target": "radiator_fans",
+          "action": "spin",
+          "speed": "fast",
+          "mode": "continuous"
+        }
+      },
+      {
+        "task": "adjust_visibility",
+        "params": {
+          "target": "fans",
+          "occlusion_handling": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "lighting_consistent": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "RmtDhE1myVE_2_0to125.mp4",
+    "selected_class": "Camera Angle Editing",
+    "selected_subclass": "High angle",
+    "tasks": [
+      {
+        "task": "transform_camera",
+        "params": {
+          "mode": "high_angle",
+          "target": "scene",
+          "perspective": "downward"
+        }
+      },
+      {
+        "task": "adjustment_scene",
+        "params": {
+          "background_visibility": "increase",
+          "region": "grassy_hill"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "no_distortion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "PHuXNq3p3Lw_260_0to245.mp4",
+    "selected_class": "Camera Angle Editing",
+    "selected_subclass": "Low angle",
+    "tasks": [
+      {
+        "task": "transform_camera",
+        "params": {
+          "mode": "low_angle",
+          "target": "subject",
+          "perspective": "upward"
+        }
+      },
+      {
+        "task": "adjustment_scene",
+        "params": {
+          "background_perspective": "adjusted"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "no_distortion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "ck1ZNslaPl4_3_0to174.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": [
+            "ingredient_bowls",
+            "stand_mixer"
+          ],
+          "framing": "center_focus"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "target": [
+            "ingredient_bowls",
+            "stand_mixer"
+          ],
+          "maintain_focus": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_distortion": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "luqB18f19rA_34_0to287_scene02.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "edit_motion",
+        "params": {
+          "target": "woman",
+          "action": "head_tilt",
+          "direction": "right",
+          "magnitude": "slight"
+        }
+      },
+      {
+        "task": "preservation_identity",
+        "params": {
+          "appearance_consistent": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "background_preserve": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "wAa1NSQwizI_60_318to515.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": "foreground_surface",
+          "color": "deep_blue"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_preserve": true,
+          "shadow_preserve": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "7pdva1luF4A_0_0to195.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Ghibli",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "ghibli",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "enhancement_style",
+        "params": {
+          "texture": "soft",
+          "lighting": "warm",
+          "palette": "nostalgic"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "subjects",
+            "kitchen_layout"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_transition": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "uQw1SwPo0UA_61_0to215.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Cyberpunk",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "cyberpunk",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "grade_color",
+        "params": {
+          "contrast": "high",
+          "lighting": "neon",
+          "colors": [
+            "blue",
+            "pink"
+          ]
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Bmw-tDeu3Yc_22_400to694.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": "fur_suit",
+          "color": "neon_blue"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_preserve": true,
+          "texture_preserve": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "NbWQNOzDiAI_28_0to172.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "highrise_office_city_night"
+        }
+      },
+      {
+        "task": "adjust_lighting",
+        "params": {
+          "target": "man",
+          "color_reflection": [
+            "blue",
+            "amber"
+          ]
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_halo": true,
+          "preserve": [
+            "man"
+          ]
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "background_stable": true,
+          "flicker_free": true,
+          "no_jitter": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "DJAiwNQYHS0_22_0to220.mp4",
+    "selected_class": "Camera Angle Editing",
+    "selected_subclass": "Low angle",
+    "tasks": [
+      {
+        "task": "transform_camera",
+        "params": {
+          "mode": "low_angle",
+          "target": "subject",
+          "perspective": "upward"
+        }
+      },
+      {
+        "task": "adjustment_scene",
+        "params": {
+          "subject_emphasis": "imposing"
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "no_distortion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "91hePSbvai0_14_0to184.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "indoor_cafe_sunlit"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "man",
+            "sofa",
+            "gestures"
+          ],
+          "edge_clean": true,
+          "lighting_consistent": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "tDm-Fh4ZLpA_1_0to148.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": [
+            "armchair_left",
+            "armchair_right"
+          ],
+          "color_map": {
+            "armchair_left": "navy_blue",
+            "armchair_right": "neutral_gray"
+          }
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "texture_preserve": true,
+          "lighting_preserve": true,
+          "no_color_bleeding": true,
+          "preserve": [
+            "presenters",
+            "background"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "QyQGDYjV6CY_11_0to162.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Cyberpunk",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "cyberpunk",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "grade_color",
+        "params": {
+          "lighting": "neon",
+          "colors": [
+            "blue",
+            "pink"
+          ],
+          "contrast": "high"
+        }
+      },
+      {
+        "task": "add_effect",
+        "params": {
+          "target": "stove_area",
+          "effect": "holographic_interface"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "chef"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Risf_QQGX2o_40_0to183.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "edit_motion",
+        "params": {
+          "target": "woman",
+          "action": [
+            "look_up",
+            "nod"
+          ],
+          "magnitude": "slight"
+        }
+      },
+      {
+        "task": "facial_expression_edit",
+        "params": {
+          "target": "woman_face",
+          "expression_from": "concentration",
+          "expression_to": "soft_smile",
+          "progressive": true
+        }
+      },
+      {
+        "task": "preservation_identity",
+        "params": {
+          "appearance_consistent": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "background_man",
+            "whiteboard"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "FbJTe47ndCU_10_0to371.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "urban_street_night",
+          "effects": [
+            "neon_lights",
+            "bokeh"
+          ]
+        }
+      },
+      {
+        "task": "grade_color",
+        "params": {
+          "target": "subject",
+          "blend_with_environment": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "man"
+          ],
+          "edge_clean": true,
+          "no_halo": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "background_stable": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "KqUrLBwQxX0_0_0to241_scene02.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Decoration effect",
+    "tasks": [
+      {
+        "task": "add_effect",
+        "params": {
+          "target": "scene",
+          "effect": "stage_lighting",
+          "direction": "top_down",
+          "color": "warm"
+        }
+      },
+      {
+        "task": "adjust_lighting",
+        "params": {
+          "target": "boy",
+          "interaction": "hair_shoulders"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "ted_sign",
+            "bookshelves"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "intensity_stable": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "uLVZrXWeyKw_29_0to154.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": "car_exterior",
+          "color": "metallic_red"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "gloss_preserve": true,
+          "reflection_preserve": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "8_iuDkiMB9o_15_0to205.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "towel_elephant",
+          "count": 1,
+          "position": "adjacent"
+        }
+      },
+      {
+        "task": "match_style",
+        "params": {
+          "reference": "existing_elephant",
+          "texture": "white_towel",
+          "details": [
+            "red_eyes"
+          ]
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "background",
+            "bed",
+            "lamp"
+          ],
+          "lighting_consistent": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "position_fixed": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "_pQAUwy0yWs_0_119to277.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": "face",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "target": "face",
+          "maintain_focus": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_distortion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "vr9oNZkfTVU_28_0to129.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "dog_sled_team",
+          "count": 1,
+          "position": "left_parallel"
+        }
+      },
+      {
+        "task": "sync_motion",
+        "params": {
+          "reference": "original_team",
+          "speed_match": true,
+          "distance_consistent": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_consistent": true,
+          "edge_clean": true,
+          "preserve": [
+            "background",
+            "sky"
+          ]
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "motion_stable": true,
+          "flicker_free": true,
+          "no_ghosting": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "nQQWnvYztYY_37_46to343.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "edit_motion",
+        "params": {
+          "target": "man",
+          "action": "head_nod",
+          "magnitude": "subtle",
+          "mode": "continuous"
+        }
+      },
+      {
+        "task": "preservation_identity",
+        "params": {
+          "appearance_consistent": true,
+          "facial_features_stable": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "background",
+            "person_behind"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "TV2R9YotgjI_52_29to208.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "speed_bump",
+          "count": 1,
+          "position": "forward_path"
+        }
+      },
+      {
+        "task": "alignment_perspective",
+        "params": {
+          "reference": "ground_plane",
+          "low_angle_consistent": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_consistent": true,
+          "shadow_consistent": true,
+          "preserve": [
+            "car",
+            "brick_wall"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "position_fixed": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "R8Kar3a9bNM_3_44to302.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": "face",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "target": "face",
+          "maintain_focus": true,
+          "depth_of_field_preserve": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_jitter": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "r8_e_d5r6Sc_1_329to648.mp4",
+    "selected_class": "Camera Angle Editing",
+    "selected_subclass": "Low angle",
+    "tasks": [
+      {
+        "task": "transform_camera",
+        "params": {
+          "mode": "low_angle",
+          "target": "subject",
+          "perspective": "upward"
+        }
+      },
+      {
+        "task": "preservation_sync",
+        "params": {
+          "facial_motion_sync": true,
+          "speech_alignment": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_consistent": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "no_noise": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "HoEcEbgJuik_106_83to258.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "baby_character",
+          "count": 3,
+          "position": "distributed_sky"
+        }
+      },
+      {
+        "task": "sync_motion",
+        "params": {
+          "reference": "original_baby",
+          "animation_match": true
+        }
+      },
+      {
+        "task": "match_style",
+        "params": {
+          "reference": "original_baby",
+          "style": "3d_animation"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "background_blend": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "no_artifacts": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "2Bb8PvQcGiI_3_0to136.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "edit_motion",
+        "params": {
+          "target": "man",
+          "action": "head_turn",
+          "direction": "camera",
+          "speed": "slow"
+        }
+      },
+      {
+        "task": "facial_expression_edit",
+        "params": {
+          "target": "man_face",
+          "expression_to": "gentle_smile",
+          "progressive": true
+        }
+      },
+      {
+        "task": "preservation_identity",
+        "params": {
+          "appearance_consistent": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "background"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "SUHXx41M9uI_33_0to176.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Watercolor",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "watercolor",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "enhancement_style",
+        "params": {
+          "texture": "hand_painted",
+          "edge_softening": true,
+          "palette": "bright"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "woman_expression",
+            "food_details"
+          ],
+          "clarity_maintain": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "brushstroke_stable": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "61jF_DX3eSw_37_89to267.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "car",
+          "count": 1,
+          "position": "between_existing"
+        }
+      },
+      {
+        "task": "alignment_perspective",
+        "params": {
+          "reference": "stage",
+          "alignment_consistent": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_consistent": true,
+          "preserve": [
+            "presenter",
+            "original_cars"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "position_fixed": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "xNLcquBRwvc_13_0to140.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": "jacket",
+          "color": "emerald_green"
+        }
+      },
+      {
+        "task": "preservation_detail",
+        "params": {
+          "preserve": [
+            "zippers",
+            "logo"
+          ],
+          "no_color_bleeding": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "skin",
+            "other_person",
+            "background"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "mask_tracking": true,
+          "no_jitter": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "CMkYw4dp_NI_6_0to363_scene03.mp4",
+    "selected_class": "Instance Editing",
+    "selected_subclass": "Instance Replacement",
+    "tasks": [
+      {
+        "task": "replace_object",
+        "params": {
+          "target": "cookie",
+          "replacement": "gold_coin"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "alignment": "hand_consistent",
+          "lighting_consistent": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "DVJgFZqkRMI_6_0to304.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "forest_sunlit",
+          "depth_of_field": "shallow",
+          "bokeh": true
+        }
+      },
+      {
+        "task": "adjust_lighting",
+        "params": {
+          "target": "woman",
+          "environment_blend": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_color_bleeding": true,
+          "preserve": [
+            "woman"
+          ]
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "background_stable": true,
+          "flicker_free": true,
+          "no_artifacts": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "ytCeLiZ_85k_4_0to136.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Oil painting",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "oil_painting",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "enhancement_style",
+        "params": {
+          "texture": "brushstroke",
+          "depth": "rich",
+          "sheen": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "object_shapes",
+            "composition"
+          ],
+          "color_preserve": [
+            "green",
+            "yellow"
+          ]
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "style_consistent": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "dnMJxYSkgHE_10_0to172.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "edit_motion",
+        "params": {
+          "target": "boy",
+          "action": "head_shake",
+          "direction": "side_to_side"
+        }
+      },
+      {
+        "task": "alignment_semantic",
+        "params": {
+          "intent": "refusal",
+          "motion_natural": true
+        }
+      },
+      {
+        "task": "preservation_identity",
+        "params": {
+          "appearance_consistent": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Cp2jwofoxFg_8_0to150.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "edit_motion",
+        "params": {
+          "target": "girl_left",
+          "action": "jump",
+          "style": "repetitive"
+        }
+      },
+      {
+        "task": "preservation_pose",
+        "params": {
+          "hand_gesture": true,
+          "facial_expression": true
+        }
+      },
+      {
+        "task": "preservation_identity",
+        "params": {
+          "appearance_consistent": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "motion_stable": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Z5XRdj7RoC8_5_427to600.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Pixel",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "pixel",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "enhancement_style",
+        "params": {
+          "resolution": "16bit",
+          "palette": "vibrant_limited",
+          "pixel_grid_stable": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "facial_features",
+            "expression"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "no_shimmer": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "BWFLztKBrLY_3_414to684_scene02.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "man_phone",
+          "count": "multiple",
+          "position": "background"
+        }
+      },
+      {
+        "task": "simulation_scene",
+        "params": {
+          "environment": "call_center",
+          "density": "high"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_consistent": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "position_fixed": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "4cWbw5cj1FI_27_0to172.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": "center_subjects",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "maintain_focus": true,
+          "detail_preserve": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_jitter": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "sOFDu2jIm4M_10_36to259.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": "hand_mixer",
+          "framing": "center_focus"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "target": "hand_mixer",
+          "maintain_focus": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_distortion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Bm5Pc8nJ5Sc_11_0to135.mp4",
+    "selected_class": "Visual Effect Editing",
+    "selected_subclass": "Background Change",
+    "tasks": [
+      {
+        "task": "replace_background",
+        "params": {
+          "target": "background",
+          "new_scene": "tropical_jungle",
+          "depth_of_field": "shallow"
+        }
+      },
+      {
+        "task": "adjust_lighting",
+        "params": {
+          "target": "man",
+          "lighting_match": "daylight"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "man",
+            "cap",
+            "stethoscope"
+          ],
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "background_stable": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "ZZGldS2w_5M_0_0to178.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Cyberpunk",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "cyberpunk",
+          "target": "car_interior"
+        }
+      },
+      {
+        "task": "add_effect",
+        "params": {
+          "target": [
+            "seat_contours",
+            "screens"
+          ],
+          "effect": "neon_glow",
+          "colors": [
+            "blue",
+            "pink"
+          ]
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "lighting_consistent": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "no_artifacts": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "fabQO-_tS8g_3_0to159.mp4",
+    "selected_class": "Camera Angle Editing",
+    "selected_subclass": "Low angle",
+    "tasks": [
+      {
+        "task": "transform_camera",
+        "params": {
+          "mode": "low_angle",
+          "target": "subject",
+          "perspective": "upward"
+        }
+      },
+      {
+        "task": "adjustment_scene",
+        "params": {
+          "spatial_consistency": true,
+          "lighting_adjust": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_flicker": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "no_distortion": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Fq46eGMB_xA_8_0to128.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": "shirt_right_girl",
+          "color": "deep_blue"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "texture_preserve": true,
+          "no_color_bleeding": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "ajnyV_Rhw5Y_17_0to272.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": "face",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "maintain_focus": true,
+          "background_preserve": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_warping": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Ob2733VOXkA_3_0to199.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": "face",
+          "framing": "center",
+          "range": "medium_to_closeup"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "maintain_focus": true,
+          "overlay_preserve": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "news_bar",
+            "live_badge"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "linear_motion": true,
+          "no_jitter": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "6q_ftAc6N0M_6_78to241.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "American comic style",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "comic",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "enhancement_style",
+        "params": {
+          "outline": "bold_black",
+          "shading": "halftone"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "player_identity",
+            "helmet_logo",
+            "stadium"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "style_stable": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "GN7wITTHFrc_29_24to235.mp4",
+    "selected_class": "Camera Angle Editing",
+    "selected_subclass": "High angle",
+    "tasks": [
+      {
+        "task": "transform_camera",
+        "params": {
+          "mode": "high_angle",
+          "target": "hands",
+          "perspective": "top_down"
+        }
+      },
+      {
+        "task": "adjustment_scene",
+        "params": {
+          "spatial_consistency": true,
+          "lighting_adjust": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "no_distortion": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "PwvYx16CKvI_3_21to228.mp4",
+    "selected_class": "Quantity Editing",
+    "selected_subclass": "Increase",
+    "tasks": [
+      {
+        "task": "add_object",
+        "params": {
+          "target": "mannequin",
+          "count": 1,
+          "position": "right_background"
+        }
+      },
+      {
+        "task": "simulation_scene",
+        "params": {
+          "lighting_consistent": true,
+          "shadow_match": true,
+          "environment": "indoor_studio"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "center_woman"
+          ],
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "position_stable": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "FqifuO9cGLw_13_0to199.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": "man_with_glasses",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "maintain_focus": true,
+          "detail_enhance": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_blur_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_jitter": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "CMkYw4dp_NI_6_0to363.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Anime",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "anime",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "enhancement_style",
+        "params": {
+          "line_art": "sharp",
+          "coloring": "cel_shading"
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "face_identity",
+            "expression"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "style_stable": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "MW2dkRTLNg4_61_127to322.mp4",
+    "selected_class": "Camera Angle Editing",
+    "selected_subclass": "Low angle",
+    "tasks": [
+      {
+        "task": "transform_camera",
+        "params": {
+          "mode": "low_angle",
+          "target": "man",
+          "perspective": "upward"
+        }
+      },
+      {
+        "task": "adjustment_scene",
+        "params": {
+          "spatial_consistency": true,
+          "lighting_adjust": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "no_distortion": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "GJX63vohxPs_15_204to411.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Arc shot",
+    "tasks": [
+      {
+        "task": "motion_camera",
+        "params": {
+          "mode": "arc_shot",
+          "target": "car",
+          "path": "front_right_to_rear_left"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "maintain_focus": true,
+          "target_lock": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_motion_blur_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_jitter": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "_U47CbHwQ6g_13_39to339.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": "suit",
+          "color": "burgundy"
+        }
+      },
+      {
+        "task": "preserve_appearance",
+        "params": {
+          "lighting_preserve": true,
+          "shadow_preserve": true,
+          "texture_preserve": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "face",
+            "background_screen"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "9YVSNaHd2QQ_9_0to146.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "edit_motion",
+        "params": {
+          "target": "right_man",
+          "action": [
+            "head_turn",
+            "laugh"
+          ],
+          "direction": "toward_camera"
+        }
+      },
+      {
+        "task": "preserve_appearance",
+        "params": {
+          "preserve": [
+            "both_men",
+            "rug_pattern"
+          ]
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_artifacts": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "motion_smooth": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "97IdFfIqk24_2_0to172.mp4",
+    "selected_class": "Instance Motion Editing",
+    "selected_subclass": "Human motion",
+    "tasks": [
+      {
+        "task": "edit_motion",
+        "params": {
+          "target": "two_people",
+          "action": "toast",
+          "object": "coffee_cup"
+        }
+      },
+      {
+        "task": "control_motion",
+        "params": {
+          "arm_motion_smooth": true,
+          "interaction_realistic": true
+        }
+      },
+      {
+        "task": "preserve_appearance",
+        "params": {
+          "preserve": [
+            "face_expression",
+            "car_interior"
+          ]
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "no_distortion": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "3Aw90FyOCNQ_10_140to295.mp4",
+    "selected_class": "Attribute Editing",
+    "selected_subclass": "Color adjustment",
+    "tasks": [
+      {
+        "task": "edit_color",
+        "params": {
+          "target": "car_foreground",
+          "color": "emerald_green_metallic"
+        }
+      },
+      {
+        "task": "preserve_appearance",
+        "params": {
+          "preserve": [
+            "man",
+            "car_right"
+          ],
+          "no_color_bleeding": true
+        }
+      },
+      {
+        "task": "adjust_lighting",
+        "params": {
+          "surface_reflection_consistent": true,
+          "natural_lighting": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "bkwLxcfcKTY_1_71to281.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom out",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_out",
+          "target": "center_background",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "foreground_sharp": true,
+          "background_bokeh_preserve": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "graphic_elements",
+            "logo"
+          ],
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_jitter": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "QrJFqor5GSs_35_0to216.mp4",
+    "selected_class": "Style Editing",
+    "selected_subclass": "Watercolor",
+    "tasks": [
+      {
+        "task": "edit_style",
+        "params": {
+          "style": "watercolor",
+          "target": "full_frame"
+        }
+      },
+      {
+        "task": "enhancement_style",
+        "params": {
+          "texture": "soft_paint",
+          "edge_soften": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "motion_preserve": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "style_stable": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "RWZkh9B-ecc_21_17to410.mp4",
+    "selected_class": "Instance Editing",
+    "selected_subclass": "Instance Replacement",
+    "tasks": [
+      {
+        "task": "replace_object",
+        "params": {
+          "target": "frosting",
+          "new_object": "mint_green_frosting",
+          "texture": "creamy"
+        }
+      },
+      {
+        "task": "preserve_geometry",
+        "params": {
+          "position_preserve": true,
+          "scale_preserve": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "preserve": [
+            "wrapper",
+            "table",
+            "sprinkles"
+          ],
+          "interaction_consistent": true,
+          "edge_clean": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "flicker_free": true,
+          "no_artifacts": true
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "4QhELEHqS1g_18_0to249.mp4",
+    "selected_class": "Camera Motion Editing",
+    "selected_subclass": "Zoom in",
+    "tasks": [
+      {
+        "task": "zoom_camera",
+        "params": {
+          "mode": "zoom_in",
+          "target": "speaker_left",
+          "framing": "center"
+        }
+      },
+      {
+        "task": "control_focus",
+        "params": {
+          "maintain_focus": true,
+          "face_sharp": true
+        }
+      },
+      {
+        "task": "compositing",
+        "params": {
+          "edge_clean": true,
+          "no_pixelation": true
+        }
+      },
+      {
+        "task": "consistency_temporal",
+        "params": {
+          "smooth_motion": true,
+          "no_jitter": true,
+          "flicker_free": true
+        }
+      }
+    ]
+  }
+]

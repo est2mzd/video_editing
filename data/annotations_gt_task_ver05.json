@@ -1,0 +1,4742 @@
+[
+  {
+    "video_path": "wyzi9GNZFMU_0_0to121.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Dolly in",
+    "instruction": "Apply a smooth dolly in effect toward the man's face, starting from the original medium shot and ending in a close-up while keeping him centered.",
+    "tasks": [
+      {
+        "action": "zoom_in",
+        "target": "camera_view",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "8rKYl1CdXCc_5_276to660_scene02.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Modify the video so that the man raises his left hand to wave towards the camera in a friendly manner. Preserve his identity, the suit he is wearing, and the dark blue stage background. Ensure the motion is natural and temporally consistent, with no flickering or artifacts around the hand and arm.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "1s9DER1bpm0_10_0to213.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Increase the number of exhausted animals in the scene by adding more rhinos and buffalos lying on the ground in the mid-ground and background areas. Ensure these additional animals match the lighting, shadows, and 3D animation style of the original subjects for a seamless integration. Maintain temporal consistency so that the new instances remain stationary and properly layered within the environment throughout the video.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "DaUJkmBvTKM_2_0to150.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the entire outdoor background behind the speaker with a sleek, modern automotive showroom featuring soft studio lighting and blurred cars in the distance. Ensure that the speaker's outline, including the fine edges of his head and shoulders, is cleanly masked with no edge flickering or artifacts across all frames. The existing lower-third text and the 'an' logo in the top right must remain perfectly legible and completely unaffected by the background modification. Maintain a high-quality, professional look where the new background's lighting and perspective naturally complement the speaker's position in the frame.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "Xw9Zsc9A924_0_0to138.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Change the woman's hair color to a vibrant shade of violet throughout the entire duration of the video. Ensure the color mask precisely follows the contours of her hair, maintaining clean edges against her skin and the background without any color bleeding. The new violet hue should exhibit natural-looking shadows and highlights that react consistently with the existing soft lighting from the window. Maintain the integrity of all other visual elements, including her facial expressions and the detailed pattern of her blouse, to ensure a high-quality and flicker-free result.",
+    "tasks": [
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "94msufYZzaQ_26_0to273.mp4",
+    "class": "Style Editing",
+    "subclass": "Ukiyo-e",
+    "instruction": "Transform the entire video into a traditional Japanese Ukiyo-e woodblock print style. Ensure the identities and facial expressions of the two men are preserved while applying the bold outlines and flat color palettes characteristic of the style. Maintain the recognizable layout of the workshop background with consistent textures and no temporal flickering between frames.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "A7wDe9rF7Xs_5_84to354.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Apply a smooth zoom-in camera effect to the entire video, gradually focusing closer on the man's face. Maintain the subject's sharpness and ensure the zoom is steady without any abrupt jerks or perspective distortion. Preserve the original lighting and colors of the scene throughout the transition.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "speed": "gradual"
+        }
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "n7WSvDzNfaM_1_0to226.mp4",
+    "class": "Instance Editing",
+    "subclass": "Instance Replacement",
+    "instruction": "Replace the woman's black knit beanie with a bright red wool hat throughout the entire video sequence. Ensure the new hat realistically conforms to the shape of her head and maintains perfect spatial alignment during any subtle head movements. The texture of the wool should be clearly defined, and the red color must be color-graded to match the natural, slightly muted lighting of the forest environment. Maintain clean, sharp edges where the hat meets her blonde hair and forehead to ensure a professional, flicker-free result.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "-UcSvp9UkJk_16_0to152.mp4",
+    "class": "Style Editing",
+    "subclass": "Cyberpunk",
+    "instruction": "Transform the entire video into a Cyberpunk style by adding vibrant neon glows to the red buttons and displays. Increase the color contrast and introduce a futuristic, dark atmosphere with subtle blue and pink lighting accents. Ensure the hands and the structural details of the music equipment remain clearly visible and consistent throughout the edit without any flickering artifacts.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "mKmpT3EWyfQ_4_18to209.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Dolly in",
+    "instruction": "Perform a smooth dolly in movement towards the manual coffee grinder to capture the detailed assembly process.",
+    "tasks": [
+      {
+        "action": "zoom_in",
+        "target": "camera_view",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "2s388uO1d-4_6_40to316.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Dolly in",
+    "instruction": "Apply a subtle and smooth dolly-in camera motion to the entire video, gradually moving closer to the subject. Maintain the man's central framing and sharp focus on his face throughout the movement. The perspective shift of the background memorabilia should appear natural and consistent, avoiding any distortion or jitter.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "speed": "gradual"
+        }
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "gmc7SaIlX9A_45_0to124.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Apply a slow and steady zoom in on the businessman's profile as he gazes into the distance. The zoom should start at the beginning of the clip and gradually narrow the field of view to frame his face more tightly by the end of the sequence. Maintain sharp focus on the subject throughout the entire movement while ensuring the background blur remains smooth and consistent without any flickering or jitter.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "zoom_in",
+        "target": "camera_view",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "speed": "gradual"
+        }
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "KeT7K68NzLA_14_0to155.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Decoration effect",
+    "instruction": "Apply a vibrant, neon electric glow effect to the strings of the bass guitar that persists throughout the entire video. The glow should pulse rhythmically and cast a soft, realistic light onto the guitar's sunburst body and the player's hands. Ensure the visual effect tracks the movement of the strings with high precision, maintaining clean edges and zero flickering while preserving the clarity of the person's fingers and clothing.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "KXmC6uNtmJ8_8_0to127.mp4",
+    "class": "Instance Editing",
+    "subclass": "Instance Replacement",
+    "instruction": "Replace the silver sports car with a bright red Lamborghini while maintaining the indoor showroom background.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Q8lmpE8vAL0_1_0to314.mp4",
+    "class": "Instance Editing",
+    "subclass": "Instance Insertion",
+    "instruction": "Place a professional-grade studio condenser microphone on the desk directly in front of the woman. Ensure the microphone's base sits naturally on the reflective surface with accurate contact shadows and subtle reflections. The inserted object must remain perfectly stable throughout the video, maintaining a consistent position relative to the desk and the woman's hands. Keep the edges of the microphone sharp and clean, ensuring no flickering or artifacts occur as the woman moves her hands or speaks.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "cERS8z56GsU_18_46to365.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the entire solid black background with a blurred, modern tech studio interior featuring soft ambient lighting. The subject, the white table surface, and the product boxes must be precisely preserved with clean, sharp edges to ensure no black fringes or flickering throughout the video. The new background should maintain a consistent perspective and shallow depth of field to keep the focus on the presenter. Ensure the transition between the subject and the new background is seamless, without any masking artifacts around the man's hair or clothing.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "4HYLeL_r55Q_7_0to255_scene02.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the blurred background behind the presenter on the right side of the screen with a sharp, well-lit image of a professional kitchen. Ensure the presenter's edges are cleanly matted with no flickering, while keeping the left side of the split-screen containing the burger untouched. Maintain a consistent background and lighting profile across the entire video.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "zUofaGtC3mY_68_0to190.mp4",
+    "class": "Style Editing",
+    "subclass": "Pixel",
+    "instruction": "Apply a pixel art style to the entire scene to give it a 16-bit retro gaming aesthetic.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "FbJTe47ndCU_10_0to371_scene03.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the plain white background with a cinematic, dimly lit library setting featuring tall wooden bookshelves and warm, soft lighting. Ensure the man and the text box in the upper left corner remain perfectly preserved and sharply defined against the new backdrop throughout the entire clip. This replacement must be consistent across all frames with no flickering or white fringing appearing at the edges of the subject. The final output should maintain a professional, clean composite look that seamlessly integrates the foreground speaker with the new environment.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "7G0ub3T0Alg_50_47to240.mp4",
+    "class": "Instance Editing",
+    "subclass": "Instance Removal",
+    "instruction": "Remove the person walking in the background and the green plastic containers from the video, inpainting the area with the surrounding foliage and patio textures. Ensure the foreground cockatoos and the person in the white hoodie remain perfectly intact. The removal must be temporally consistent across all frames with no visible seams or artifacts.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "green"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "S_6ZfRhs0H4_35_97to426_scene02.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Increase the amount of red fruit jam on the white plate to fill the empty space in the center.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "N51llmtWa8Q_10_0to160.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom out",
+    "instruction": "Perform a slow zoom out to reveal more of the dark cosmic void surrounding the two planets.",
+    "tasks": [
+      {
+        "action": "zoom_out",
+        "target": "camera_view",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "5kV7UA9-r18_8_131to333.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Change the color of the subject's red necktie to a deep navy blue throughout the entire video. Ensure the color change follows the folds and lighting of the fabric naturally without bleeding onto the shirt or suit jacket. Keep the subject's identity, the background studio, and the news graphics exactly as they are.",
+    "tasks": [
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "rhXDtQCpp-0_40_0to130.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the solid blue background with a vibrant tropical beach scene featuring sand and ocean waves.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "pyJBzKCvJrk_7_0to318.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the blurry indoor background with a view of a futuristic city skyline at night.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "un-L1Fo8-IU_19_0to341.mp4",
+    "class": "Camera Angle Editing",
+    "subclass": "Low angle",
+    "instruction": "Modify the video to adopt a low angle perspective, making the camera look up at the central man to create a more authoritative and commanding presence. Throughout the entire sequence, ensure the man's facial expressions and the details of his checkered shirt remain perfectly stable without any flickering or artifacts. The background crowd and the man in the suit behind him must have their perspective adjusted to match the new upward-facing camera position while keeping the background realistically out of focus. Maintain clean, sharp edges on the primary subject to ensure he is seamlessly integrated into the new camera framing.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "pSV28NbGT-4_41_31to271.mp4",
+    "class": "Instance Editing",
+    "subclass": "Instance Replacement",
+    "instruction": "Replace the iconic yellow wooden bed with a sleek, modern minimalist metal bed frame.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "EYkd6c6Gqyg_23_0to209.mp4",
+    "class": "Camera Angle Editing",
+    "subclass": "Low angle",
+    "instruction": "Change the camera perspective to a low angle shot, looking up at the two men from below.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "0Th8ieWYQa0_78_0to142.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Increase the number of panda characters in the video by adding a second panda adjacent to the original one. Ensure the new panda matches the existing 3D animation style and maintains a consistent position relative to the group throughout the entire video. The integration should be seamless with no flickering or artifacts, preserving the original background and other characters.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "pLaTa5tXnqA_1_794to1006.mp4",
+    "class": "Style Editing",
+    "subclass": "Anime",
+    "instruction": "Apply a vibrant anime art style to the video, emphasizing the clean lines of the juicer and the saturation of the citrus fruits.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "LQ5umkrHY3g_1_847to1178.mp4",
+    "class": "Style Editing",
+    "subclass": "Cyberpunk",
+    "instruction": "Transform the entire scene into a high-contrast Cyberpunk aesthetic. Replace the red and black background panels with glowing neon signs and digital circuitry patterns in shades of electric blue and hot pink. Adjust the lighting on the man to include vibrant rim lights reflecting these neon colors while maintaining his clear facial features and professional posture. Ensure the style is applied consistently throughout the video with no flickering or noise, keeping the edges of the speaker and the furniture clean and sharp.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "CQTWpJ_NmkQ_7_0to168.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Decoration effect",
+    "instruction": "Enhance the basketball player by adding a vibrant, glowing aura of orange and blue flames that outlines his body throughout the entire video. Ensure the fire effect flickers dynamically, casting a subtle light onto his jersey while maintaining the clarity of the 'NEW YORK' text and the arm tattoo. The background spectators should remain visible but slightly dimmed to make the player stand out more prominently. All edges between the player and the visual effects must be sharp and clean, with no flickering artifacts or inconsistent movement across frames.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "p_DqjCTN6Fg_27_0to145.mp4",
+    "class": "Instance Editing",
+    "subclass": "Instance Replacement",
+    "instruction": "Replace the woman wearing the bright pink hat on the left side of the frame with a middle-aged woman wearing a classic beige pillbox hat and a matching suit. The new subject must be accurately positioned within the carriage, maintaining the original profile perspective and lighting conditions for a seamless blend. Ensure that the man in the top hat and the yellow graphic overlay remain completely unchanged throughout the duration of the clip. The transition between the new subject and the background should have clean, anti-aliased edges with no visible flickering or jitter.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "preserve_original"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "yHPualcu7wE_44_0to203.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Modify the baby's facial expression to transition from the current pensive look into a wide, joyous smile. The animation of the facial muscles should appear smooth and biologically realistic, ensuring the baby's identity is perfectly preserved throughout the video. Maintain consistent lighting and skin texture across the face to avoid any flickering or visual artifacts. This change should occur progressively over the sequence, reaching the peak of the smile by the final frame while keeping the background stable.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "9TnWVIUAmQE_2_0to187.mp4",
+    "class": "Camera Angle Editing",
+    "subclass": "Low angle",
+    "instruction": "Adjust the camera perspective to a low angle throughout the entire video, viewing the scene from a bottom-up position. Maintain the focus on the man's hands as he works on the yellow bike, ensuring the brick wall background and lighting remain consistent. The resulting video should have a natural perspective shift without artifacts or distortion.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "2LB9h6ZM7Mc_6_0to173.mp4",
+    "class": "Instance Editing",
+    "subclass": "Instance Removal",
+    "instruction": "Remove the black crochet hook from the background of the video and inpaint the area with the plain white surface seamlessly. Maintain the original lighting and texture of the background throughout the entire video. Ensure the removal is clean with no flickering or ghosting artifacts as the hand moves.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "KlBsMy2HRas_37_19to283.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Animate the woman in the foreground so that she slowly rotates her head 90 degrees to her left to discover the giant mask looming behind her. Her facial expression must realistically transition from a neutral speaking state to one of intense fear and shock as she makes eye contact with the mask. Ensure the movement is smooth with no temporal flickering, and maintain the woman's original appearance and the sharp boundaries between her and the background mask throughout the entire sequence.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "zm3KV2vomiQ_23_0to160.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Modify the exterior color of the blue luxury car to a vibrant metallic emerald green throughout the entire video sequence. Carefully preserve the original lighting, highlights, and reflections on the car's surface to maintain a realistic appearance. Ensure that the interior leather, the dashboard, and the bright showroom environment remain untouched by the color shift. The edit must have clean edges along the car's body panels with no color bleeding or flickering during the shot.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "green"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "no_artifacts"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "KlCmBIwCGCs_32_0to287.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Increase the number of pastries on the baking tray to fill the empty middle section.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "XXHUgddofPo_4_0to252.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the existing plain white wall and blinds background with a vibrant, modern city skyline at night featuring glowing neon lights. The man in the foreground should remain perfectly intact, with precise rotoscoping to ensure clean, sharp edges around his hair and clothing throughout the entire sequence. Match the ambient lighting on the subject's face to the new environment, adding subtle blue and purple highlights to reflect the neon city glow. Ensure the new background is consistently tracked and stabilized relative to any slight camera movements, maintaining a professional and seamless composite without flickering.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "MPCQi8LEeOI_67_0to214.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "object motion",
+    "instruction": "Make the black radiator fans visible behind the metallic plate spin rapidly and continuously.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "RmtDhE1myVE_2_0to125.mp4",
+    "class": "Camera Angle Editing",
+    "subclass": "High angle",
+    "instruction": "Shift the camera to a high angle looking down at the two men to reveal more of the grassy hill behind them.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "PHuXNq3p3Lw_260_0to245.mp4",
+    "class": "Camera Angle Editing",
+    "subclass": "Low angle",
+    "instruction": "Change the shot to a low angle view, capturing the woman from a lower perspective looking upwards.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "ck1ZNslaPl4_3_0to174.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Perform a smooth zoom in on the ingredient bowls and the stand mixer to focus on the baking preparation.",
+    "tasks": [
+      {
+        "action": "zoom_in",
+        "target": "camera_view",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "luqB18f19rA_34_0to287_scene02.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Modify the video so the woman tilts her head slightly to the right while she is speaking.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "wAa1NSQwizI_60_318to515.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Change the bright red foreground surface to a deep blue color while keeping the lighting and shadows consistent.",
+    "tasks": [
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "7pdva1luF4A_0_0to195.mp4",
+    "class": "Style Editing",
+    "subclass": "Ghibli",
+    "instruction": "Transform the entire video into a Studio Ghibli-inspired aesthetic, using soft textures, warm lighting, and a hand-painted feel. Preserve the likeness of the two subjects and the general kitchen arrangement while ensuring smooth, flicker-free transitions between frames. Maintain consistent edges and a nostalgic color palette throughout the sequence.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "uQw1SwPo0UA_61_0to215.mp4",
+    "class": "Style Editing",
+    "subclass": "Cyberpunk",
+    "instruction": "Transform the video into a cyberpunk style by applying a high-contrast nocturnal color grade with vibrant neon blue and pink lighting.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "Bmw-tDeu3Yc_22_400to694.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Change the color of the character's orange fur suit to a vibrant neon blue.",
+    "tasks": [
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "NbWQNOzDiAI_28_0to172.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the plain white background with a sophisticated, high-rise office interior overlooking a city at night. Ensure that the edges around the man's hair and suit are perfectly masked with no white fringes or haloing. The lighting on the man's face should be subtly adjusted to reflect the cool blue and warm amber tones of the new city-lit background. Maintain this background consistently throughout the video with no flickering or spatial jittering.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "DJAiwNQYHS0_22_0to220.mp4",
+    "class": "Camera Angle Editing",
+    "subclass": "Low angle",
+    "instruction": "Change the camera perspective to a low angle shot looking up at the rugby player to make him appear more imposing.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "91hePSbvai0_14_0to184.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the entire studio background with a cozy, sunlit indoor cafe setting. Keep the man sitting on the leather sofa and his gestures exactly as they are throughout the video. Ensure smooth edge blending and consistent lighting across all frames without any flickering.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "tDm-Fh4ZLpA_1_0to148.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Modify the color of the furniture in the studio to create a more professional atmosphere. Change the bright pink armchair on the left to a sophisticated navy blue, and transform the green armchair on the right into a neutral gray. Ensure the original fabric textures and highlights are realistically maintained throughout the video sequence. The presenters and the studio background should remain untouched, with no color flickering or edge artifacts.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "green"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "QyQGDYjV6CY_11_0to162.mp4",
+    "class": "Style Editing",
+    "subclass": "Cyberpunk",
+    "instruction": "Transform the entire video into a vibrant Cyberpunk style, characterized by high-contrast neon lighting and a futuristic color palette. Replace the warm kitchen lights with glowing blue and pink hues, and add subtle holographic interface elements hovering near the stove. The transformation must be temporally consistent across all frames with no flickering, ensuring the chef's movements remain clear and well-defined against the stylized, high-tech background.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "Risf_QQGX2o_40_0to183.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Please edit the woman in the foreground to look up from her screen and perform a slight nod of approval. Her facial muscles should move naturally, showing a subtle transition from concentration to a soft smile as she reacts to something. The motion must be fluid and smooth throughout the sequence, ensuring there is no flickering or distortion around the frames of her glasses or her dark hair. Keep the background man and the whiteboard's content stable and out of focus to maintain the original professional office atmosphere.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "FbJTe47ndCU_10_0to371.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the plain white background throughout the entire video with a bustling urban street scene at night, featuring glowing neon lights and bokeh effects. Carefully mask the man, ensuring clean edges around his hair and beard to prevent any white outline or flickering during movement. Maintain the man's original facial expressions and body language while subtly adjusting the color grading to blend him naturally into the new vibrant city environment. The transition between the subject and the new background must remain stable across all frames.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "KqUrLBwQxX0_0_0to241_scene02.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Decoration effect",
+    "instruction": "Enhance the video by adding subtle, warm stage lighting decoration effects that emanate from above, creating a professional presentation atmosphere. Ensure the lighting interacts naturally with the boy's hair and shoulders while keeping the 'TED' sign and the bookshelves in the background clearly visible. The effect should remain consistent across all frames without any flickering or sudden changes in intensity to maintain a high-quality, clean look.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "uLVZrXWeyKw_29_0to154.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Change the color of the silver sports car to a vibrant metallic red while maintaining its glossy finish.",
+    "tasks": [
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "8_iuDkiMB9o_15_0to205.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Increase the number of towel animals by adding a second towel elephant next to the existing one on the wooden nightstand. Ensure the new towel elephant matches the style, white texture, and red eye details of the original. Keep the background, bed, and lamp completely unchanged throughout the entire video with consistent lighting.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency",
+          "preserve_original"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "_pQAUwy0yWs_0_119to277.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Apply a smooth and gradual zoom-in effect focused on the man's face throughout the entire video. Ensure the subject remains sharp and the transition is steady without any abrupt shifts or frame distortions.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "speed": "gradual"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "vr9oNZkfTVU_28_0to129.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Increase the number of sled teams by adding a second identical dog sled team running parallel to the first one on the left side of the track. Throughout the entire video, ensure that the new dogs and sled move in sync with the original team, maintaining a consistent distance and speed. The integration must feature clean edges against the white snow and perfectly matched lighting to prevent any visual flickering or ghosting artifacts. Keep the expansive snowy mountain backdrop and the clear blue sky completely unchanged while the two teams traverse the landscape.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "preserve_original"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "nQQWnvYztYY_37_46to343.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Modify the video to have the man in the foreground nod his head subtly and naturally while he is speaking. This nodding motion should persist throughout the duration of the clip to signify agreement. Ensure that his glasses and facial features remain sharp and do not distort during the movement. The background and the blurred person behind him must remain unchanged and stable with no visual artifacts or flickering.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "preserve_original"
+        ],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "TV2R9YotgjI_52_29to208.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Increase the number of speed bumps in the scene by adding a second identical black and yellow ramp further ahead in the car's path. Ensure that the newly added ramp aligns perfectly with the low-angle perspective of the ground and matches the existing lighting and shadows for a realistic integration. The added object must remain stable throughout the entire video sequence with clean edges and no visual flickering. Carefully preserve the appearance of the grey car and the background brick wall during this modification.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "R8Kar3a9bNM_3_44to302.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Apply a slow and smooth zoom-in effect focused on the older man's face throughout the duration of the clip to emphasize his expression. Ensure that the subject remains centered and in sharp focus as the camera moves closer, while preserving the shallow depth of field in the background. The motion must be steady without any jitter, flickering, or sudden jumps in scale. Maintain high visual quality with clean edges and consistent lighting throughout the entire camera movement.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "r8_e_d5r6Sc_1_329to648.mp4",
+    "class": "Camera Angle Editing",
+    "subclass": "Low angle",
+    "instruction": "Adjust the camera perspective to a low angle shot, looking up at the subject to enhance his presence during the speech. Ensure that his facial features and mouth movements remain perfectly synchronized with the existing dialogue throughout the video. The lighting on his face and the background should remain stable, avoiding any flickering or artificial noise. Maintain clean edges around his hair and suit jacket to ensure a professional and seamless visual transition.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "HoEcEbgJuik_106_83to258.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Increase the number of jumping baby characters in the scene by adding three more identical instances at various positions across the pink sky. Ensure each new baby maintains the same 3D animation style and movement characteristics as the original character to maintain visual consistency. The edges of the added instances must be sharp and clean, blending seamlessly into the colorful background without any flickering or temporal artifacts throughout the entire sequence.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "2Bb8PvQcGiI_3_0to136.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Modify the video so the man slowly turns his head to face the camera and offers a gentle smile. Maintain his original appearance and the details of the street background throughout the movement. Ensure the motion is fluid and realistic, with no flickering or artifacts.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "SUHXx41M9uI_33_0to176.mp4",
+    "class": "Style Editing",
+    "subclass": "Watercolor",
+    "instruction": "Transform the video into a vibrant watercolor painting style while maintaining the woman's cheerful expression and the motion of her eating. Soften the edges and apply a fluid, hand-painted texture to the blue background and the hexagonal wall patterns. Ensure the color palette remains bright and consistent across all frames with no flickering of the brushstroke effects. The subject's features and the details of the food on the fork should remain clear enough to follow the action.",
+    "tasks": [
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "61jF_DX3eSw_37_89to267.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Increase the number of cars on the stage by adding an additional white car in the background between the existing blue and yellow vehicles. Ensure the new car aligns with the stage's perspective and lighting conditions for a seamless integration. Keep the movement and identity of the presenter and the two original cars intact throughout the video.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "xNLcquBRwvc_13_0to140.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Change the color of the man's blue jacket to a dark emerald green while meticulously preserving the orange-red zippers and logo details. This color modification must be applied consistently across the entire video duration, ensuring the mask accurately follows the man's movements without any jittering. It is crucial to keep the skin tones, the woman's black hoodie, and the background water's natural colors unchanged. The final video should exhibit sharp, clean edges around the jacket with no green spill onto the man's neck or hands.",
+    "tasks": [
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [
+          "preserve_original"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "green"
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "CMkYw4dp_NI_6_0to363_scene03.mp4",
+    "class": "Instance Editing",
+    "subclass": "Instance Replacement",
+    "instruction": "Replace the black cookie the man is holding with a shiny gold coin.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "DVJgFZqkRMI_6_0to304.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the current blurred indoor background with a lush, sun-drenched forest scene filled with soft green foliage. Ensure that the woman's silhouette is cleanly matted with sharp, flicker-free edges, particularly around the fine details of her hair as she moves and talks. Apply a realistic bokeh effect to the new forest background to match the original camera's shallow depth of field, and adjust the ambient lighting on her face to blend naturally with the new outdoor environment. The final output must maintain temporal consistency with no edge bleeding or artifacts throughout the entire sequence.",
+    "tasks": [
+      {
+        "action": "replace_background",
+        "target": "background",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "green"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [
+          "no_artifacts"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "ytCeLiZ_85k_4_0to136.mp4",
+    "class": "Style Editing",
+    "subclass": "Oil painting",
+    "instruction": "Transform the entire scene of fresh vegetables into a classic oil painting style with rich, textured brushstrokes. Maintain the identifiable shapes and original composition of the lettuce, lemon, ginger, and kale throughout the sequence. Ensure that the vibrant green and yellow hues are preserved but rendered with the characteristic depth and sheen of oil pigments. The final video should have a smooth, consistent painterly look across all frames without flickering or loss of subject definition.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "green"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "dnMJxYSkgHE_10_0to172.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Modify the boy's motion so he shakes his head side to side to refuse the food being offered.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "Cp2jwofoxFg_8_0to150.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Make the girl on the left hop up and down repeatedly like a rabbit while maintaining her current hand gesture and facial expression.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "Z5XRdj7RoC8_5_427to600.mp4",
+    "class": "Style Editing",
+    "subclass": "Pixel",
+    "instruction": "Transform the entire video into a high-quality 16-bit retro pixel art style while preserving the recognizable facial features and intense expression of LeBron James. The color palette should be limited to vibrant, saturated tones that emphasize the yellow and purple of the Lakers jersey against a darker, pixelated stadium background. Ensure the pixel grid remains perfectly stable throughout the motion to prevent flickering or 'shimmering' effects. Maintain clean, sharp edges between the subject and the background across all frames for a polished aesthetic.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "BWFLztKBrLY_3_414to684_scene02.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Increase the number of men talking on phones, placing duplicates in the background to simulate a busy call center environment.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "4cWbw5cj1FI_27_0to172.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Apply a smooth, gradual zoom-in effect to the entire video, focusing centrally on the two individuals at the table. Maintain the sharpness of the subjects and the detailed background props throughout the movement. Ensure the transition is steady with no flickering or jerky motions.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "speed": "gradual"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "sOFDu2jIm4M_10_36to259.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Perform a steady zoom in on the white hand mixer the man is holding and pointing towards.",
+    "tasks": [
+      {
+        "action": "zoom_in",
+        "target": "camera_view",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "Bm5Pc8nJ5Sc_11_0to135.mp4",
+    "class": "Visual Effect Editing",
+    "subclass": "Background Change",
+    "instruction": "Replace the brick wall and the garden background behind the man with a dense, lush tropical jungle environment to emphasize his role in a global wildlife health program. Ensure the subject's silhouette, including the fine details of his cap and the stethoscope, is cleanly masked and preserved throughout the video. The new jungle background should have a soft blur to maintain a professional depth-of-field effect, and the lighting must be adjusted to match the existing natural daylight on the man's face. The transition must be seamless with no flickering or edge artifacts around the moving subject.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "ZZGldS2w_5M_0_0to178.mp4",
+    "class": "Style Editing",
+    "subclass": "Cyberpunk",
+    "instruction": "Apply a cyberpunk aesthetic to the car interior, adding vibrant neon blue and pink glowing accents to the seat contours and screens.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "fabQO-_tS8g_3_0to159.mp4",
+    "class": "Camera Angle Editing",
+    "subclass": "Low angle",
+    "instruction": "Transform the current front-view shot into a dramatic low-angle perspective, making the chef appear more prominent and authoritative. Throughout the entire video, ensure the spatial consistency between the chef and the kitchen background is maintained to reflect the new camera position. High-quality masking should be used to keep the subject's edges sharp and free from flickering as he gestures. Additionally, adjust the scene's lighting to realistically match the upward camera angle while preserving the overall color balance of the original footage.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "Fq46eGMB_xA_8_0to128.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Change the multicolored floral shirt of the girl on the right to a solid deep blue color.",
+    "tasks": [
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      }
+    ]
+  },
+  {
+    "video_path": "ajnyV_Rhw5Y_17_0to272.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Apply a smooth and steady zoom-in effect to the entire video, gradually focusing more on the man's face as he speaks. Ensure the man remains the central subject throughout the camera movement and maintain sharp focus on both the foreground and the urban background. The transition should be seamless with no sudden jumps or perspective warping.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "speed": "gradual"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "Ob2733VOXkA_3_0to199.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Execute a smooth and gradual zoom-in transition starting from the current medium shot and ending on a tight close-up of the subject's face. The motion should be perfectly linear and devoid of any jitter or stuttering throughout the entire duration of the clip. Ensure that the subject remains in sharp focus and centered in the frame as the camera tightens. The graphic overlays, such as the 'SQUAWK' news bar and the 'LIVE NEW YORK' badge, must remain clear and integrated naturally without flickering or being awkwardly cropped.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "speed": "gradual"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "6q_ftAc6N0M_6_78to241.mp4",
+    "class": "Style Editing",
+    "subclass": "American comic style",
+    "instruction": "Transform the entire video into an American comic style, applying bold black outlines and halftone dot textures for shading. Preserve the identity of the football player, the New York Jets helmet logo, and the stadium background. Maintain temporal consistency and ensure the stylistic effects remain stable across all frames without flickering.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "GN7wITTHFrc_29_24to235.mp4",
+    "class": "Camera Angle Editing",
+    "subclass": "High angle",
+    "instruction": "Shift the camera to a high angle perspective to look directly down at the hands holding the pink mold.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "PwvYx16CKvI_3_21to228.mp4",
+    "class": "Quantity Editing",
+    "subclass": "Increase",
+    "instruction": "Introduce an additional mannequin wearing a formal floral dress into the background space on the far right of the frame. The new instance must be seamlessly integrated with realistic lighting and soft shadows that match the existing indoor studio setting. Throughout the sequence, ensure the woman in the center remains the focus, with clean edges maintained as she moves to prevent any visual flickering or artifacts between her and the newly added mannequin.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "FqifuO9cGLw_13_0to199.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Execute a gradual zoom-in transition focused on the man wearing glasses in the foreground. The camera should steadily move closer to his face, increasing the level of detail while ensuring the subject remains the central focus of the composition. Maintain clean edges and a stable frame throughout the entire motion to avoid any distracting jitter or blur. This effect should be applied uniformly across the entire video duration to create a more intimate and intense perspective.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "speed": "gradual"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "CMkYw4dp_NI_6_0to363.mp4",
+    "class": "Style Editing",
+    "subclass": "Anime",
+    "instruction": "Transform the entire video into a high-quality Japanese anime style, characterized by sharp line art and vibrant, cel-shaded coloring. Ensure the man's facial expressions and features are accurately translated into the anime aesthetic while preserving his identity. The dark cookie should be stylized with a subtle hand-drawn texture, and the lighting should emphasize a bright, cinematic anime atmosphere. Throughout the clip, maintain temporal consistency to prevent flickering, ensuring clean edges and a professional finish.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "MW2dkRTLNg4_61_127to322.mp4",
+    "class": "Camera Angle Editing",
+    "subclass": "Low angle",
+    "instruction": "Shift the camera to a low angle perspective, filming the man from a position below the table line while looking upward.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "GJX63vohxPs_15_204to411.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Arc shot",
+    "instruction": "Execute a smooth arc shot revolving around the blue sports car, transitioning from the front-right view to the rear-left side.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "_U47CbHwQ6g_13_39to339.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Change the color of the news presenter's suit from navy blue to a deep burgundy throughout the entire video. Ensure that the original lighting, shadows, and fabric textures are preserved for a realistic appearance. Keep the background screen content and the presenter's facial features unchanged.",
+    "tasks": [
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "preserve_original"
+        ],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "9YVSNaHd2QQ_9_0to146.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Modify the video so that the man on the right turns his head to look directly at the camera and starts laughing. This new motion should be fluid and naturally integrated with the existing scene. Preserve the appearance of both men and the background rug pattern throughout the entire clip.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "97IdFfIqk24_2_0to172.mp4",
+    "class": "Instance Motion Editing",
+    "subclass": "Human motion",
+    "instruction": "Modify the video so that the two individuals in the car bring their coffee cups together to perform a toast. Ensure the motion of their arms and cups is fluid and realistic while maintaining their facial expressions and the interior details of the vehicle. The transition should be seamless with no flickering or distortions in the background throughout the entire sequence.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "3Aw90FyOCNQ_10_140to295.mp4",
+    "class": "Attribute Editing",
+    "subclass": "Color adjustment",
+    "instruction": "Change the color of the magenta Porsche in the foreground to a metallic emerald green throughout the entire video. Maintain the original appearance of the man and the purple car on the right without any color bleeding. Ensure temporal consistency and natural lighting transitions on the car's surface across all frames.",
+    "tasks": [
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [],
+        "params": {
+          "color": "green"
+        }
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "bkwLxcfcKTY_1_71to281.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom out",
+    "instruction": "Create a smooth zoom-out effect that starts from the center of the blurry colorful background and gradually reveals more of the surrounding space. Maintain the soft, dreamy bokeh quality of the pink and orange spheres while ensuring the vibrant purple graphic elements and the turquoise logo in the foreground remain sharp and anchored. The motion should be steady and continuous throughout the sequence, avoiding any sudden jumps or flickering.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "speed": "gradual"
+        }
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "QrJFqor5GSs_35_0to216.mp4",
+    "class": "Style Editing",
+    "subclass": "Watercolor",
+    "instruction": "Transform the video into a soft watercolor painting style, preserving the fluid motions of the makeup application.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "RWZkh9B-ecc_21_17to410.mp4",
+    "class": "Instance Editing",
+    "subclass": "Instance Replacement",
+    "instruction": "Replace the pink swirl frosting on top of the cupcake with a vibrant scoop of mint green frosting that has a creamy, textured surface. Maintain the original position and scale of the frosting so that the person's hand appears to be placing the decoration onto the new mint green surface naturally. Ensure that the blue wrapper with the cute face, the wooden table, and all the surrounding colorful sprinkles remain completely unchanged throughout the video. The edit must be temporally consistent, featuring clean edges where the hand interacts with the frosting and no visual flickering or artifacts.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "green"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red"
+        }
+      },
+      {
+        "action": "preserve",
+        "target": "existing_elements",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "green"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "change_color",
+        "target": "object",
+        "constraints": [
+          "preserve_original"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "temporal_consistency"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  },
+  {
+    "video_path": "4QhELEHqS1g_18_0to249.mp4",
+    "class": "Camera Motion Editing",
+    "subclass": "Zoom in",
+    "instruction": "Apply a smooth, gradual zoom-in effect centered on the speaker on the left throughout the entire video. Ensure the subject's face remains in sharp focus and the composition transitions naturally without any abrupt scaling or pixelation.",
+    "tasks": [
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [
+          "smooth_transition"
+        ],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {
+          "color": "red",
+          "speed": "gradual"
+        }
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      },
+      {
+        "action": "modify",
+        "target": "scene",
+        "constraints": [],
+        "params": {}
+      }
+    ]
+  }
+]
