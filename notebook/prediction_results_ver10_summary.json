@@ -1,0 +1,25 @@
+{
+  "baseline": {
+    "action_score": 0.92,
+    "target_score": 0.22,
+    "params_score": 0.3013,
+    "total": 0.5944
+  },
+  "improved": {
+    "action_score": 0.99,
+    "target_score": 0.61,
+    "params_score": 0.7244,
+    "total": 0.8343
+  },
+  "delta": {
+    "action_score": 0.07,
+    "target_score": 0.39,
+    "params_score": 0.4231,
+    "total": 0.2399
+  },
+  "low_confidence_count": 6,
+  "notes": [
+    "Evaluation is against the primary task extracted from annotations_gt_task_ver09.json.",
+    "Some change_color labels in ver09 appear noisy, so manual inspection remains important."
+  ]
+}

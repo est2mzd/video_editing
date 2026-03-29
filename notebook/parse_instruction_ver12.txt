@@ -1,0 +1,120 @@
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+from pprint import pprint
+
+WORKSPACE = Path('/workspace')
+SRC_DIR = WORKSPACE / 'src'
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+from parse.data_loading import load_base_records, load_grouped_unknown_records, load_ver10_seed_predictions
+from parse.evaluation import evaluate_prediction_map
+from parse.runner import run_models
+
+DATA_DIR = WORKSPACE / 'data'
+NOTEBOOK_DIR = WORKSPACE / 'notebook'
+OUTPUT_DIR = NOTEBOOK_DIR / 'ver12_outputs'
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+RAW_PATH = DATA_DIR / 'annotations.jsonl'
+GT_PATH = DATA_DIR / 'annotations_gt_task_ver09.json'
+GROUPED_PATHS = [DATA_DIR / 'annotations_grouped_ver01.json', DATA_DIR / 'annotations_grouped_ver02.json']
+VER10_SEED_PATH = NOTEBOOK_DIR / 'prediction_results_ver10.json'
+
+MODEL_NAMES = ['ver10_baseline', 'ver10_improved', 'v11a_ruleplus', 'v11d_ensemble']
+
+print({'output_dir': str(OUTPUT_DIR), 'models': MODEL_NAMES})
+
+base_records = load_base_records(RAW_PATH, GT_PATH)
+seed_predictions = load_ver10_seed_predictions(VER10_SEED_PATH)
+unknown_records = load_grouped_unknown_records(GROUPED_PATHS, base_records, instruction_keys=('ver2', 'ver3', 'ver4'))
+
+print('base_records:', len(base_records))
+print('seed_predictions:', len(seed_predictions))
+print('unknown_records:', len(unknown_records))
+pprint(unknown_records[0])
+
+model_predictions, model_debug = run_models(unknown_records, seed_predictions=seed_predictions)
+
+reports = {}
+for model_name in MODEL_NAMES:
+    reports[model_name] = evaluate_prediction_map(model_predictions[model_name], unknown_records)
+
+print('overall metrics on unknown instructions')
+for model_name in sorted(MODEL_NAMES, key=lambda name: reports[name]['overall']['total'], reverse=True):
+    print(model_name, reports[model_name]['overall'])
+
+def materialize_rows(records, predictions, debug_map):
+    rows = []
+    for record in records:
+        key = record['prediction_key']
+        rows.append({
+            'prediction_key': key,
+            'video_path': record['video_path'],
+            'variant': record.get('variant', 'base'),
+            'variant_source': record.get('variant_source', 'base'),
+            'instruction': record['instruction'],
+            'class': record['class'],
+            'subclass': record['subclass'],
+            'gt_primary': record['gt_primary'],
+            'prediction': predictions[key],
+            'debug': debug_map[key],
+        })
+    return rows
+
+model_output_paths = {}
+for model_name in MODEL_NAMES:
+    model_rows = materialize_rows(unknown_records, model_predictions[model_name], model_debug[model_name])
+    out_path = OUTPUT_DIR / f'unknown_predictions_{model_name}.json'
+    out_path.write_text(json.dumps(model_rows, ensure_ascii=False, indent=2), encoding='utf-8')
+    model_output_paths[model_name] = str(out_path)
+
+analysis_payload = {
+    'models': {model_name: reports[model_name]['overall'] for model_name in MODEL_NAMES},
+    'best_model': max(MODEL_NAMES, key=lambda name: reports[name]['overall']['total']),
+    'record_count': len(unknown_records),
+    'variant_distribution': {
+        variant: sum(1 for row in unknown_records if row.get('variant') == variant)
+        for variant in sorted({row.get('variant') for row in unknown_records})
+    },
+    'model_output_paths': model_output_paths,
+    'note': 'Grouped paraphrase data is used only for inference/evaluation input in this notebook.',
+}
+
+analysis_path = OUTPUT_DIR / 'unknown_instruction_analysis_ver12.json'
+analysis_path.write_text(json.dumps(analysis_payload, ensure_ascii=False, indent=2), encoding='utf-8')
+
+print('analysis path:', analysis_path)
+pprint(analysis_payload)
+
+print('overall summary')
+for model_name in sorted(MODEL_NAMES, key=lambda name: reports[name]['overall']['total'], reverse=True):
+    print(model_name, reports[model_name]['overall'])
+
+for model_name in MODEL_NAMES:
+    rows = reports[model_name]['rows']
+    by_variant = {}
+    for variant in sorted({row['variant'] for row in rows}):
+        subset = [row for row in rows if row['variant'] == variant]
+        by_variant[variant] = round(sum(row['total'] for row in subset) / len(subset), 4)
+    print()
+    print(f'variant totals: {model_name}')
+    pprint(by_variant)
+
+best_model = max(MODEL_NAMES, key=lambda name: reports[name]['overall']['total'])
+worst_rows = sorted(reports[best_model]['rows'], key=lambda row: (row['total'], row['action_score'], row['target_score'], row['params_score']))[:10]
+print()
+print('worst examples from best model:', best_model)
+for row in worst_rows[:5]:
+    key = row['prediction_key']
+    record = next(item for item in unknown_records if item['prediction_key'] == key)
+    pred = model_predictions[best_model][key]['tasks'][0]
+    print('=' * 100)
+    print('prediction_key:', key)
+    print('instruction:', record['instruction'])
+    print('gt_primary:', record['gt_primary'])
+    print('pred:', pred)
+    print('scores:', {k: row[k] for k in ['action_score', 'target_score', 'params_score', 'total']})
