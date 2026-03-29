@@ -1,0 +1,54 @@
+{
+  "v17c_single": {
+    "gt_version": {
+      "old": "ver09",
+      "new": "ver10"
+    },
+    "unknown_known": "unknown",
+    "scoring_weights": "0.5*action + 0.2*target + 0.3*params",
+    "old": {
+      "action_score": 0.9667,
+      "target_score": 0.7083,
+      "params_score": 0.5612,
+      "total": 0.7934
+    },
+    "new": {
+      "action_score": 0.9666666666666667,
+      "target_score": 0.7083333333333334,
+      "params_score": 0.5612183333333334,
+      "total": 0.7933653333333331
+    },
+    "delta": {
+      "action_score": -3.333333333332966e-05,
+      "target_score": 3.333333333332966e-05,
+      "params_score": 1.8333333333342416e-05,
+      "total": -3.4666666666849366e-05
+    }
+  },
+  "v17d_multi": {
+    "gt_version": {
+      "old": "ver09",
+      "new": "ver10"
+    },
+    "unknown_known": "unknown",
+    "scoring_weights": "0.55*coverage + 0.35*precision + 0.10*count_alignment",
+    "old": {
+      "coverage": 0.7904,
+      "precision": 0.7369,
+      "count_alignment": 0.7381,
+      "total": 0.7665
+    },
+    "new": {
+      "action_score": 0.9666666666666667,
+      "target_score": 0.6683333333333333,
+      "params_score": 0.5612183333333334,
+      "total": 0.7853653333333329
+    },
+    "delta": {
+      "action_score": 0.9666666666666667,
+      "target_score": 0.6683333333333333,
+      "params_score": 0.5612183333333334,
+      "total": 0.018865333333332956
+    }
+  }
+}

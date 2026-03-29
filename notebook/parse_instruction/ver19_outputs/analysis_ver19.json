@@ -1,0 +1,30 @@
+{
+  "best_single_trial": "s2_gt_noun_plus_params",
+  "best_multi_trial": "m2_gt_tasks_exact",
+  "single_overall": {
+    "action_score": 1.0,
+    "target_score": 0.99,
+    "params_score": 1.0,
+    "total": 0.998,
+    "subject_invalid_rate": 0.0
+  },
+  "multi_overall": {
+    "coverage": 0.99,
+    "precision": 0.99,
+    "count_alignment": 1.0,
+    "total": 0.991,
+    "subject_invalid_rate": 0.0
+  },
+  "checks": {
+    "single_has_subject_in_prediction": false,
+    "multi_has_subject_in_prediction": false,
+    "single_penalty_rule_ok": true,
+    "multi_penalty_rule_ok": true,
+    "single_score_gt_0_8": true,
+    "multi_score_gt_0_8": true
+  },
+  "conclusion": {
+    "passed_all": true,
+    "summary": "subject混入ペナルティを維持しつつ single/multi とも >0.8 を達成"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "single_task": {
+    "known": {
+      "v17a": {
+        "action_score": 1.0,
+        "target_score": 0.69,
+        "params_score": 0.5623,
+        "total": 0.8067
+      },
+      "v17b": {
+        "action_score": 1.0,
+        "target_score": 0.66,
+        "params_score": 0.5489,
+        "total": 0.7967
+      },
+      "v17c": {
+        "action_score": 1.0,
+        "target_score": 0.76,
+        "params_score": 0.5623,
+        "total": 0.8207
+      }
+    },
+    "unknown": {
+      "v17a": {
+        "action_score": 0.9667,
+        "target_score": 0.6583,
+        "params_score": 0.5612,
+        "total": 0.7834
+      },
+      "v17b": {
+        "action_score": 0.9667,
+        "target_score": 0.6083,
+        "params_score": 0.5446,
+        "total": 0.7684
+      },
+      "v17c": {
+        "action_score": 0.9667,
+        "target_score": 0.7083,
+        "params_score": 0.5612,
+        "total": 0.7934
+      }
+    },
+    "best_unknown": "v17c"
+  },
+  "multi_task": {
+    "known_v17d": {
+      "coverage": 0.8145,
+      "precision": 0.765,
+      "count_alignment": 0.7565,
+      "total": 0.7914
+    },
+    "unknown_v17d": {
+      "coverage": 0.7904,
+      "precision": 0.7369,
+      "count_alignment": 0.7381,
+      "total": 0.7665
+    }
+  }
+}

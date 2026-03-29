@@ -1,0 +1,43 @@
+{
+  "known_benchmark": {
+    "v16a_deterministic_aux": {
+      "coverage": 0.7866,
+      "precision": 0.6687,
+      "count_alignment": 0.7068,
+      "total": 0.7374
+    },
+    "v16b_retrieval_all_tasks": {
+      "coverage": 0.7464,
+      "precision": 0.7837,
+      "count_alignment": 0.6935,
+      "total": 0.7542
+    },
+    "v16c_count_adaptive": {
+      "coverage": 0.7085,
+      "precision": 0.7714,
+      "count_alignment": 0.7253,
+      "total": 0.7322
+    }
+  },
+  "unknown_benchmark": {
+    "v16a_deterministic_aux": {
+      "coverage": 0.7667,
+      "precision": 0.6557,
+      "count_alignment": 0.7046,
+      "total": 0.7217
+    },
+    "v16b_retrieval_all_tasks": {
+      "coverage": 0.7267,
+      "precision": 0.7667,
+      "count_alignment": 0.6978,
+      "total": 0.7378
+    },
+    "v16c_count_adaptive": {
+      "coverage": 0.6938,
+      "precision": 0.7595,
+      "count_alignment": 0.7274,
+      "total": 0.7202
+    }
+  },
+  "best_model": "v16b_retrieval_all_tasks"
+}
