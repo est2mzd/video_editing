@@ -227,11 +227,13 @@ data/*.parquet
 
 notebook/data/
 notebook/ckpt/
+notebook/*_outputs/
 
 checkpoints/
 
 third_party/VACE/models/
 third_party/VACE/cache/
+third_party/VACE/results/
 
 weights/
 notebook/output/
