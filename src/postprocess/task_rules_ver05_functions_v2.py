@@ -1572,7 +1572,7 @@ def add_object_frames(
         return add_object_frames_ver5(frames, params, instruction, logger)
     if version in {"ver6", "6", "xmem", "xmem_hybrid", "tracked_sam_xmem"}:
         return add_object_frames_ver6(frames, params, instruction, logger)
-    return add_object_frames_ver2(frames, params, instruction, logger)
+    return add_object_frames_ver1(frames, params, instruction, logger)
 
 
 def run_method(

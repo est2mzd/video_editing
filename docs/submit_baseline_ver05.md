@@ -445,7 +445,7 @@ python3 -m src.submit_baseline_ver05 \
 
 実施変更:
 - 新規作成:
-	- `/workspace/src/posteprocess/task_rules_ver05_functions.py`
+	- `/workspace/src/postprocess/task_rules_ver05_functions.py`
 - 参照差し替え:
 	- `src/submit_baseline_ver05.py` にて `src.posteprocess.task_rules_ver05_functions` を import
 	- `apply_task_to_frames()` は method 分岐を持たず、`run_method(...)` 呼び出しへ一本化

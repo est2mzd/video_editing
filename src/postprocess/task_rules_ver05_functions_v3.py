@@ -1547,231 +1547,387 @@ def add_object_frames_ver6(
     return out
 
 
-
 def add_object_frames_ver7(
+    frames,
+    params,
+    instruction,
+    logger,
+):
+    """
+    ver7:
+    ・ver6でmask取得（差分）
+    ・ver1と同じ copy + shift で複製
+    """
+
+    if not frames:
+        return frames
+
+    frames_v6 = add_object_frames_ver6(frames, params, instruction, logger)
+
+    shift_ratio = params.get("shift_ratio", 0.5)
+    out = []
+
+    for orig, v6 in zip(frames, frames_v6):
+
+        # --- 差分mask ---
+        diff = (v6.astype(int) - orig.astype(int)) != 0
+        mask = diff.any(axis=2).astype("uint8")
+
+        ys, xs = (mask > 0).nonzero()
+        if len(xs) == 0:
+            out.append(orig)
+            continue
+
+        # --- bbox ---
+        x1, x2 = xs.min(), xs.max()
+        y1, y2 = ys.min(), ys.max()
+
+        h = y2 - y1
+        w = x2 - x1
+
+        # --- ROI（元画像からコピーが重要） ---
+        roi = orig[y1:y2, x1:x2].copy()
+        roi_mask = mask[y1:y2, x1:x2].copy()
+
+        # --- shift（ここが本質） ---
+        dx = int(w * shift_ratio)
+
+        new_x1 = x1 + dx
+        new_y1 = y1
+
+        # 境界補正
+        new_x1 = max(0, min(orig.shape[1] - w, new_x1))
+
+        # --- 合成 ---
+        canvas = orig.copy()
+
+        target = canvas[new_y1:new_y1 + h, new_x1:new_x1 + w]
+
+        mask_bool = roi_mask > 0
+        target[mask_bool] = roi[mask_bool]
+
+        canvas[new_y1:new_y1 + h, new_x1:new_x1 + w] = target
+
+        out.append(canvas)
+
+    return out
+
+
+def add_object_frames_ver8(
     frames: list[np.ndarray],
     params: dict[str, Any],
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
-    """add_object ver7 pipeline:
-    1) detect initial target/foreground bbox(es) on first frame via GroundingDINO
-    2) initialize SAM masks on first frame
-    3) initialize one multi-label XMem processor from first-frame target/foreground masks
-    4) for each new frame, run XMem + RAFT flow + dynamic SAM
-    5) adaptively fuse SAM and temporally stable XMem masks for target/foreground
-    6) preserve ver1-style foreground priority during composition
+    """add_object ver8 pipeline:
+    1) detect candidate boxes on every frame via GroundingDINO
+    2) build SAM mask for each candidate box on every frame
+    3) select largest-area mask on frame0, then max-IoU mask thereafter
+    4) compute bbox from the selected mask
+    5) copy bbox region from the original frame and paste it with 50% x-shift
+    6) paste only mask pixels without removing the original object
     """
     if not frames:
         return frames
 
-    def _make_xmem_processor_multilabel(
-        first_bgr: np.ndarray,
-        first_target_mask: np.ndarray,
-        first_fg_mask: np.ndarray,
-    ):
-        if not load_xmem_model(params=params, logger=logger):
-            return None
-        try:
-            import torch
-
-            config = {
-                "top_k": int(params.get("xmem_top_k", 30)),
-                "mem_every": int(params.get("xmem_mem_every", 5)),
-                "deep_update_every": int(params.get("xmem_deep_update_every", -1)),
-                "enable_long_term": bool(params.get("xmem_enable_long_term", True)),
-                "enable_long_term_count_usage": bool(params.get("xmem_enable_long_term_count_usage", True)),
-                "max_mid_term_frames": int(params.get("xmem_max_mid_term_frames", 10)),
-                "min_mid_term_frames": int(params.get("xmem_min_mid_term_frames", 5)),
-                "num_prototypes": int(params.get("xmem_num_prototypes", 128)),
-                "max_long_term_elements": int(params.get("xmem_max_long_term_elements", 10000)),
-            }
-            processor = XMEMInferenceCore(XMEM_NETWORK, config)
-            processor.set_all_labels([1, 2])
-
-            first_rgb = cv2.cvtColor(first_bgr, cv2.COLOR_BGR2RGB)
-            image_t, _ = XMEM_IMAGE_TO_TORCH(first_rgb, device=XMEM_DEVICE)
-
-            target_bin = (first_target_mask > 0).astype(np.float32)
-            fg_bin = (first_fg_mask > 0).astype(np.float32)
-            # foreground has priority over target
-            target_bin[fg_bin > 0] = 0.0
-
-            mask_t = torch.from_numpy(
-                np.stack([target_bin, fg_bin], axis=0)
-            ).to(XMEM_DEVICE)
-            _ = processor.step(image_t, mask_t)
-            return processor
-        except Exception as exc:
-            logger.debug(f"XMem multi processor init failed: {exc}")
-            return None
-
-    def _xmem_predict_multilabel(processor, curr_bgr: np.ndarray) -> tuple[np.ndarray | None, np.ndarray | None]:
-        if processor is None:
-            return None, None
-        try:
-            import torch
-
-            curr_rgb = cv2.cvtColor(curr_bgr, cv2.COLOR_BGR2RGB)
-            image_t, _ = XMEM_IMAGE_TO_TORCH(curr_rgb, device=XMEM_DEVICE)
-            with torch.no_grad():
-                prob = processor.step(image_t)
-            if prob is None or not hasattr(prob, "detach"):
-                return None, None
-
-            prob_t = prob.detach()
-            if prob_t.ndim != 3 or prob_t.shape[0] < 3:
-                return None, None
-
-            label_map = torch.argmax(prob_t, dim=0).cpu().numpy().astype(np.uint8)
-            target_mask = (label_map == 1).astype(np.uint8)
-            fg_mask = (label_map == 2).astype(np.uint8)
-            return target_mask, fg_mask
-        except Exception as exc:
-            logger.debug(f"XMem multi predict failed: {exc}")
-            return None, None
-
-    h, w = frames[0].shape[:2]
-    target_prompt, fg_prompt = _resolve_add_object_prompts(params, instruction)
-    frame0_rgb = cv2.cvtColor(frames[0], cv2.COLOR_BGR2RGB)
-
-    target_boxes = _detect_all_boxes(frame0_rgb, target_prompt, logger=logger)
-    if not target_boxes:
-        logger.warning(f"add_object ver7: '{target_prompt}' not detected, passthrough")
-        return frames
-
-    tx1, ty1, tx2, ty2 = [int(c) for c in target_boxes[0]]
-    target_box_init = _clip_box((tx1, ty1, tx2, ty2), w, h)
-    if target_box_init[2] <= target_box_init[0] or target_box_init[3] <= target_box_init[1]:
-        return frames
-
-    fg_boxes0 = _detect_all_boxes(frame0_rgb, fg_prompt, logger=logger)
-    fixed_fg_boxes: list[tuple[int, int, int, int]] = []
-    for box in fg_boxes0:
-        bx1, by1, bx2, by2 = [int(c) for c in box]
-        cbox = _clip_box((bx1, by1, bx2, by2), w, h)
-        if cbox[2] > cbox[0] and cbox[3] > cbox[1]:
-            fixed_fg_boxes.append(cbox)
-
-    prev_target_box = target_box_init
-    prev_target_mask = get_sam_mask_from_box(
-        frame0_rgb,
-        [prev_target_box[0], prev_target_box[1], prev_target_box[2], prev_target_box[3]],
-        logger=logger,
-    ).astype(np.uint8)
-    prev_target_mask = _refine_mask(prev_target_mask)
-
-    prev_fg_mask = _build_fg_mask_from_boxes(frame0_rgb, fixed_fg_boxes, logger=logger)
-    prev_fg_mask = _refine_mask(prev_fg_mask)
-
-    # foreground has priority over target, consistent with ver1 composition
-    prev_target_mask = np.where(prev_fg_mask > 0, 0, prev_target_mask).astype(np.uint8)
-
-    xmem_processor = _make_xmem_processor_multilabel(
-        frames[0], prev_target_mask, prev_fg_mask
-    )
-
-    smooth_alpha = float(params.get("temporal_smooth_alpha", 0.7))
-    sam_blend_alpha = float(np.clip(params.get("sam_blend_alpha", 0.6), 0.0, 1.0))
-    target_expand_scale = float(params.get("target_expand_scale", 1.18))
-    fg_expand_scale = float(params.get("fg_expand_scale", 1.10))
+    frame_h, frame_w = frames[0].shape[:2]
+    target_prompt, _fg_prompt = _resolve_add_object_prompts(params, instruction)
+    shift_ratio = float(params.get("shift_ratio", 0.5))
 
     out: list[np.ndarray] = []
-    out.append(
-        _compose_shifted_add_object(
-            frames[0],
-            prev_target_box,
-            prev_target_mask,
-            prev_fg_mask,
-        )
-    )
+    prev_mask: np.ndarray | None = None
+    prev_box: tuple[int, int, int, int] = (0, 0, frame_w, frame_h)
 
-    for i in _iter_frames_with_progress(range(1, len(frames)), params, "add_object", "add_object_ver7"):
-        prev_frame = frames[i - 1]
-        curr_frame = frames[i]
-        curr_rgb = cv2.cvtColor(curr_frame, cv2.COLOR_BGR2RGB)
-
-        flow = _estimate_optical_flow(prev_frame, curr_frame, logger=logger)
-        warped_target = _warp_mask_with_flow(prev_target_mask, flow)
-        warped_fg = _warp_mask_with_flow(prev_fg_mask, flow)
-
-        xmem_target_mask, xmem_fg_mask = _xmem_predict_multilabel(
-            xmem_processor, curr_frame
+    for frame_idx, frame in enumerate(
+        _iter_frames_with_progress(
+            frames,
+            params,
+            "add_object",
+            "add_object_ver8",
         )
-        if xmem_target_mask is None:
-            xmem_target_mask = warped_target
-        if xmem_fg_mask is None:
-            xmem_fg_mask = warped_fg
-
-        stable_target = _temporal_stabilize_mask(
-            prev_target_mask, xmem_target_mask, flow, smooth_alpha
-        )
-        stable_fg = _temporal_stabilize_mask(
-            prev_fg_mask, xmem_fg_mask, flow, smooth_alpha
-        )
-
-        target_box_dyn = _derive_dynamic_box_from_masks(
-            warped_target | stable_target,
-            prev_target_box,
-            w,
-            h,
-            expand_scale=target_expand_scale,
-        )
-        sam_target = get_sam_mask_from_box(
-            curr_rgb,
-            [target_box_dyn[0], target_box_dyn[1], target_box_dyn[2], target_box_dyn[3]],
+    ):
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        candidate_boxes = _detect_all_boxes(
+            frame_rgb,
+            target_prompt,
             logger=logger,
-        ).astype(np.uint8)
-        sam_target = _refine_mask(sam_target)
-
-        fg_box_dyn = _derive_dynamic_box_from_masks(
-            warped_fg | stable_fg,
-            _mask_to_box(prev_fg_mask, (0, 0, w, h)),
-            w,
-            h,
-            expand_scale=fg_expand_scale,
-        )
-        sam_fg_dyn = get_sam_mask_from_box(
-            curr_rgb,
-            [fg_box_dyn[0], fg_box_dyn[1], fg_box_dyn[2], fg_box_dyn[3]],
-            logger=logger,
-        ).astype(np.uint8)
-        sam_fg_fixed = _build_fg_mask_from_boxes(curr_rgb, fixed_fg_boxes, logger=logger)
-        sam_fg = np.maximum(sam_fg_dyn, sam_fg_fixed)
-        sam_fg = _refine_mask(sam_fg)
-
-        curr_target_mask = _fuse_masks_adaptive(
-            sam_mask=sam_target,
-            stable_mask=stable_target,
-            prev_mask=prev_target_mask,
-            sam_blend_alpha=sam_blend_alpha,
-        )
-        curr_fg_mask = _fuse_masks_adaptive(
-            sam_mask=sam_fg,
-            stable_mask=stable_fg,
-            prev_mask=prev_fg_mask,
-            sam_blend_alpha=sam_blend_alpha,
         )
 
-        # keep ver1-style priority: foreground occluder wins over target
-        curr_target_mask = np.where(curr_fg_mask > 0, 0, curr_target_mask).astype(np.uint8)
+        candidate_masks: list[np.ndarray] = []
+        for box in candidate_boxes:
+            tx1, ty1, tx2, ty2 = [int(c) for c in box]
+            clipped_box = _clip_box((tx1, ty1, tx2, ty2), frame_w, frame_h)
+            if (
+                clipped_box[2] <= clipped_box[0]
+                or clipped_box[3] <= clipped_box[1]
+            ):
+                continue
+            mask = get_sam_mask_from_box(
+                frame_rgb,
+                [
+                    clipped_box[0],
+                    clipped_box[1],
+                    clipped_box[2],
+                    clipped_box[3],
+                ],
+                logger=logger,
+            ).astype(np.uint8)
+            mask = _refine_mask(mask)
+            if _mask_area(mask) > 0:
+                candidate_masks.append(mask)
 
-        curr_target_box = _mask_to_box(curr_target_mask, target_box_dyn)
-        curr_target_box = _expand_box(curr_target_box, w, h, scale=1.05, min_margin=4)
+        selected_mask: np.ndarray | None = None
+        if candidate_masks:
+            if prev_mask is None:
+                selected_mask = max(candidate_masks, key=_mask_area)
+            else:
+                selected_mask = max(
+                    candidate_masks,
+                    key=lambda mask: _mask_iou(prev_mask, mask),
+                )
+        elif prev_mask is not None:
+            selected_mask = prev_mask.copy()
 
-        edited = _compose_shifted_add_object(
-            curr_frame,
-            curr_target_box,
-            curr_target_mask,
-            curr_fg_mask,
-        )
-        out.append(edited)
+        if selected_mask is None:
+            if frame_idx == 0:
+                logger.warning(
+                    f"add_object ver8: '{target_prompt}' not detected, passthrough"
+                )
+            out.append(frame.copy())
+            continue
 
-        prev_target_box = curr_target_box
-        prev_target_mask = curr_target_mask
-        prev_fg_mask = curr_fg_mask
+        selected_mask = (selected_mask > 0).astype(np.uint8)
+        selected_box = _mask_to_box(selected_mask, prev_box)
+        selected_box = _clip_box(selected_box, frame_w, frame_h)
+
+        x1, y1, x2, y2 = selected_box
+        box_w = x2 - x1
+        box_h = y2 - y1
+        if box_w <= 0 or box_h <= 0:
+            out.append(frame.copy())
+            prev_mask = selected_mask
+            prev_box = selected_box
+            continue
+
+        shift_x = int(round(box_w * shift_ratio))
+        dst_x1 = x1 + shift_x
+        dst_y1 = y1
+        dst_x2 = dst_x1 + box_w
+        dst_y2 = dst_y1 + box_h
+
+        if dst_x1 < 0:
+            dst_x1 = 0
+            dst_x2 = box_w
+        if dst_x2 > frame_w:
+            dst_x2 = frame_w
+            dst_x1 = max(0, dst_x2 - box_w)
+        if dst_y1 < 0:
+            dst_y1 = 0
+            dst_y2 = box_h
+        if dst_y2 > frame_h:
+            dst_y2 = frame_h
+            dst_y1 = max(0, dst_y2 - box_h)
+
+        src_off_x = dst_x1 - (x1 + shift_x)
+        src_off_y = dst_y1 - y1
+        src_x1 = x1 + src_off_x
+        src_y1 = y1 + src_off_y
+        src_x2 = src_x1 + (dst_x2 - dst_x1)
+        src_y2 = src_y1 + (dst_y2 - dst_y1)
+
+        src_x1 = max(0, min(frame_w - 1, src_x1))
+        src_y1 = max(0, min(frame_h - 1, src_y1))
+        src_x2 = max(src_x1 + 1, min(frame_w, src_x2))
+        src_y2 = max(src_y1 + 1, min(frame_h, src_y2))
+        dst_x2 = dst_x1 + (src_x2 - src_x1)
+        dst_y2 = dst_y1 + (src_y2 - src_y1)
+
+        result = frame.copy()
+        src_patch = frame[src_y1:src_y2, src_x1:src_x2].copy()
+        src_mask = selected_mask[src_y1:src_y2, src_x1:src_x2] > 0
+        dst_region = result[dst_y1:dst_y2, dst_x1:dst_x2].copy()
+        dst_region[src_mask] = src_patch[src_mask]
+        result[dst_y1:dst_y2, dst_x1:dst_x2] = dst_region
+        out.append(result)
+
+        prev_mask = selected_mask
+        prev_box = selected_box
 
     return out
+
+
+def add_object_frames_ver9(
+    frames: list[np.ndarray],
+    params: dict[str, Any],
+    instruction: str,
+    logger: logging.Logger,
+) -> list[np.ndarray]:
+    """add_object ver9 pipeline:
+    1) detect candidate boxes on every frame via GroundingDINO
+    2) build SAM masks for all candidate boxes on every frame
+    3) select largest-area mask on frame0, then max-IoU mask thereafter
+    4) compute centroid from the selected mask and smooth it with EMA
+    5) copy ROI from the original frame only
+    6) place the copied object by centroid-based 50% horizontal shift
+    7) paste only masked pixels without removing the original object
+    """
+    if not frames:
+        return frames
+
+    frame_h, frame_w = frames[0].shape[:2]
+    target_prompt, _fg_prompt = _resolve_add_object_prompts(params, instruction)
+    shift_ratio = float(params.get("shift_ratio", 0.5))
+    ema_prev_weight = float(params.get("ema_prev_weight", 0.7))
+    ema_curr_weight = float(params.get("ema_curr_weight", 0.3))
+
+    out: list[np.ndarray] = []
+    prev_mask: np.ndarray | None = None
+    prev_center: tuple[float, float] | None = None
+    prev_box: tuple[int, int, int, int] = (0, 0, frame_w, frame_h)
+
+    for frame_idx, frame in enumerate(
+        _iter_frames_with_progress(
+            frames,
+            params,
+            "add_object",
+            "add_object_ver9",
+        )
+    ):
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        candidate_boxes = _detect_all_boxes(
+            frame_rgb,
+            target_prompt,
+            logger=logger,
+        )
+
+        candidate_masks: list[np.ndarray] = []
+        for box in candidate_boxes:
+            tx1, ty1, tx2, ty2 = [int(c) for c in box]
+            clipped_box = _clip_box((tx1, ty1, tx2, ty2), frame_w, frame_h)
+            if (
+                clipped_box[2] <= clipped_box[0]
+                or clipped_box[3] <= clipped_box[1]
+            ):
+                continue
+            mask = get_sam_mask_from_box(
+                frame_rgb,
+                [
+                    clipped_box[0],
+                    clipped_box[1],
+                    clipped_box[2],
+                    clipped_box[3],
+                ],
+                logger=logger,
+            ).astype(np.uint8)
+            mask = _refine_mask(mask)
+            if _mask_area(mask) > 0:
+                candidate_masks.append(mask)
+
+        selected_mask: np.ndarray | None = None
+        if candidate_masks:
+            if prev_mask is None:
+                selected_mask = max(candidate_masks, key=_mask_area)
+            else:
+                selected_mask = max(
+                    candidate_masks,
+                    key=lambda mask: _mask_iou(prev_mask, mask),
+                )
+        elif prev_mask is not None:
+            selected_mask = prev_mask.copy()
+
+        if selected_mask is None:
+            if frame_idx == 0:
+                logger.warning(
+                    f"add_object ver9: '{target_prompt}' not detected, passthrough"
+                )
+            out.append(frame.copy())
+            continue
+
+        selected_mask = (selected_mask > 0).astype(np.uint8)
+        selected_box = _mask_to_box(selected_mask, prev_box)
+        selected_box = _clip_box(selected_box, frame_w, frame_h)
+
+        ys, xs = np.where(selected_mask > 0)
+        if len(xs) == 0 or len(ys) == 0:
+            out.append(frame.copy())
+            prev_mask = selected_mask
+            prev_box = selected_box
+            continue
+
+        raw_cx = float(xs.mean())
+        raw_cy = float(ys.mean())
+        if prev_center is None:
+            smooth_cx = raw_cx
+            smooth_cy = raw_cy
+        else:
+            smooth_cx = ema_prev_weight * prev_center[0] + ema_curr_weight * raw_cx
+            smooth_cy = ema_prev_weight * prev_center[1] + ema_curr_weight * raw_cy
+
+        x1, y1, x2, y2 = selected_box
+        box_w = x2 - x1
+        box_h = y2 - y1
+        if box_w <= 0 or box_h <= 0:
+            out.append(frame.copy())
+            prev_mask = selected_mask
+            prev_box = selected_box
+            prev_center = (smooth_cx, smooth_cy)
+            continue
+
+        shift_x = float(box_w) * shift_ratio
+        new_cx = smooth_cx + shift_x
+        new_cy = smooth_cy
+
+        dst_x1 = int(round(new_cx - box_w / 2.0))
+        dst_y1 = int(round(new_cy - box_h / 2.0))
+        dst_x2 = dst_x1 + box_w
+        dst_y2 = dst_y1 + box_h
+
+        if dst_x1 < 0:
+            dst_x1 = 0
+            dst_x2 = box_w
+        if dst_x2 > frame_w:
+            dst_x2 = frame_w
+            dst_x1 = max(0, dst_x2 - box_w)
+        if dst_y1 < 0:
+            dst_y1 = 0
+            dst_y2 = box_h
+        if dst_y2 > frame_h:
+            dst_y2 = frame_h
+            dst_y1 = max(0, dst_y2 - box_h)
+
+        src_x1 = x1
+        src_y1 = y1
+        src_x2 = x2
+        src_y2 = y2
+
+        copy_w = min(src_x2 - src_x1, dst_x2 - dst_x1)
+        copy_h = min(src_y2 - src_y1, dst_y2 - dst_y1)
+        if copy_w <= 0 or copy_h <= 0:
+            out.append(frame.copy())
+            prev_mask = selected_mask
+            prev_box = selected_box
+            prev_center = (smooth_cx, smooth_cy)
+            continue
+
+        src_x2 = src_x1 + copy_w
+        src_y2 = src_y1 + copy_h
+        dst_x2 = dst_x1 + copy_w
+        dst_y2 = dst_y1 + copy_h
+
+        result = frame.copy()
+        src_patch = frame[src_y1:src_y2, src_x1:src_x2].copy()
+        src_mask = selected_mask[src_y1:src_y2, src_x1:src_x2] > 0
+        dst_region = result[dst_y1:dst_y2, dst_x1:dst_x2].copy()
+        dst_region[src_mask] = src_patch[src_mask]
+        result[dst_y1:dst_y2, dst_x1:dst_x2] = dst_region
+        out.append(result)
+
+        prev_mask = selected_mask
+        prev_box = selected_box
+        prev_center = (smooth_cx, smooth_cy)
+
+    return out
+
 
 def add_object_frames(
     frames: list[np.ndarray],
@@ -1786,7 +1942,8 @@ def add_object_frames(
     - ver4: fixed initial-frame bbox + tracking + RAFT + temporal stabilization
     - ver5: ver4 + per-frame SAM fusion
     - ver6: ver5 + real XMem tracking + dynamic SAM box + adaptive fusion
-    - ver7: ver6 + one multi-label XMem processor for target/foreground with ver1-style foreground priority
+    - ver8: per-frame DINO+SAM + IoU mask selection + copy/shift duplication
+    - ver9: ver8 + centroid-based placement + EMA-smoothed center
     """
     version = str(params.get("add_object_version", "ver2")).lower()
     if version in {"ver1", "1", "first", "first_frame"}:
@@ -1799,9 +1956,13 @@ def add_object_frames(
         return add_object_frames_ver5(frames, params, instruction, logger)
     if version in {"ver6", "6", "xmem", "xmem_hybrid", "tracked_sam_xmem"}:
         return add_object_frames_ver6(frames, params, instruction, logger)
-    if version in {"ver7", "7", "xmem_multilabel", "tracked_sam_xmem_multilabel", "foreground_priority"}:
+    if version in {"ver7", "7", "xmem_dup"}:
         return add_object_frames_ver7(frames, params, instruction, logger)
-    return add_object_frames_ver2(frames, params, instruction, logger)
+    if version in {"ver8", "8", "iou_dup", "mask_iou_dup"}:
+        return add_object_frames_ver8(frames, params, instruction, logger)
+    if version in {"ver9", "9", "center_dup", "ema_center_dup"}:
+        return add_object_frames_ver9(frames, params, instruction, logger)
+    return add_object_frames_ver1(frames, params, instruction, logger)
 
 
 def run_method(
