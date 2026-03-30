@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -284,9 +285,193 @@ def detect_primary_box(frame: np.ndarray, text_prompt: str, logger: logging.Logg
         return None
 
 
+def _split_target_keywords(text: str) -> list[str]:
+    cleaned = (text or "").lower()
+    cleaned = cleaned.replace("'s", " ")
+    cleaned = cleaned.replace("_", " ")
+    parts = re.split(r"[^a-z0-9]+", cleaned)
+    stop_words = {
+        "a", "an", "the", "of", "to", "and", "or", "in", "on",
+        "at", "with", "for", "from", "by",
+    }
+    keywords: list[str] = []
+    for part in parts:
+        token = part.strip()
+        if not token or token in stop_words:
+            continue
+        if token not in keywords:
+            keywords.append(token)
+    return keywords
+
+
+def _resolve_target_union_box(
+    frame: np.ndarray,
+    params: dict[str, Any],
+    instruction: str,
+    logger: logging.Logger,
+) -> tuple[int, int, int, int] | None:
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    h, w = frame.shape[:2]
+    target_text = str(params.get("target", instruction or "person"))
+    keywords = _split_target_keywords(target_text)
+    all_boxes: list[list[float]] = []
+
+    for keyword in keywords:
+        prompt = keyword.replace("_", " ") + " ."
+        all_boxes.extend(_detect_all_boxes(frame_rgb, prompt, logger=logger))
+
+    if not all_boxes and target_text:
+        prompt = target_text.replace("_", " ") + " ."
+        all_boxes.extend(_detect_all_boxes(frame_rgb, prompt, logger=logger))
+
+    if not all_boxes:
+        fallback = detect_primary_box(
+            frame,
+            text_prompt="face . person .",
+            logger=logger,
+        )
+        if fallback is None:
+            return None
+        all_boxes = [list(fallback)]
+
+    x1 = max(0, int(min(box[0] for box in all_boxes)))
+    y1 = max(0, int(min(box[1] for box in all_boxes)))
+    x2 = min(w, int(max(box[2] for box in all_boxes)))
+    y2 = min(h, int(max(box[3] for box in all_boxes)))
+    if x2 <= x1 or y2 <= y1:
+        return None
+    return x1, y1, x2, y2
+
+
+def _inpaint_masked_background(
+    frame: np.ndarray,
+    mask: np.ndarray,
+) -> np.ndarray:
+    mask_u8 = (mask > 0).astype(np.uint8)
+    if int(mask_u8.sum()) == 0:
+        return frame.copy()
+
+    ys, xs = np.where(mask_u8 > 0)
+    box_size = max(int(xs.max() - xs.min() + 1), int(ys.max() - ys.min() + 1))
+    dilate_size = max(3, min(15, box_size // 20 * 2 + 1))
+    radius = max(3, min(9, box_size // 25))
+    kernel = np.ones((dilate_size, dilate_size), dtype=np.uint8)
+    hole_mask = cv2.dilate(mask_u8, kernel, iterations=1) * 255
+    return cv2.inpaint(frame, hole_mask, radius, cv2.INPAINT_TELEA)
+
+
+def _compose_scaled_mask_foreground(
+    frame: np.ndarray,
+    mask: np.ndarray,
+    scale: float,
+) -> np.ndarray:
+    mask_u8 = (mask > 0).astype(np.uint8)
+    ys, xs = np.where(mask_u8 > 0)
+    if len(xs) == 0 or len(ys) == 0:
+        return frame.copy()
+
+    center_x = float(xs.mean())
+    center_y = float(ys.mean())
+    top_y = float(ys.min())
+
+    # Keep background unchanged and scale only masked foreground pixels.
+    obj_only = np.where(mask_u8[:, :, None] > 0, frame, 0).astype(np.uint8)
+    affine = cv2.getRotationMatrix2D((center_x, center_y), 0.0, float(scale))
+
+    # Keep the upper side inside the frame even if the lower side is clipped.
+    scaled_top_y = center_y + float(scale) * (top_y - center_y)
+    if scaled_top_y < 0.0:
+        affine[1, 2] += -scaled_top_y
+
+    h, w = frame.shape[:2]
+    scaled_obj = cv2.warpAffine(
+        obj_only,
+        affine,
+        (w, h),
+        flags=cv2.INTER_LINEAR,
+        borderMode=cv2.BORDER_CONSTANT,
+        borderValue=0,
+    )
+    scaled_mask = cv2.warpAffine(
+        mask_u8,
+        affine,
+        (w, h),
+        flags=cv2.INTER_NEAREST,
+        borderMode=cv2.BORDER_CONSTANT,
+        borderValue=0,
+    )
+
+    result = _inpaint_masked_background(frame, mask_u8)
+    paste_region = scaled_mask > 0
+    result[paste_region] = scaled_obj[paste_region]
+    return result
+
+
+def _stable_object_zoom_in(
+    frames: list[np.ndarray],
+    params: dict[str, Any],
+    instruction: str,
+    logger: logging.Logger,
+) -> list[np.ndarray]:
+    if not frames:
+        return frames
+
+    zoom_end_scale = params.get("end_scale")
+    if zoom_end_scale is None:
+        object_end_scale = float(params.get("max_scale", 1.3))
+    else:
+        zoom_end_scale = float(zoom_end_scale)
+        if zoom_end_scale > 1.0:
+            object_end_scale = zoom_end_scale
+        else:
+            object_end_scale = 1.0 / max(zoom_end_scale, 1e-4)
+    object_end_scale = float(np.clip(object_end_scale, 1.0, 3.0))
+
+    scales = np.linspace(1.0, object_end_scale, len(frames))
+    out: list[np.ndarray] = []
+    prev_mask: np.ndarray | None = None
+    for i, frame in enumerate(
+        _iter_frames_with_progress(frames, params, "dolly_in", "object_zoom_in")
+    ):
+        box = _resolve_target_union_box(frame, params, instruction, logger)
+        curr_mask: np.ndarray | None = None
+        if box is not None:
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            curr_mask = get_sam_mask_from_box(
+                frame_rgb,
+                [box[0], box[1], box[2], box[3]],
+                logger=logger,
+            ).astype(np.uint8)
+            if int((curr_mask > 0).sum()) == 0:
+                curr_mask = None
+
+        if curr_mask is None:
+            if prev_mask is None:
+                out.append(frame.copy())
+                continue
+            curr_mask = prev_mask
+        else:
+            prev_mask = curr_mask
+
+        out.append(
+            _compose_scaled_mask_foreground(
+                frame,
+                curr_mask,
+                float(scales[i]),
+            )
+        )
+    return out
+
+
 def stable_zoom_in(frames: list[np.ndarray], params: dict[str, Any], logger: logging.Logger, text_prompt: str = "face . person .") -> list[np.ndarray]:
     if not frames:
         return frames
+    action = str(params.get("action", params.get("_action", "")))
+    motion_type = str(params.get("motion_type", ""))
+    if action == "dolly_in" or motion_type == "dolly_in":
+        instruction = str(params.get("instruction", ""))
+        return _stable_object_zoom_in(frames, params, instruction, logger)
+
     h, w = frames[0].shape[:2]
     box = detect_primary_box(frames[0], text_prompt=text_prompt, logger=logger)
     if box is None:
@@ -1978,6 +2163,7 @@ def run_method(
     constraints: set[str] = set()
     if isinstance(raw_constraints, list):
         constraints = {str(c) for c in raw_constraints}
+    params.setdefault("instruction", instruction)
 
     # TODO branches for unsupported actions (currently routed to identity in rules).
     if action == "add_object":
@@ -2009,43 +2195,46 @@ def run_method(
         print(f"{action} ---> pass throught")
         return frames
 
+    # NOTE(ver06): ignore all constraint-only passthrough branches for now.
+    # Method dispatch below is executed regardless of constraint labels.
+    #
     # TODO branches for unsupported/constraint-only requirements.
-    if "unchanged" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "unchanged_identity" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "natural_motion" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "temporal_consistency" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "no_flicker" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "clean_edges" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "no_artifacts" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "no_color_bleeding" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "smooth_motion" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "continuous_motion" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "no_jitter" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
-    if "no_distortion" in constraints:
-        print(f"{action} ---> pass throught")
-        return frames
+    # if "unchanged" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "unchanged_identity" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "natural_motion" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "temporal_consistency" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "no_flicker" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "clean_edges" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "no_artifacts" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "no_color_bleeding" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "smooth_motion" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "continuous_motion" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "no_jitter" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
+    # if "no_distortion" in constraints:
+    #     print(f"{action} ---> pass throught")
+    #     return frames
 
     if method == "crop_resize":
         # Tool: stable_zoom_in (GroundingDINO + OpenCV)
