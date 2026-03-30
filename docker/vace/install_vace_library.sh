@@ -118,3 +118,6 @@ export PYTHONPATH=/workspace/third_party/XMem:$PYTHONPATH
 # 7. Style transfer
 # =========================================
 # python3 -m pip install opencv-python
+mkdir -p /workspace/weights/lora/
+wget -O /workspace/weights/lora/anime.safetensors \
+https://huggingface.co/latent-consistency/lcm-lora-sdv1-5/resolve/main/pytorch_lora_weights.safetensors
