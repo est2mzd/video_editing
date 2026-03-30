@@ -104,3 +104,11 @@ export PYTHONPATH=/workspace/third_party/VACE:$PYTHONPATH
 # 意図：
 # ・install不要（コード参照のみ）
 # -----------------------------------------
+
+# =========================================
+# 6. XMem
+# =========================================
+cd /workspace/third_party/XMem
+
+pip install -r requirements.txt
+export PYTHONPATH=/workspace/third_party/XMem:$PYTHONPATH

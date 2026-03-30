@@ -58,6 +58,7 @@ from src.parse.instruction_parser_ver19 import (
     parse_annotations_jsonl,
     MULTI_CFG_BEST,
 )
+from src.posteprocess import task_rules_ver05_functions as task_rule_funcs
 
 
 # ---------------------------------------------------------------------------
@@ -591,181 +592,8 @@ def write_video(
 
 
 # ---------------------------------------------------------------------------
-# フレーム処理: action ごとの変換ロジック
+# フレーム処理関数は src/posteprocess/task_rules_ver05_functions.py を参照
 # ---------------------------------------------------------------------------
-
-def apply_zoom(
-    frame: np.ndarray,
-    progress: float,
-    zoom_in: bool,
-    max_scale: float = 1.3,
-    min_scale: float = 0.8,
-) -> np.ndarray:
-    h, w = frame.shape[:2]
-    if zoom_in:
-        scale = 1.0 + (max_scale - 1.0) * progress
-    else:
-        scale = 1.0 - (1.0 - min_scale) * progress
-
-    if abs(scale - 1.0) < 1e-4:
-        return frame
-
-    if scale > 1.0:
-        # crop center then resize back
-        new_w = int(w / scale)
-        new_h = int(h / scale)
-        x1 = (w - new_w) // 2
-        y1 = (h - new_h) // 2
-        cropped = frame[y1:y1 + new_h, x1:x1 + new_w]
-        return cv2.resize(cropped, (w, h), interpolation=cv2.INTER_LINEAR)
-    else:
-        # shrink then pad
-        new_w = int(w * scale)
-        new_h = int(h * scale)
-        resized = cv2.resize(frame, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
-        canvas = np.zeros_like(frame)
-        ox = (w - new_w) // 2
-        oy = (h - new_h) // 2
-        canvas[oy:oy + new_h, ox:ox + new_w] = resized
-        return canvas
-
-
-def apply_perspective_warp(frame: np.ndarray, strength: float = 0.07) -> np.ndarray:
-    h, w = frame.shape[:2]
-    s = strength
-    src = np.float32([[0, 0], [w, 0], [w, h], [0, h]])
-    dst = np.float32([
-        [w * s, h * s],
-        [w * (1 - s), 0],
-        [w * (1 - s * 0.5), h],
-        [w * s * 0.5, h],
-    ])
-    M = cv2.getPerspectiveTransform(src, dst)
-    return cv2.warpPerspective(frame, M, (w, h))
-
-
-def extract_target_color(instruction: str) -> str | None:
-    color_names = [
-        "navy blue", "violet", "purple", "red", "blue", "green",
-        "yellow", "orange", "pink", "black", "white", "silver",
-    ]
-    lower = instruction.lower()
-    for c in color_names:
-        if c in lower:
-            return c
-    return None
-
-
-HSV_BOUNDS: dict[str, tuple[tuple, tuple]] = {
-    "red":      ((0, 70, 40),   (12, 255, 255)),
-    "orange":   ((8, 70, 40),   (25, 255, 255)),
-    "yellow":   ((20, 60, 40),  (38, 255, 255)),
-    "green":    ((35, 40, 30),  (90, 255, 255)),
-    "blue":     ((90, 40, 30),  (130, 255, 255)),
-    "navy blue":((100, 40, 20), (125, 255, 180)),
-    "violet":   ((125, 40, 30), (155, 255, 255)),
-    "purple":   ((125, 40, 30), (155, 255, 255)),
-    "pink":     ((150, 30, 40), (179, 255, 255)),
-    "black":    ((0, 0, 0),     (179, 255, 55)),
-    "white":    ((0, 0, 180),   (179, 70, 255)),
-    "silver":   ((0, 0, 80),    (179, 50, 230)),
-}
-
-
-def apply_color_change(frame: np.ndarray, instruction: str) -> np.ndarray:
-    color_name = extract_target_color(instruction)
-    if color_name is None or color_name not in HSV_BOUNDS:
-        return frame
-    low, high = HSV_BOUNDS[color_name]
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    target_h = (int(low[0]) + int(high[0])) // 2
-    hsv[:, :, 0] = target_h
-    return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
-
-
-def apply_style(frame: np.ndarray) -> np.ndarray:
-    # Fast style approximation for stable long-batch processing.
-    smooth = cv2.bilateralFilter(frame, d=5, sigmaColor=45, sigmaSpace=45)
-    return cv2.addWeighted(frame, 0.7, smooth, 0.3, 0)
-
-
-def apply_inpaint(frame: np.ndarray, radius: int = 5) -> np.ndarray:
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    _, mask = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY_INV)
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
-    mask = cv2.dilate(mask, kernel, iterations=1)
-    if mask.sum() == 0:
-        return frame
-    return cv2.inpaint(frame, mask, radius, cv2.INPAINT_TELEA)
-
-
-def apply_background_blur(frame: np.ndarray) -> np.ndarray:
-    """背景ぼかし (GrabCut で前景抽出 → 背景ガウシアン)"""
-    h, w = frame.shape[:2]
-    mask_gc = np.zeros((h, w), dtype=np.uint8)
-    rect = (w // 8, h // 8, w * 3 // 4, h * 3 // 4)
-    bgd = np.zeros((1, 65), dtype=np.float64)
-    fgd = np.zeros((1, 65), dtype=np.float64)
-    try:
-        cv2.grabCut(frame, mask_gc, rect, bgd, fgd, 3, cv2.GC_INIT_WITH_RECT)
-        fg_mask = np.where((mask_gc == 2) | (mask_gc == 0), 0, 1).astype(np.uint8)
-    except Exception:
-        fg_mask = np.ones((h, w), dtype=np.uint8)
-
-    blurred = cv2.GaussianBlur(frame, (21, 21), 0)
-    fg_mask_3ch = fg_mask[:, :, None]
-    return (frame * fg_mask_3ch + blurred * (1 - fg_mask_3ch)).astype(np.uint8)
-
-
-def build_mask_from_grounding_sam(
-    frame: np.ndarray,
-    task: dict,
-    rule: dict,
-    available_tools: set[str],
-    logger: logging.Logger,
-) -> np.ndarray | None:
-    """GroundingDINO + SAM を想定したマスク生成の入口。
-
-    現段階ではランタイム統合を行わず、ツールが無い/失敗時は None を返して
-    下流で pass-through または OpenCV 近似へフォールバックする。
-    """
-    pipeline = rule.get("mask_pipeline", [])
-    if not isinstance(pipeline, list) or not pipeline:
-        return None
-
-    missing = [t for t in pipeline if t not in available_tools]
-    if missing:
-        logger.warning(f"  mask pipeline unavailable for {task.get('action', '')}: missing={missing}")
-        return None
-
-    # TODO: GroundingDINO/SAM 実統合時に差し替え
-    logger.debug(f"  mask pipeline requested ({pipeline}) but runtime integration is pending; fallback to OpenCV heuristic")
-    h, w = frame.shape[:2]
-    mask = np.zeros((h, w), dtype=np.uint8)
-    cv2.rectangle(mask, (w // 8, h // 8), (w * 7 // 8, h * 7 // 8), 255, -1)
-    return mask
-
-
-def apply_sharpness(frame: np.ndarray, strength: float = 0.5) -> np.ndarray:
-    kernel = np.array([[-1, -1, -1],
-                       [-1,  9, -1],
-                       [-1, -1, -1]], dtype=np.float32) * strength
-    kernel[1, 1] = 1.0 + 8.0 * strength
-    return cv2.filter2D(frame, -1, kernel)
-
-
-def apply_horizontal_shift(frame: np.ndarray, progress: float, max_ratio: float = 0.1) -> np.ndarray:
-    h, w = frame.shape[:2]
-    shift = int(w * max_ratio * progress)
-    M = np.float32([[1, 0, shift], [0, 1, 0]])
-    return cv2.warpAffine(frame, M, (w, h))
-
-
-def apply_histogram_match(frame: np.ndarray) -> np.ndarray:
-    # 自己参照のhistogram equalization（参照画像なし）
-    yuv = cv2.cvtColor(frame, cv2.COLOR_BGR2YUV)
-    yuv[:, :, 0] = cv2.equalizeHist(yuv[:, :, 0])
-    return cv2.cvtColor(yuv, cv2.COLOR_YUV2BGR)
 
 
 # ---------------------------------------------------------------------------
@@ -782,10 +610,9 @@ def apply_task_to_frames(
     logger: logging.Logger,
 ) -> list[np.ndarray]:
     """1 タスクをフレームリスト全体に適用する。"""
-    method = rule.get("method", "identity")
-    params = rule.get("params", {})
-    action = task.get("action", "")
-    n = len(frames)
+    method = str(rule.get("method", "identity"))
+    params = dict(rule.get("params", {}))
+    action = str(task.get("action", ""))
 
     if tool_name not in {
         "opencv",
@@ -805,81 +632,19 @@ def apply_task_to_frames(
     if method == "identity" or method is None:
         return frames
 
-    static_mask = build_mask_from_grounding_sam(frames[0], task, rule, available_tools, logger)
-
-    result: list[np.ndarray] = []
-    for i, frame in enumerate(frames):
-        progress = i / max(n - 1, 1)
-        try:
-            if method == "crop_resize":
-                out = apply_zoom(frame, progress, zoom_in=True, max_scale=params.get("max_scale", 1.3))
-
-            elif method == "resize_pad":
-                out = apply_zoom(frame, progress, zoom_in=False, min_scale=params.get("min_scale", 0.8))
-
-            elif method == "progressive_crop_resize":
-                out = apply_zoom(
-                    frame, progress, zoom_in=True,
-                    max_scale=params.get("end_scale", 1.3),
-                )
-
-            elif method == "progressive_resize_pad":
-                out = apply_zoom(
-                    frame, progress, zoom_in=False,
-                    min_scale=params.get("end_scale", 0.8),
-                )
-
-            elif method == "perspective_warp":
-                out = apply_perspective_warp(frame, params.get("strength", 0.07))
-
-            elif method == "horizontal_shift":
-                out = apply_horizontal_shift(frame, progress, params.get("max_shift_ratio", 0.1))
-
-            elif method == "hsv_retarget":
-                out = apply_color_change(frame, instruction)
-                if static_mask is not None:
-                    out = np.where(static_mask[:, :, None] > 0, out, frame)
-
-            elif method == "segment_and_replace":
-                if static_mask is not None:
-                    blurred = cv2.GaussianBlur(frame, (21, 21), 0)
-                    out = np.where(static_mask[:, :, None] > 0, frame, blurred)
-                else:
-                    out = apply_background_blur(frame)
-
-            elif method == "opencv_blur":
-                out = apply_background_blur(frame)
-
-            elif method == "inpaint":
-                if static_mask is not None:
-                    out = cv2.inpaint(frame, static_mask, params.get("inpaint_radius", 5), cv2.INPAINT_TELEA)
-                else:
-                    out = apply_inpaint(frame, params.get("inpaint_radius", 5))
-
-            elif method == "stylize":
-                out = apply_style(frame)
-
-            elif method == "blur_or_brightness":
-                out = cv2.GaussianBlur(frame, (5, 5), 0)
-
-            elif method == "sharpness":
-                out = apply_sharpness(frame, params.get("strength", 0.5))
-
-            elif method == "histogram_match":
-                out = apply_histogram_match(frame)
-
-            else:
-                out = frame
-
-            result.append(out)
-
-        except Exception as e:
-            if "out of memory" in str(e).lower() or "cuda" in str(e).lower() and "memory" in str(e).lower():
-                raise RuntimeError(str(e))
-            logger.warning(f"  frame {i} [{action}/{method}] error: {e} → passthrough")
-            result.append(frame)
-
-    return result
+    try:
+        return task_rule_funcs.run_method(
+            method=method,
+            frames=frames,
+            params=params,
+            instruction=instruction,
+            logger=logger,
+        )
+    except Exception as e:
+        if "out of memory" in str(e).lower() or ("cuda" in str(e).lower() and "memory" in str(e).lower()):
+            raise RuntimeError(str(e))
+        logger.warning(f"  task error [{action}/{method}] {e} → passthrough")
+        return frames
 
 
 # ---------------------------------------------------------------------------

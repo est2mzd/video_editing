@@ -436,3 +436,40 @@ python3 -m src.submit_baseline_ver05 \
 
 補足:
 - 互換性のため、`--tool-probe-report` で指定した新パスにファイルがない場合のみ、旧パス（`/workspace/logs/experiments/tool_runtime_probe_ver05.json`）を参照するフォールバックを残している。
+
+### 10-13. submit処理関数の外部化（posteprocess参照化）
+
+背景:
+- submit本体内に処理関数を直接持つ構成を解消し、処理実装を分離する要件に対応。
+- 併せて、`zoom_in` と `background color change` の品質を、指定ノートブック実装に近づける。
+
+実施変更:
+- 新規作成:
+	- `/workspace/src/posteprocess/task_rules_ver05_functions.py`
+- 参照差し替え:
+	- `src/submit_baseline_ver05.py` にて `src.posteprocess.task_rules_ver05_functions` を import
+	- `apply_task_to_frames()` は method 分岐を持たず、`run_method(...)` 呼び出しへ一本化
+	- 既存の submit 内ローカル処理関数群（zoom/color/background 等）は削除
+
+実装内容（posteprocess 側）:
+- 先頭 `_` なしの関数名で実装（直接利用前提）
+- `zoom_in`（`crop_resize` 相当）
+	- `task_01_zoom_in.ipynb` の方針を反映
+	- 先頭フレームの検出ボックス中心で固定し、全フレーム共通スケジュールでズーム
+	- GroundingDINO 利用不可時は中央領域フォールバック
+- `background color change`（`hsv_retarget` 相当）
+	- `task_02_background copy.ipynb` を参考に前景保持・背景置換へ変更
+	- GrabCut ベースの前景マスクで前景を保持し、背景のみターゲット色へ変更
+	- instruction から色名を抽出して背景色を決定
+- そのほか `segment_and_replace`, `inpaint`, `stylize`, `sharpness`, `histogram_match` などを集約
+
+検証:
+- 構文チェック
+	- `python3 -m py_compile /workspace/src/submit_baseline_ver05.py /workspace/src/posteprocess/task_rules_ver05_functions.py`
+	- 結果: 成功
+- import スモークテスト
+	- `from src.posteprocess import task_rules_ver05_functions as f`
+	- `hasattr(f, 'run_method') == True` を確認
+
+補足:
+- 既存の `src/preprocess/task_rules_ver05_functions.py` はチューニング用ユーティリティとして残し、提出実行経路は `src/posteprocess/task_rules_ver05_functions.py` を参照する。
