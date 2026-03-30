@@ -1,5 +1,0 @@
-from __future__ import annotations
-
-from .models import predict_v11a_ruleplus
-
-__all__ = ["predict_v11a_ruleplus"]

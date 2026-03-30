@@ -1,0 +1,16 @@
+action,count,targets
+apply_style,15,full_frame
+edit_motion,12,"person, object"
+replace_background,12,"background_behind_speaker, black_background, background_behind_presenter, white_background, background, background_behind_man"
+add_object,11,"rhino_and_buffalo, new_object, panda, pastry, towel_elephant, dog_sled_team, speed_bump, baby_character, white_car, man_on_phone, mannequin_in_formal_floral_dress"
+change_color,11,"woman's hair color to a vibrant shade of violet throughout the entire duration of the video. Ensure the color mask precisely follows the contours of her hair, maintaining clean edges against her skin and the background without any color bleeding. The new violet hue should exhibit natural-looking shadows and highlights that react consistently with the existing soft lighting, red necktie, blue luxury car, bright red foreground surface, character's orange fur suit, ['armchair_left', 'armchair_right'], silver sports car, man's blue jacket, multicolored floral shirt of the girl on the right, news presenter's suit from navy blue, magenta Porsche in the foreground"
+zoom_in,11,"camera_view, businessman's profile, ingredient bowls, older man's face, white hand mixer the man is holding, face"
+change_camera_angle,10,"central man to create a more authoritative and commanding presence, two men from below, man's hands, two men, woman, rugby player to make him appear more imposing, speaker, chef, hands holding the pink mold, man"
+replace_object,6,"woman's black knit beanie, silver sports car, iconic yellow wooden bed, woman wearing the bright pink hat on the left side of the frame, black cookie the man is holding, pink swirl frosting on top of the cupcake"
+dolly_in,3,"man's face, manual coffee grinder, camera_view"
+add_effect,3,"strings of the bass guitar that persists throughout the entire video, his body, stage_lighting_region"
+remove_object,2,"person walking in the background, green plastic containers, black crochet hook"
+zoom_out,2,camera_view
+increase_amount,1,fruit_jam
+orbit_camera,1,blue sports car
+----------------------------------------------

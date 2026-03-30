@@ -8,6 +8,7 @@ from typing import Any
 
 import cv2
 import numpy as np
+from src.postprocess.apply_style import apply_style_frames
 
 try:
     from tqdm.auto import tqdm
@@ -602,12 +603,8 @@ def inpaint(frames: list[np.ndarray], params: dict[str, Any]) -> list[np.ndarray
 
 
 def stylize(frames: list[np.ndarray], params: dict[str, Any]) -> list[np.ndarray]:
-    blend = float(params.get("blend", 0.3))
-    out: list[np.ndarray] = []
-    for frame in _iter_frames_with_progress(frames, params, "apply_style", "stylize"):
-        smooth = cv2.bilateralFilter(frame, d=5, sigmaColor=45, sigmaSpace=45)
-        out.append(cv2.addWeighted(frame, 1.0 - blend, smooth, blend, 0))
-    return out
+    style = str(params.get("style", params.get("style_name", "anime")))
+    return apply_style_frames(frames, style)
 
 
 def blur_or_brightness(frames: list[np.ndarray], params: dict[str, Any]) -> list[np.ndarray]:

@@ -110,5 +110,11 @@ export PYTHONPATH=/workspace/third_party/VACE:$PYTHONPATH
 # =========================================
 cd /workspace/third_party/XMem
 
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 export PYTHONPATH=/workspace/third_party/XMem:$PYTHONPATH
+
+
+# =========================================
+# 7. Style transfer
+# =========================================
+# python3 -m pip install opencv-python
