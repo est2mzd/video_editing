@@ -8,7 +8,7 @@ from typing import Any
 
 import cv2
 import numpy as np
-from src.postprocess.apply_style import apply_style_frames
+from src.postprocess.apply_style_ver5 import apply_style_frames
 
 try:
     from tqdm.auto import tqdm
@@ -26,6 +26,20 @@ XMEM_NETWORK: Any = None
 XMEM_DEVICE: str | None = None
 XMEM_IMAGE_TO_TORCH: Any = None
 XMEMInferenceCore: Any = None
+
+
+def _resolve_grounding_dino_checkpoint_path() -> Path | None:
+    candidates = [
+        Path("/workspace/weights/groundingdino_swint_ogc.pth"),
+        Path(
+            "/workspace/third_party/GroundingDINO/weights/"
+            "groundingdino_swint_ogc.pth"
+        ),
+    ]
+    for path in candidates:
+        if path.exists():
+            return path
+    return None
 
 
 def _resolve_video_name_for_progress(params: dict[str, Any]) -> str:
@@ -114,8 +128,8 @@ def load_grounding_dino_model(logger: logging.Logger | None = None) -> bool:
         from groundingdino.datasets import transforms as transforms_mod
 
         config_path = Path("/workspace/third_party/GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py")
-        ckpt_path = Path("/workspace/third_party/GroundingDINO/weights/groundingdino_swint_ogc.pth")
-        if not config_path.exists() or not ckpt_path.exists():
+        ckpt_path = _resolve_grounding_dino_checkpoint_path()
+        if not config_path.exists() or ckpt_path is None:
             return False
 
         device = "cuda" if torch.cuda.is_available() else "cpu"

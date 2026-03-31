@@ -6,7 +6,7 @@ DIR_PATH=$(dirname "$FILE_PATH")
 PARENT_DIR=$(dirname "$DIR_PATH")
 cd "$PARENT_DIR"
 
-TARGET_PATH="checkpoints/groundingdino_swint_ogc.pth"
+TARGET_PATH="/workspace/weights/groundingdino_swint_ogc.pth"
 URL="https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth"
 
 FORCE=0
@@ -14,7 +14,7 @@ if [[ "${1:-}" == "--force" ]]; then
   FORCE=1
 fi
 
-mkdir -p checkpoints
+mkdir -p "$(dirname "$TARGET_PATH")"
 
 if [[ -f "$TARGET_PATH" && "$FORCE" -ne 1 ]]; then
   echo "[INFO] Checkpoint already exists: $TARGET_PATH"
