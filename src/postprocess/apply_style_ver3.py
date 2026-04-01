@@ -1,8 +1,12 @@
 import threading
-import numpy as np
-import torch
-from diffusers import StableDiffusionImg2ImgPipeline, EulerAncestralDiscreteScheduler
-from PIL import Image
+
+from .apply_style_common import (
+    STYLE_ALIASES,
+    build_style_prompt,
+    get_img2img_pipe,
+    normalize_style_alias,
+    run_img2img_batch,
+)
 
 # ============================================
 # 設定
@@ -12,24 +16,7 @@ NUM_STEPS = 25
 GUIDANCE = 7.0
 STRENGTH = 0.5
 
-# ============================================
-# style
-# ============================================
-APPLY_STYLES = [
-    "ukiyo-e", "ghibli", "pixel_art", "anime",
-    "cyberpunk", "watercolor", "oil_painting", "american_comic",
-]
-
-_STYLE_ALIASES = {
-    "cyberpunk": ["cyberpunk", "cyber", "neon"],
-    "pixel_art": ["pixel", "pixelart", "8bit"],
-    "american_comic": ["comic", "americancomic", "cartooncomic"],
-    "anime": ["anime", "japanimation"],
-    "ghibli": ["ghibli", "miyazaki", "studio ghibli"],
-    "watercolor": ["watercolor", "watercolour"],
-    "oil_painting": ["oil", "oilpainting", "oil_painting", "oil paint"],
-    "ukiyo-e": ["ukiyoe", "ukiyo", "japaneseprint"],
-}
+_STYLE_ALIASES = dict(STYLE_ALIASES)
 
 _PIPE = None
 _LOCK = threading.Lock()
@@ -39,60 +26,60 @@ _LOCK = threading.Lock()
 # style normalize
 # ============================================
 def normalize_style(style: str) -> str:
-    s = style.lower().replace("-", "").replace("_", "").strip()
-    for canonical, aliases in _STYLE_ALIASES.items():
-        for alias in aliases:
-            if alias in s:
-                return canonical
-    return style.lower()
+    """Normalize style text to canonical token used by prompt builder.
+
+    Tools:
+    - Python alias-table lookup after string cleanup.
+
+    Steps:
+    1. Lowercase and remove '-'/'_' separators.
+    2. Match aliases against canonical style names.
+    3. Return lowercase fallback when unmatched.
+    """
+    return normalize_style_alias(
+        style,
+        aliases=_STYLE_ALIASES,
+        fallback="lower",
+    )
 
 
 def get_prompt(style: str) -> str:
+    """Generate img2img prompt text from a style token.
+
+    Tools:
+    - normalize_style and formatted prompt template.
+
+    Steps:
+    1. Normalize incoming style alias.
+    2. Convert style key to readable phrase.
+    3. Return deterministic text prompt.
+    """
     style = normalize_style(style)
-    return f"apply style of {style.replace('_', ' ')}"
+    return build_style_prompt(style)
 
 
 # ============================================
 # pipeline
 # ============================================
 def get_pipe():
+    """Create and cache a tuned Stable Diffusion img2img pipeline.
+
+    Tools:
+    - Diffusers StableDiffusionImg2ImgPipeline + Euler scheduler.
+    - Torch device selection and optional xformers.
+    - LoRA adapter loading.
+
+    Steps:
+    1. Return cached pipeline if already initialized.
+    2. Load base model on CUDA/CPU with dtype policy.
+    3. Attach LoRA weights and scheduler optimizations.
+    4. Disable safety checker and store global singleton.
+    """
     global _PIPE
-
-    if _PIPE is not None:
-        return _PIPE
-
-    with _LOCK:
-        if _PIPE is None:
-            device = "cuda" if torch.cuda.is_available() else "cpu"
-            dtype = torch.float16 if device == "cuda" else torch.float32
-
-            pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-                "runwayml/stable-diffusion-v1-5",
-                torch_dtype=dtype,
-            ).to(device)
-
-            # LoRA
-            pipe.load_lora_weights(
-                "/workspace/weights/lora",
-                weight_name="anime.safetensors",
-            )
-            pipe.set_adapters(["default_0"], adapter_weights=[0.8])
-
-            # 高速化
-            pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
-            pipe.enable_attention_slicing()
-            
-            try:
-                pipe.enable_xformers_memory_efficient_attention()
-            except:
-                print("xformers not available, skip")
-
-            # safety無効
-            pipe.safety_checker = None
-            pipe.requires_safety_checker = False
-
-            _PIPE = pipe
-
+    if _PIPE is None:
+        with _LOCK:
+            if _PIPE is None:
+                _PIPE = get_img2img_pipe(adapter_weight=0.8)
     return _PIPE
 
 
@@ -100,27 +87,34 @@ def get_pipe():
 # batch stylize
 # ============================================
 def stylize_batch(frames, prompt, batch_size=BATCH_SIZE):
+    """Stylize frames in mini-batches for faster diffusion inference.
+
+    Tools:
+    - Diffusers batched img2img execution.
+    - PIL conversion from OpenCV BGR frames.
+
+    Steps:
+    1. Slice sequence into configurable mini-batches.
+    2. Convert each batch frame to RGB PIL image.
+    3. Run batched img2img with shared prompt.
+    4. Convert outputs back to BGR NumPy arrays.
+    """
     pipe = get_pipe()
     results = []
 
     for i in range(0, len(frames), batch_size):
         batch = frames[i:i + batch_size]
 
-        images = [
-            Image.fromarray(f[:, :, ::-1]) for f in batch
-        ]
-
-        outputs = pipe(
-            prompt=[prompt] * len(images),
-            image=images,
-            strength=STRENGTH,
-            guidance_scale=GUIDANCE,
-            num_inference_steps=NUM_STEPS,
-        ).images
-
-        for out in outputs:
-            arr = np.array(out)[:, :, ::-1]
-            results.append(arr)
+        results.extend(
+            run_img2img_batch(
+                pipe,
+                frames_bgr=batch,
+                prompt=prompt,
+                strength=STRENGTH,
+                guidance_scale=GUIDANCE,
+                num_inference_steps=NUM_STEPS,
+            )
+        )
 
     return results
 
@@ -129,5 +123,15 @@ def stylize_batch(frames, prompt, batch_size=BATCH_SIZE):
 # public API
 # ============================================
 def apply_style_frames(frames, style):
+    """Public API: stylize full frame sequence with one style prompt.
+
+    Tools:
+    - get_prompt and stylize_batch.
+
+    Steps:
+    1. Normalize style and build diffusion prompt.
+    2. Run batched stylization over all frames.
+    3. Return stylized sequence.
+    """
     prompt = get_prompt(style)
     return stylize_batch(frames, prompt)

@@ -6,7 +6,11 @@ from typing import Any
 import cv2
 import numpy as np
 
-from .detectors import detect_primary_box, get_sam_mask_from_box, resolve_target_union_box
+from .detectors import (
+    detect_primary_box,
+    get_sam_mask_from_box,
+    resolve_target_union_box,
+)
 from .mask_ops import inpaint_masked_background
 from .progress import iter_frames_with_progress
 
@@ -16,6 +20,15 @@ def compose_scaled_mask_foreground(
     mask: np.ndarray,
     scale: float,
 ) -> np.ndarray:
+    """Scale only masked foreground while preserving background continuity.
+
+    Tools: OpenCV affine warp + inpainting.
+    Steps:
+    1. Compute foreground center/top from binary mask.
+    2. Warp masked object with scale transform.
+    3. Inpaint original foreground hole in background.
+    4. Paste scaled foreground back with warped mask.
+    """
     mask_u8 = (mask > 0).astype(np.uint8)
     ys, xs = np.where(mask_u8 > 0)
     if len(xs) == 0 or len(ys) == 0:
@@ -62,6 +75,15 @@ def stable_object_zoom_in(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """Object-centric zoom using DINO+SAM masks and OpenCV compositing.
+
+    Tools: GroundingDINO, SAM, OpenCV.
+    Steps:
+    1. Per frame, resolve target union box with DINO prompts.
+    2. Convert box to mask via SAM.
+    3. Build temporal scale schedule for dolly-in style zoom.
+    4. Apply masked foreground scaling and background restoration.
+    """
     if not frames:
         return frames
 
@@ -103,7 +125,9 @@ def stable_object_zoom_in(
         else:
             prev_mask = curr_mask
 
-        out.append(compose_scaled_mask_foreground(frame, curr_mask, float(scales[i])))
+        out.append(
+            compose_scaled_mask_foreground(frame, curr_mask, float(scales[i]))
+        )
     return out
 
 
@@ -111,16 +135,32 @@ def stable_zoom_in(
     frames: list[np.ndarray],
     params: dict[str, Any],
     logger: logging.Logger,
-    text_prompt: str = "face . person .",
 ) -> list[np.ndarray]:
+    """Stable zoom-in camera effect with optional object-centric branch.
+
+    Tools: GroundingDINO + OpenCV crop/resize, optionally SAM branch.
+    Steps:
+    1. If action is dolly_in, delegate to object-mask zoom pipeline.
+    2. Detect primary box once from the first frame (DINO).
+    3. Compute per-frame zoom scale curve.
+    4. Crop around center and resize back to original resolution.
+    """
     if not frames:
         return frames
 
-    action = str(params.get("action", params.get("_action", "")))
-    motion_type = str(params.get("motion_type", ""))
-    if action == "dolly_in" or motion_type == "dolly_in":
-        instruction = str(params.get("instruction", ""))
-        return stable_object_zoom_in(frames, params, instruction, logger)
+    # text_promptは params["target"]から取得する
+    default_target = "face . person . object"
+    target = params.get("target", default_target)
+
+    # target を text_prompt に変換する
+    if isinstance(target, str):
+        text_prompt = target
+    elif isinstance(target, (list, tuple, set)):
+        text_prompt = " . ".join(
+            str(t).strip() for t in target if str(t).strip()
+        )
+    else:
+        text_prompt = str(target).strip()
 
     h, w = frames[0].shape[:2]
     box = detect_primary_box(frames[0], text_prompt=text_prompt, logger=logger)
@@ -170,6 +210,14 @@ def stable_zoom_in(
 def zoom_out(
     frames: list[np.ndarray], params: dict[str, Any]
 ) -> list[np.ndarray]:
+    """Create zoom-out effect by progressive downscale + center padding.
+
+    Tools: OpenCV resize and canvas composition.
+    Steps:
+    1. Build linear scale schedule from 1.0 to min_scale.
+    2. Resize each frame to scaled size.
+    3. Paste resized frame at canvas center.
+    """
     if not frames:
         return frames
     h, w = frames[0].shape[:2]
@@ -188,7 +236,7 @@ def zoom_out(
         canvas = np.zeros_like(frame)
         ox = (w - sw) // 2
         oy = (h - sh) // 2
-        canvas[oy : oy + sh, ox : ox + sw] = small
+        canvas[oy:oy + sh, ox:ox + sw] = small
         out.append(canvas)
     return out
 
@@ -196,6 +244,14 @@ def zoom_out(
 def perspective_warp(
     frames: list[np.ndarray], params: dict[str, Any]
 ) -> list[np.ndarray]:
+    """Apply synthetic camera angle change with perspective transform.
+
+    Tools: OpenCV perspective transform.
+    Steps:
+    1. Derive source and destination corner points from strength.
+    2. Compute perspective matrix.
+    3. Warp each frame with the matrix.
+    """
     strength = float(params.get("strength", 0.07))
     out: list[np.ndarray] = []
     for frame in iter_frames_with_progress(
@@ -207,9 +263,12 @@ def perspective_warp(
         h, w = frame.shape[:2]
         s = strength
         src = np.float32([[0, 0], [w, 0], [w, h], [0, h]])
-        dst = np.float32(
-            [[w * s, h * s], [w * (1 - s), 0], [w * (1 - s * 0.5), h], [w * s * 0.5, h]]
-        )
+        dst = np.float32([
+            [w * s, h * s],
+            [w * (1 - s), 0],
+            [w * (1 - s * 0.5), h],
+            [w * s * 0.5, h],
+        ])
         m = cv2.getPerspectiveTransform(src, dst)
         out.append(cv2.warpPerspective(frame, m, (w, h)))
     return out
@@ -218,6 +277,14 @@ def perspective_warp(
 def horizontal_shift(
     frames: list[np.ndarray], params: dict[str, Any]
 ) -> list[np.ndarray]:
+    """Simulate simple orbit/pan by progressive horizontal translation.
+
+    Tools: OpenCV affine warp.
+    Steps:
+    1. Compute frame-wise shift from progress ratio.
+    2. Build affine translation matrix.
+    3. Warp each frame with translated x position.
+    """
     if not frames:
         return frames
     max_ratio = float(params.get("max_shift_ratio", 0.1))

@@ -17,6 +17,14 @@ XMEMInferenceCore: Any = None
 
 
 def resolve_grounding_dino_checkpoint_path() -> Path | None:
+    """Resolve GroundingDINO checkpoint path from known locations.
+
+    Tools: filesystem checks only.
+    Steps:
+    1. Enumerate supported weight file paths.
+    2. Return first existing checkpoint.
+    3. Return None when no checkpoint is available.
+    """
     candidates = [
         Path("/workspace/weights/groundingdino_swint_ogc.pth"),
         Path(
@@ -31,6 +39,15 @@ def resolve_grounding_dino_checkpoint_path() -> Path | None:
 
 
 def load_grounding_dino_model(logger: logging.Logger | None = None) -> bool:
+    """Load and cache GroundingDINO model and transforms.
+
+    Tools: GroundingDINO, PyTorch.
+    Steps:
+    1. Skip when already cached.
+    2. Resolve config/checkpoint paths.
+    3. Initialize model on CUDA/CPU.
+    4. Cache model + transform module for reuse.
+    """
     global GROUNDING_DINO_MODEL, GROUNDING_DINO_TRANSFORMS
     if (
         GROUNDING_DINO_MODEL is not None
@@ -63,6 +80,15 @@ def load_grounding_dino_model(logger: logging.Logger | None = None) -> bool:
 
 
 def load_sam_predictor(logger: logging.Logger | None = None) -> bool:
+    """Load and cache SAM predictor instance.
+
+    Tools: Segment Anything (SAM), PyTorch.
+    Steps:
+    1. Skip when predictor is already cached.
+    2. Validate checkpoint path.
+    3. Build vit_h SAM model and predictor.
+    4. Move model to CUDA/CPU and cache.
+    """
     global SAM_PREDICTOR
     if SAM_PREDICTOR is not None:
         return True
@@ -86,6 +112,15 @@ def load_sam_predictor(logger: logging.Logger | None = None) -> bool:
 
 
 def load_raft_model(logger: logging.Logger | None = None) -> bool:
+    """Load and cache RAFT optical flow model.
+
+    Tools: RAFT, PyTorch.
+    Steps:
+    1. Skip when RAFT is already cached.
+    2. Validate repo and checkpoint paths.
+    3. Load checkpoint (including DataParallel key fix).
+    4. Move model to device and set eval mode.
+    """
     global RAFT_MODEL, RAFT_DEVICE
     if RAFT_MODEL is not None and RAFT_DEVICE is not None:
         return True
@@ -134,6 +169,14 @@ def load_raft_model(logger: logging.Logger | None = None) -> bool:
 
 
 def find_xmem_model_path(params: dict[str, Any] | None = None) -> Path | None:
+    """Resolve XMem checkpoint path from explicit/default candidates.
+
+    Tools: filesystem checks only.
+    Steps:
+    1. Prefer explicit path from params if provided.
+    2. Probe known local weight locations.
+    3. Return first existing path or None.
+    """
     candidates: list[Path] = []
     if params is not None:
         explicit = params.get("xmem_model_path")
@@ -155,6 +198,15 @@ def load_xmem_model(
     params: dict[str, Any] | None = None,
     logger: logging.Logger | None = None,
 ) -> bool:
+    """Load and cache XMem network and helper APIs.
+
+    Tools: XMem, PyTorch.
+    Steps:
+    1. Skip when XMem objects are already cached.
+    2. Resolve repo + model path.
+    3. Import XMem network/inference helper modules.
+    4. Build network with config and cache shared handles.
+    """
     global XMEM_NETWORK, XMEM_DEVICE, XMEM_IMAGE_TO_TORCH, XMEMInferenceCore
     if (
         XMEM_NETWORK is not None
@@ -235,6 +287,15 @@ def make_xmem_processor(
     params: dict[str, Any],
     logger: logging.Logger | None = None,
 ):
+    """Create and seed XMem inference processor for one object track.
+
+    Tools: XMem inference core, OpenCV, PyTorch.
+    Steps:
+    1. Ensure shared XMem model is loaded.
+    2. Instantiate inference core with memory parameters.
+    3. Convert first frame/mask to tensor format.
+    4. Perform initial step to prime memory bank.
+    """
     if not load_xmem_model(params=params, logger=logger):
         return None
     try:

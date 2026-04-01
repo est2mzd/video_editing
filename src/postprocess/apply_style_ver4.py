@@ -1,13 +1,19 @@
 import threading
 
-import cv2
 import numpy as np
-import torch
-from diffusers import (
-    EulerAncestralDiscreteScheduler,
-    StableDiffusionImg2ImgPipeline,
+
+from .apply_style_common import (
+    STYLE_ALIASES,
+    blend_regenerated,
+    build_style_prompt,
+    calc_flow_farneback,
+    detect_breakdown_mask,
+    get_img2img_pipe,
+    normalize_style_alias,
+    run_img2img,
+    sample_flow,
+    warp_with_flow,
 )
-from PIL import Image
 
 # ============================================
 # Settings
@@ -19,137 +25,118 @@ MASK_PHOTO_THRESHOLD = 18
 MASK_FB_THRESHOLD = 1.5
 MIN_REGEN_RATIO = 0.01
 
-# ============================================
-# Style
-# ============================================
-APPLY_STYLES = [
-    "ukiyo-e",
-    "ghibli",
-    "pixel_art",
-    "anime",
-    "cyberpunk",
-    "watercolor",
-    "oil_painting",
-    "american_comic",
-]
-
-_STYLE_ALIASES = {
-    "cyberpunk": ["cyberpunk", "cyber", "neon"],
-    "pixel_art": ["pixel", "pixelart", "8bit"],
-    "american_comic": ["comic", "americancomic", "cartooncomic"],
-    "anime": ["anime", "japanimation"],
-    "ghibli": ["ghibli", "miyazaki", "studio ghibli"],
-    "watercolor": ["watercolor", "watercolour"],
-    "oil_painting": ["oil", "oilpainting", "oil_painting", "oil paint"],
-    "ukiyo-e": ["ukiyoe", "ukiyo", "japaneseprint"],
-}
+_STYLE_ALIASES = dict(STYLE_ALIASES)
 
 _PIPE = None
 _LOCK = threading.Lock()
 
 
 def normalize_style(style: str) -> str:
-    s = style.lower().replace("-", "").replace("_", "").strip()
-    for canonical, aliases in _STYLE_ALIASES.items():
-        for alias in aliases:
-            if alias in s:
-                return canonical
-    return style.lower()
+    """Normalize input style text into canonical style key.
+
+    Tools:
+    - String cleanup and alias dictionary matching.
+
+    Steps:
+    1. Lowercase and remove separators.
+    2. Resolve aliases to canonical names.
+    3. Return lowercase fallback when no alias matches.
+    """
+    return normalize_style_alias(
+        style,
+        aliases=_STYLE_ALIASES,
+        fallback="lower",
+    )
 
 
 def get_prompt(style: str) -> str:
+    """Build diffusion prompt from canonicalized style token.
+
+    Tools:
+    - normalize_style and prompt template formatting.
+
+    Steps:
+    1. Normalize style input.
+    2. Convert style token into readable phrase.
+    3. Return prompt for img2img inference.
+    """
     canonical = normalize_style(style)
-    return f"apply style of {canonical.replace('_', ' ')}"
+    return build_style_prompt(canonical)
 
 
-def get_pipe() -> StableDiffusionImg2ImgPipeline:
+def get_pipe():
+    """Initialize and cache Stable Diffusion img2img with LoRA tuning.
+
+    Tools:
+    - Diffusers StableDiffusionImg2ImgPipeline.
+    - EulerAncestralDiscreteScheduler.
+    - Torch device selection and optional xformers acceleration.
+
+    Steps:
+    1. Reuse global pipeline when available.
+    2. Load base model and move to selected device.
+    3. Load LoRA adapters and configure scheduler/runtime options.
+    4. Disable safety checker and cache singleton pipeline.
+    """
     global _PIPE
-
-    if _PIPE is not None:
-        return _PIPE
-
-    with _LOCK:
-        if _PIPE is None:
-            device = "cuda" if torch.cuda.is_available() else "cpu"
-            dtype = torch.float16 if device == "cuda" else torch.float32
-
-            pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-                "runwayml/stable-diffusion-v1-5",
-                torch_dtype=dtype,
-            ).to(device)
-
-            pipe.load_lora_weights(
-                "/workspace/weights/lora",
-                weight_name="anime.safetensors",
-            )
-            pipe.set_adapters(["default_0"], adapter_weights=[0.8])
-
-            pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(
-                pipe.scheduler.config
-            )
-            pipe.enable_attention_slicing()
-
-            try:
-                pipe.enable_xformers_memory_efficient_attention()
-            except Exception:
-                print("xformers not available, skip")
-
-            # Keep generating all regions; caller handles blending by mask.
-            pipe.safety_checker = None
-            pipe.requires_safety_checker = False
-
-            _PIPE = pipe
-
+    if _PIPE is None:
+        with _LOCK:
+            if _PIPE is None:
+                _PIPE = get_img2img_pipe(adapter_weight=0.8)
     return _PIPE
 
 
 def _stylize_img2img(frame_bgr: np.ndarray, prompt: str) -> np.ndarray:
-    pipe = get_pipe()
-    image = Image.fromarray(frame_bgr[:, :, ::-1])
+    """Run one-frame img2img stylization and return BGR output.
 
-    out = pipe(
+    Tools:
+    - Diffusers pipeline inference.
+    - PIL for OpenCV BGR <-> RGB conversion.
+
+    Steps:
+    1. Convert BGR frame to RGB PIL image.
+    2. Run img2img with configured strength/guidance/steps.
+    3. Convert generated RGB output back to BGR array.
+    """
+    return run_img2img(
+        get_pipe(),
+        frame_bgr=frame_bgr,
         prompt=prompt,
-        image=image,
         strength=STRENGTH,
         guidance_scale=GUIDANCE,
         num_inference_steps=NUM_STEPS,
-    ).images[0]
-
-    return np.array(out)[:, :, ::-1]
+    )
 
 
 def _calc_flow_farneback(
     src_bgr: np.ndarray,
     dst_bgr: np.ndarray,
 ) -> np.ndarray:
-    src_gray = cv2.cvtColor(src_bgr, cv2.COLOR_BGR2GRAY)
-    dst_gray = cv2.cvtColor(dst_bgr, cv2.COLOR_BGR2GRAY)
-    return cv2.calcOpticalFlowFarneback(
-        src_gray,
-        dst_gray,
-        None,
-        0.5,
-        3,
-        21,
-        5,
-        7,
-        1.5,
-        0,
-    )
+    """Estimate dense optical flow between two frames.
+
+    Tools:
+    - OpenCV Farneback optical flow.
+
+    Steps:
+    1. Convert source and destination frames to grayscale.
+    2. Compute dense forward motion field.
+    3. Return flow vectors in pixel coordinates.
+    """
+    return calc_flow_farneback(src_bgr, dst_bgr)
 
 
 def _warp_with_flow(image_bgr: np.ndarray, flow: np.ndarray) -> np.ndarray:
-    h, w = image_bgr.shape[:2]
-    xx, yy = np.meshgrid(np.arange(w), np.arange(h))
-    map_x = (xx + flow[:, :, 0]).astype(np.float32)
-    map_y = (yy + flow[:, :, 1]).astype(np.float32)
-    return cv2.remap(
-        image_bgr,
-        map_x,
-        map_y,
-        interpolation=cv2.INTER_LINEAR,
-        borderMode=cv2.BORDER_REFLECT,
-    )
+    """Warp an image according to a dense flow field.
+
+    Tools:
+    - NumPy grid generation and OpenCV remap.
+
+    Steps:
+    1. Build x/y sampling maps from flow offsets.
+    2. Remap pixels with linear interpolation.
+    3. Reflect borders to avoid empty seams.
+    """
+    return warp_with_flow(image_bgr, flow)
 
 
 def _sample_flow(
@@ -157,23 +144,17 @@ def _sample_flow(
     map_x: np.ndarray,
     map_y: np.ndarray,
 ) -> np.ndarray:
-    sampled_x = cv2.remap(
-        flow[:, :, 0],
-        map_x,
-        map_y,
-        interpolation=cv2.INTER_LINEAR,
-        borderMode=cv2.BORDER_CONSTANT,
-        borderValue=0,
-    )
-    sampled_y = cv2.remap(
-        flow[:, :, 1],
-        map_x,
-        map_y,
-        interpolation=cv2.INTER_LINEAR,
-        borderMode=cv2.BORDER_CONSTANT,
-        borderValue=0,
-    )
-    return np.stack([sampled_x, sampled_y], axis=-1)
+    """Sample flow vectors at remapped coordinates.
+
+    Tools:
+    - OpenCV remap on flow channels.
+
+    Steps:
+    1. Bilinearly sample x/y flow channels.
+    2. Fill out-of-range values with zeros.
+    3. Stack sampled channels into vector flow.
+    """
+    return sample_flow(flow, map_x, map_y)
 
 
 def _detect_breakdown_mask(
@@ -181,36 +162,25 @@ def _detect_breakdown_mask(
     frame_tp1_bgr: np.ndarray,
     flow_fwd: np.ndarray,
 ) -> np.ndarray:
-    h, w = frame_t_bgr.shape[:2]
+    """Detect temporal breakdown regions that need regeneration.
 
-    warped_gray_t = cv2.cvtColor(
-        _warp_with_flow(frame_t_bgr, flow_fwd),
-        cv2.COLOR_BGR2GRAY,
+    Tools:
+    - OpenCV warping, photometric error, Farneback flow, morphology.
+    - Forward-backward consistency check.
+
+    Steps:
+    1. Warp frame t toward t+1 and compute photometric residual.
+    2. Compute backward flow and forward-backward inconsistency.
+    3. Combine masks with validity constraint.
+    4. Refine mask using open+dilate morphology.
+    """
+    return detect_breakdown_mask(
+        frame_t_bgr,
+        frame_tp1_bgr,
+        flow_fwd,
+        photo_threshold=MASK_PHOTO_THRESHOLD,
+        fb_threshold=MASK_FB_THRESHOLD,
     )
-    gray_tp1 = cv2.cvtColor(frame_tp1_bgr, cv2.COLOR_BGR2GRAY)
-    photo_error = cv2.absdiff(warped_gray_t, gray_tp1)
-    mask_photo = (photo_error > MASK_PHOTO_THRESHOLD).astype(np.uint8)
-
-    flow_bwd = _calc_flow_farneback(frame_tp1_bgr, frame_t_bgr)
-    xx, yy = np.meshgrid(np.arange(w), np.arange(h))
-    map_x = (xx + flow_fwd[:, :, 0]).astype(np.float32)
-    map_y = (yy + flow_fwd[:, :, 1]).astype(np.float32)
-    sampled_bwd = _sample_flow(flow_bwd, map_x, map_y)
-    fb_error = np.linalg.norm(flow_fwd + sampled_bwd, axis=2)
-    mask_fb = (fb_error > MASK_FB_THRESHOLD).astype(np.uint8)
-
-    valid = (
-        (map_x >= 0)
-        & (map_x < w)
-        & (map_y >= 0)
-        & (map_y < h)
-    ).astype(np.uint8)
-
-    mask = ((mask_photo | mask_fb) & valid).astype(np.uint8) * 255
-    kernel = np.ones((3, 3), dtype=np.uint8)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel, iterations=1)
-    mask = cv2.dilate(mask, kernel, iterations=2)
-    return mask
 
 
 def _blend_regenerated(
@@ -218,20 +188,48 @@ def _blend_regenerated(
     regenerated_bgr: np.ndarray,
     mask: np.ndarray,
 ) -> np.ndarray:
-    alpha = (mask.astype(np.float32) / 255.0)
-    alpha = cv2.GaussianBlur(alpha, (0, 0), 1.2)
-    alpha3 = alpha[:, :, None]
-    blended = regenerated_bgr.astype(np.float32) * alpha3
-    blended += warped_bgr.astype(np.float32) * (1.0 - alpha3)
-    return np.clip(blended, 0, 255).astype(np.uint8)
+    """Feather-blend regenerated regions into flow-warped stylization.
+
+    Tools:
+    - OpenCV Gaussian blur and NumPy alpha compositing.
+
+    Steps:
+    1. Convert binary mask to soft alpha map.
+    2. Blend regenerated pixels where confidence is low.
+    3. Keep warped pixels elsewhere for temporal continuity.
+    """
+    return blend_regenerated(warped_bgr, regenerated_bgr, mask)
 
 
 def apply_style_frame(frame, style):
+    """Stylize a single frame without temporal propagation.
+
+    Tools:
+    - Prompt generation and one-shot img2img inference.
+
+    Steps:
+    1. Build style prompt from input.
+    2. Run single-frame diffusion stylization.
+    3. Return BGR stylized frame.
+    """
     prompt = get_prompt(style)
     return _stylize_img2img(frame, prompt)
 
 
 def apply_style_frames(frames, style):
+    """Stylize video with flow warp + selective diffusion regeneration.
+
+    Tools:
+    - Stable Diffusion img2img for style transfer.
+    - OpenCV Farneback flow for temporal propagation.
+    - Masked blending for artifact repair.
+
+    Steps:
+    1. Stylize first frame via diffusion.
+    2. Propagate stylization by optical-flow warping.
+    3. Detect unstable regions with photometric and FB checks.
+    4. Regenerate only unstable areas and blend into propagated frame.
+    """
     if not frames:
         return []
 

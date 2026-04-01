@@ -13,6 +13,15 @@ from .progress import iter_frames_with_progress
 def change_background_color(
     frames: list[np.ndarray], instruction: str
 ) -> list[np.ndarray]:
+    """Replace background with instruction-derived solid color.
+
+    Tools: GrabCut mask estimation + OpenCV/Numpy compositing.
+    Steps:
+    1. Parse target color from instruction text.
+    2. Estimate foreground mask for each frame.
+    3. Fill background with selected BGR color.
+    4. Composite original foreground over colored background.
+    """
     color = target_color_bgr(extract_target_color(instruction))
     out: list[np.ndarray] = []
     params_for_progress = {"action": "change_color"}
@@ -33,6 +42,14 @@ def replace_background(
     params: dict[str, Any],
     instruction: str,
 ) -> list[np.ndarray]:
+    """Replace background by blur or color while preserving foreground.
+
+    Tools: GrabCut mask estimation + OpenCV blur/compositing.
+    Steps:
+    1. Estimate foreground mask for each frame.
+    2. Build new background (Gaussian blur or solid color).
+    3. Composite preserved foreground with replaced background.
+    """
     blur_background = bool(params.get("blur_background", True))
     color = target_color_bgr(extract_target_color(instruction))
     out: list[np.ndarray] = []
@@ -54,6 +71,14 @@ def replace_background(
 def inpaint(
     frames: list[np.ndarray], params: dict[str, Any]
 ) -> list[np.ndarray]:
+    """Inpaint dark/empty regions as object-removal fallback.
+
+    Tools: OpenCV threshold, morphology, and Telea inpainting.
+    Steps:
+    1. Create rough hole mask from low-intensity pixels.
+    2. Dilate mask to cover borders.
+    3. Apply Telea inpaint where mask is non-empty.
+    """
     radius = int(params.get("inpaint_radius", 5))
     out: list[np.ndarray] = []
     for frame in iter_frames_with_progress(

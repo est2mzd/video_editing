@@ -32,6 +32,11 @@ from .trackers import (
 def resolve_add_object_prompts(
     params: dict[str, Any], instruction: str
 ) -> tuple[str, str]:
+    """Resolve target/foreground text prompts for DINO detection.
+
+    Tools: prompt composition only.
+    Steps: normalize target name, build target prompt, build broad FG prompt.
+    """
     raw_target = str(params.get("target", instruction or "person"))
     if raw_target in ("", "new_object", "object"):
         target_prompt = "person . animal . object ."
@@ -47,6 +52,15 @@ def compose_shifted_add_object(
     target_mask: np.ndarray,
     fg_mask: np.ndarray,
 ) -> np.ndarray:
+    """Copy masked target patch and paste with horizontal shift.
+
+    Tools: OpenCV/NumPy compositing.
+    Steps:
+    1. Compute destination box by half-width horizontal shift.
+    2. Extract source patch and mask.
+    3. Prevent overlap onto existing foreground mask.
+    4. Paste selected pixels into destination region.
+    """
     h, w = frame.shape[:2]
     tx1, ty1, tx2, ty2 = target_box
 
@@ -88,6 +102,10 @@ def add_object_frames_ver1(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """ver1: first-frame DINO+SAM masks, fixed across all frames.
+
+    Tools: GroundingDINO, SAM, OpenCV compositing.
+    """
     if not frames:
         return frames
 
@@ -143,6 +161,11 @@ def add_object_frames_ver2(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """ver2: per-frame DINO+SAM for target and foreground.
+
+    Tools: GroundingDINO, SAM, OpenCV compositing.
+    Steps: detect masks each frame, fallback to previous masks, then compose.
+    """
     if not frames:
         return frames
 
@@ -155,11 +178,20 @@ def add_object_frames_ver2(
     prev_fg_mask: np.ndarray | None = None
 
     for frame_idx, frame in enumerate(
-        iter_frames_with_progress(frames, params, "add_object", "add_object_ver2")
+        iter_frames_with_progress(
+            frames,
+            params,
+            "add_object",
+            "add_object_ver2",
+        )
     ):
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        target_boxes = detect_all_boxes(frame_rgb, target_prompt, logger=logger)
+        target_boxes = detect_all_boxes(
+            frame_rgb,
+            target_prompt,
+            logger=logger,
+        )
         if target_boxes:
             tx1, ty1, tx2, ty2 = [int(c) for c in target_boxes[0]]
             tx1, ty1 = max(0, tx1), max(0, ty1)
@@ -223,6 +255,10 @@ def add_object_frames_ver3(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """ver3: fixed DINO boxes from frame0, per-frame SAM masks.
+
+    Tools: GroundingDINO (frame0), SAM (all frames), OpenCV compositing.
+    """
     if not frames:
         return frames
 
@@ -302,6 +338,15 @@ def add_object_frames_ver4(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """ver4: tracking-stabilized masks with optical flow smoothing.
+
+    Tools: DINO/SAM + tracker hook + RAFT/Farneback + OpenCV.
+    Steps:
+    1. Initialize masks from first frame.
+    2. Track masks across frames.
+    3. Stabilize with optical-flow warp blending.
+    4. Compose shifted object per frame.
+    """
     if not frames:
         return frames
 
@@ -341,7 +386,9 @@ def add_object_frames_ver4(
     )
     prev_fg_mask = np.zeros((h, w), dtype=np.uint8)
     for bx1, by1, bx2, by2 in fixed_fg_boxes:
-        m = get_sam_mask_from_box(frame0_rgb, [bx1, by1, bx2, by2], logger=logger)
+        m = get_sam_mask_from_box(
+            frame0_rgb, [bx1, by1, bx2, by2], logger=logger
+        )
         prev_fg_mask = np.maximum(prev_fg_mask, m)
 
     smooth_alpha = float(params.get("temporal_smooth_alpha", 0.7))
@@ -411,6 +458,10 @@ def add_object_frames_ver5(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """ver5: ver4 plus SAM fusion on every frame.
+
+    Tools: DINO/SAM + tracker/flow + OpenCV compositing.
+    """
     if not frames:
         return frames
 
@@ -450,11 +501,15 @@ def add_object_frames_ver5(
     )
     prev_fg_mask = np.zeros((h, w), dtype=np.uint8)
     for bx1, by1, bx2, by2 in fixed_fg_boxes:
-        m = get_sam_mask_from_box(frame0_rgb, [bx1, by1, bx2, by2], logger=logger)
+        m = get_sam_mask_from_box(
+            frame0_rgb, [bx1, by1, bx2, by2], logger=logger
+        )
         prev_fg_mask = np.maximum(prev_fg_mask, m)
 
     smooth_alpha = float(params.get("temporal_smooth_alpha", 0.7))
-    sam_blend_alpha = float(np.clip(params.get("sam_blend_alpha", 0.6), 0.0, 1.0))
+    sam_blend_alpha = float(
+        np.clip(params.get("sam_blend_alpha", 0.6), 0.0, 1.0)
+    )
 
     out: list[np.ndarray] = []
     out.append(
@@ -480,7 +535,9 @@ def add_object_frames_ver5(
         )
         sam_fg = np.zeros((h, w), dtype=np.uint8)
         for bx1, by1, bx2, by2 in fixed_fg_boxes:
-            m = get_sam_mask_from_box(curr_rgb, [bx1, by1, bx2, by2], logger=logger)
+            m = get_sam_mask_from_box(
+                curr_rgb, [bx1, by1, bx2, by2], logger=logger
+            )
             sam_fg = np.maximum(sam_fg, m)
 
         tracked_target = track_mask_with_xmem_or_ostrack(
@@ -544,6 +601,16 @@ def add_object_frames_ver6(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """ver6: XMem-guided tracking with dynamic SAM refinement.
+
+    Tools: DINO, SAM, XMem, RAFT/Farneback, OpenCV.
+    Steps:
+    1. Initialize target/fg masks and XMem processors.
+    2. Predict propagated masks per frame (XMem + flow).
+    3. Build dynamic SAM boxes and re-segment.
+    4. Adaptively fuse SAM and stable masks.
+    5. Compose shifted object with refined masks.
+    """
     if not frames:
         return frames
 
@@ -553,7 +620,9 @@ def add_object_frames_ver6(
 
     target_boxes = detect_all_boxes(frame0_rgb, target_prompt, logger=logger)
     if not target_boxes:
-        logger.warning(f"add_object ver6: '{target_prompt}' not detected, passthrough")
+        logger.warning(
+            f"add_object ver6: '{target_prompt}' not detected, passthrough"
+        )
         return frames
 
     tx1, ty1, tx2, ty2 = [int(c) for c in target_boxes[0]]
@@ -575,7 +644,12 @@ def add_object_frames_ver6(
     prev_target_box = target_box_init
     prev_target_mask = get_sam_mask_from_box(
         frame0_rgb,
-        [prev_target_box[0], prev_target_box[1], prev_target_box[2], prev_target_box[3]],
+        [
+            prev_target_box[0],
+            prev_target_box[1],
+            prev_target_box[2],
+            prev_target_box[3],
+        ],
         logger=logger,
     ).astype(np.uint8)
     prev_target_mask = refine_mask(prev_target_mask)
@@ -593,7 +667,9 @@ def add_object_frames_ver6(
     )
 
     smooth_alpha = float(params.get("temporal_smooth_alpha", 0.7))
-    sam_blend_alpha = float(np.clip(params.get("sam_blend_alpha", 0.6), 0.0, 1.0))
+    sam_blend_alpha = float(
+        np.clip(params.get("sam_blend_alpha", 0.6), 0.0, 1.0)
+    )
     target_expand_scale = float(params.get("target_expand_scale", 1.18))
     fg_expand_scale = float(params.get("fg_expand_scale", 1.10))
 
@@ -653,7 +729,12 @@ def add_object_frames_ver6(
 
         sam_target = get_sam_mask_from_box(
             curr_rgb,
-            [target_box_dyn[0], target_box_dyn[1], target_box_dyn[2], target_box_dyn[3]],
+            [
+                target_box_dyn[0],
+                target_box_dyn[1],
+                target_box_dyn[2],
+                target_box_dyn[3],
+            ],
             logger=logger,
         ).astype(np.uint8)
         sam_target = refine_mask(sam_target)
@@ -721,6 +802,10 @@ def add_object_frames_ver7(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """ver7: duplicate object by differencing ver6 output vs original.
+
+    Tools: ver6 pipeline + NumPy diff + OpenCV-style paste.
+    """
     if not frames:
         return frames
 
@@ -751,10 +836,10 @@ def add_object_frames_ver7(
         new_y1 = y1
 
         canvas = orig.copy()
-        target = canvas[new_y1 : new_y1 + h, new_x1 : new_x1 + w]
+        target = canvas[new_y1:new_y1 + h, new_x1:new_x1 + w]
         mask_bool = roi_mask > 0
         target[mask_bool] = roi[mask_bool]
-        canvas[new_y1 : new_y1 + h, new_x1 : new_x1 + w] = target
+        canvas[new_y1:new_y1 + h, new_x1:new_x1 + w] = target
         out.append(canvas)
 
     return out
@@ -766,6 +851,10 @@ def add_object_frames_ver8(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """ver8: per-frame candidate mask selection by IoU continuity.
+
+    Tools: DINO, SAM, mask refinement, OpenCV compositing.
+    """
     if not frames:
         return frames
 
@@ -786,7 +875,11 @@ def add_object_frames_ver8(
         )
     ):
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        candidate_boxes = detect_all_boxes(frame_rgb, target_prompt, logger=logger)
+        candidate_boxes = detect_all_boxes(
+            frame_rgb,
+            target_prompt,
+            logger=logger,
+        )
 
         candidate_masks: list[np.ndarray] = []
         for box in candidate_boxes:
@@ -826,7 +919,10 @@ def add_object_frames_ver8(
         if selected_mask is None:
             if frame_idx == 0:
                 logger.warning(
-                    f"add_object ver8: '{target_prompt}' not detected, passthrough"
+                    (
+                        f"add_object ver8: '{target_prompt}' "
+                        "not detected, passthrough"
+                    )
                 )
             out.append(frame.copy())
             continue
@@ -897,6 +993,14 @@ def add_object_frames_ver9(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """ver9: ver8 with EMA-smoothed centroid placement.
+
+    Tools: DINO, SAM, mask refinement, OpenCV compositing.
+    Steps:
+    1. Select mask by IoU continuity.
+    2. Compute centroid and smooth with EMA.
+    3. Place copied object by centroid-based shift.
+    """
     if not frames:
         return frames
 
@@ -920,7 +1024,11 @@ def add_object_frames_ver9(
         )
     ):
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        candidate_boxes = detect_all_boxes(frame_rgb, target_prompt, logger=logger)
+        candidate_boxes = detect_all_boxes(
+            frame_rgb,
+            target_prompt,
+            logger=logger,
+        )
 
         candidate_masks: list[np.ndarray] = []
         for box in candidate_boxes:
@@ -960,7 +1068,10 @@ def add_object_frames_ver9(
         if selected_mask is None:
             if frame_idx == 0:
                 logger.warning(
-                    f"add_object ver9: '{target_prompt}' not detected, passthrough"
+                    (
+                        f"add_object ver9: '{target_prompt}' "
+                        "not detected, passthrough"
+                    )
                 )
             out.append(frame.copy())
             continue
@@ -982,8 +1093,14 @@ def add_object_frames_ver9(
             smooth_cx = raw_cx
             smooth_cy = raw_cy
         else:
-            smooth_cx = ema_prev_weight * prev_center[0] + ema_curr_weight * raw_cx
-            smooth_cy = ema_prev_weight * prev_center[1] + ema_curr_weight * raw_cy
+            smooth_cx = (
+                ema_prev_weight * prev_center[0]
+                + ema_curr_weight * raw_cx
+            )
+            smooth_cy = (
+                ema_prev_weight * prev_center[1]
+                + ema_curr_weight * raw_cy
+            )
 
         x1, y1, x2, y2 = selected_box
         box_w = x2 - x1

@@ -14,6 +14,14 @@ def add_object_frames(
     instruction: str,
     logger: logging.Logger,
 ) -> list[np.ndarray]:
+    """Route add_object execution to selected implementation version.
+
+    Tools: add_object_versions ver1-ver9 (DINO/SAM/RAFT/XMem/OpenCV mix).
+    Steps:
+    1. Read `add_object_version` selector from params.
+    2. Map aliases to concrete version function.
+    3. Execute selected pipeline and return processed frames.
+    """
     version = str(params.get("add_object_version", "ver2")).lower()
     if version in {"ver1", "1", "first", "first_frame"}:
         return versions.add_object_frames_ver1(

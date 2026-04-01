@@ -634,11 +634,13 @@ def apply_task_to_frames(
 
     try:
         return task_rule_funcs.run_method(
-            method=method,
+            action=action,
+            targets=task.get("targets", task.get("target")),
             frames=frames,
             params=params,
             instruction=instruction,
             logger=logger,
+            method=method,
         )
     except Exception as e:
         if "out of memory" in str(e).lower() or ("cuda" in str(e).lower() and "memory" in str(e).lower()):

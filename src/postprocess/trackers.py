@@ -15,6 +15,14 @@ def estimate_optical_flow(
     curr_bgr: np.ndarray,
     logger: logging.Logger | None = None,
 ) -> np.ndarray:
+    """Estimate dense flow from previous frame to current frame.
+
+    Tools: RAFT (preferred), OpenCV Farneback (fallback).
+    Steps:
+    1. Try RAFT inference with proper tensor padding.
+    2. Unpad and convert predicted flow to HxWx2 float map.
+    3. Fallback to Farneback when RAFT is unavailable/fails.
+    """
     try:
         import torch
         if registry.load_raft_model(logger=logger):
@@ -81,6 +89,15 @@ def xmem_predict_mask(
     curr_bgr: np.ndarray,
     logger: logging.Logger | None = None,
 ) -> np.ndarray | None:
+    """Predict current object mask using an initialized XMem processor.
+
+    Tools: XMem inference core, PyTorch, OpenCV.
+    Steps:
+    1. Convert current BGR frame to RGB tensor.
+    2. Run `processor.step` to obtain probability logits.
+    3. Convert logits to binary class-1 mask.
+    4. Return None when prediction is unavailable.
+    """
     if processor is None:
         return None
     try:
@@ -113,6 +130,14 @@ def track_mask_with_xmem_or_ostrack(
     curr_bgr: np.ndarray,
     logger: logging.Logger | None = None,
 ) -> np.ndarray:
+    """Compatibility tracker hook for XMem/OSTrack integration.
+
+    Tools: placeholder hook (no active tracker logic yet).
+    Steps:
+    1. Check if XMem/OSTrack repos exist.
+    2. Return previous mask as conservative fallback.
+    3. Emit debug hint when only fallback path is used.
+    """
     xmem_dir = Path("/workspace/third_party/XMem")
     ostrack_dir = Path("/workspace/third_party/OSTrack")
     if xmem_dir.exists() or ostrack_dir.exists():

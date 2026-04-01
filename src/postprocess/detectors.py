@@ -14,6 +14,15 @@ def get_sam_mask_from_box(
     box_xyxy: list[float] | tuple[float, float, float, float],
     logger: logging.Logger | None = None,
 ) -> np.ndarray:
+    """Predict foreground mask inside a bbox with SAM.
+
+    Tools: SAM (segment-anything) via model_registry.SAM_PREDICTOR.
+    Steps:
+    1. Ensure SAM predictor is loaded.
+    2. Clamp bbox to frame bounds.
+    3. Run SAM box prompt inference and return binary mask.
+    4. Return zero mask on failure.
+    """
     if not registry.load_sam_predictor(logger=logger):
         return np.zeros(frame_rgb.shape[:2], dtype=np.uint8)
 
@@ -44,6 +53,15 @@ def detect_all_boxes(
     box_threshold: float = 0.3,
     text_threshold: float = 0.25,
 ) -> list[tuple[float, float, float, float]]:
+    """Detect all candidate boxes from a text prompt with GroundingDINO.
+
+    Tools: GroundingDINO + its preprocess transforms.
+    Steps:
+    1. Ensure GroundingDINO model and transforms are loaded.
+    2. Apply resize/normalize transform to RGB frame.
+    3. Run text-conditioned box prediction.
+    4. Convert normalized cxcywh boxes to pixel xyxy boxes.
+    """
     if not registry.load_grounding_dino_model(logger=logger):
         return []
     try:
@@ -96,6 +114,14 @@ def detect_primary_box(
     text_prompt: str,
     logger: logging.Logger | None = None,
 ) -> tuple[float, float, float, float] | None:
+    """Get the first detected box for zoom/camera operations.
+
+    Tools: OpenCV (BGR->RGB) + GroundingDINO via detect_all_boxes.
+    Steps:
+    1. Convert frame to RGB.
+    2. Detect boxes from prompt.
+    3. Return first box or None when no detection exists.
+    """
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     boxes = detect_all_boxes(frame_rgb, text_prompt, logger=logger)
     if not boxes:
@@ -104,6 +130,14 @@ def detect_primary_box(
 
 
 def split_target_keywords(text: str) -> list[str]:
+    """Tokenize target text into prompt-friendly keywords.
+
+    Tools: regex tokenization only.
+    Steps:
+    1. Lowercase and remove non-alphanumeric separators.
+    2. Split by commas/whitespace.
+    3. Keep non-empty tokens with minimum length.
+    """
     t = (text or "").lower()
     t = re.sub(r"[^a-z0-9_\s,]", " ", t)
     tokens = [x.strip() for x in re.split(r"[,\s]+", t) if x.strip()]
@@ -116,6 +150,15 @@ def resolve_target_union_box(
     instruction: str,
     logger: logging.Logger | None = None,
 ) -> tuple[int, int, int, int] | None:
+    """Build a union target box by probing multiple prompt keywords.
+
+    Tools: OpenCV + GroundingDINO via detect_all_boxes.
+    Steps:
+    1. Extract keywords from task target/instruction.
+    2. Query DINO per keyword and collect all candidate boxes.
+    3. Compute union xyxy box in image coordinates.
+    4. Return fallback center box if no detection exists.
+    """
     h, w = frame.shape[:2]
     target = str(params.get("target", ""))
     keys = split_target_keywords(target) + split_target_keywords(instruction)

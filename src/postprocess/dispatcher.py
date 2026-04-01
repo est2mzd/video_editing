@@ -15,30 +15,72 @@ from .camera_ops import (
     horizontal_shift,
     perspective_warp,
     stable_zoom_in,
+    stable_object_zoom_in,
     zoom_out,
 )
 from .style_ops import (
     blur_or_brightness,
-    histogram_match,
-    identity,
-    sharpness,
     stylize,
+    # histogram_match,
+    # identity,
+    # sharpness,
 )
 
 
+def _normalize_target_text(targets: Any) -> str:
+    """Normalize task targets into a single prompt-friendly string.
+
+    Tools: Python type checks and string joins.
+    Steps:
+    1. Accept list/tuple/set or scalar target payload.
+    2. Trim empty values and stringify entries.
+    3. Return comma-joined text used by DINO/SAM prompts.
+    """
+    if targets is None:
+        return ""
+    if isinstance(targets, (list, tuple, set)):
+        parts = [str(t).strip() for t in targets if str(t).strip()]
+        return ", ".join(parts)
+    return str(targets).strip()
+
+
 def run_method(
-    method: str,
+    action: str,
+    targets: Any,
     frames: list[np.ndarray],
     params: dict[str, Any],
     instruction: str,
     logger: logging.Logger,
+    # method: str | None = None,
 ) -> list[np.ndarray]:
-    action = str(params.get("action", params.get("_action", "")))
+    """Dispatch postprocess by action and apply target-aware params.
+
+    Tools routed here include:
+    - GroundingDINO/SAM/OpenCV camera/object ops
+    - GrabCut/OpenCV background ops
+    - Style transfer backends
+    - Add-object versioned pipelines (ver1-ver9)
+
+    Steps:
+    1. Normalize incoming action and targets.
+    2. Inject action/target hints into params for downstream modules.
+    3. Route primarily by action from annotation schema.
+    4. Use method-based fallback for backward compatibility.
+    """
+    resolved_action = str(action or params.get("action", "")).strip()
+    target_text = _normalize_target_text(
+        targets if targets is not None else params.get("target")
+    )
+
+    params["action"] = resolved_action
+    if target_text:
+        params["target"] = target_text
     params.setdefault("instruction", instruction)
 
-    if action == "add_object":
+    if resolved_action in {"add_object", "increase_amount"}:
         return add_object_frames(frames, params, instruction, logger)
 
+    # 準備できていない関数はpassthroughして後で実装する
     passthrough_actions = {
         "replace_object",
         "edit_motion",
@@ -49,39 +91,29 @@ def run_method(
         "track_effect",
         "stabilize_object",
     }
-    if action in passthrough_actions:
+    if resolved_action in passthrough_actions:
         return frames
 
-    if method == "crop_resize":
-        return stable_zoom_in(frames, params, logger)
-    if method == "resize_pad":
-        return zoom_out(frames, params)
-    if method == "progressive_crop_resize":
-        return stable_zoom_in(frames, params, logger)
-    if method == "progressive_resize_pad":
-        return zoom_out(frames, params)
-    if method == "perspective_warp":
-        return perspective_warp(frames, params)
-    if method == "horizontal_shift":
-        return horizontal_shift(frames, params)
-    if method == "hsv_retarget":
-        return change_background_color(frames, instruction)
-    if method == "segment_and_replace":
-        return replace_background(frames, params, instruction)
-    if method == "opencv_blur":
-        return replace_background(
-            frames,
-            {"blur_background": True},
-            instruction,
-        )
-    if method == "inpaint":
-        return inpaint(frames, params)
-    if method == "stylize":
+    # 準備できた関数
+    if resolved_action == "apply_style":
         return stylize(frames, params)
-    if method == "blur_or_brightness":
+    if resolved_action == "replace_background":
+        return replace_background(frames, params, instruction)
+    if resolved_action == "change_color":
+        return change_background_color(frames, instruction)
+    if resolved_action == "zoom_in":
+        return stable_zoom_in(frames, params, logger)
+    if resolved_action == "dolly_in":
+        return stable_object_zoom_in(frames, params, instruction, logger)
+    if resolved_action == "zoom_out":
+        return zoom_out(frames, params)
+    if resolved_action == "change_camera_angle":
+        return perspective_warp(frames, params)
+    if resolved_action == "orbit_camera":
+        return horizontal_shift(frames, params)
+    if resolved_action == "add_effect":
         return blur_or_brightness(frames, params)
-    if method == "sharpness":
-        return sharpness(frames, params)
-    if method == "histogram_match":
-        return histogram_match(frames, params)
-    return identity(frames, params)
+    if resolved_action == "remove_object":
+        return inpaint(frames, params)
+
+    return frames

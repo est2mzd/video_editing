@@ -11,6 +11,14 @@ except Exception:
 
 
 def resolve_video_name_for_progress(params: dict[str, Any]) -> str:
+    """Resolve display-only video filename for progress UI.
+
+    Tools: none (pure Python Path parsing).
+    Steps:
+    1. Check known metadata keys in priority order.
+    2. Normalize to string and extract basename via pathlib.
+    3. Return fallback name when no video hint is present.
+    """
     raw = (
         params.get("video_name")
         or params.get("input_video_name")
@@ -31,7 +39,15 @@ def iter_frames_with_progress(
     action_hint: str,
     stage: str,
 ):
-    action = str(params.get("action", params.get("_action", action_hint)))
+    """Wrap frame iteration with tqdm progress bar metadata.
+
+    Tools: tqdm (if available), otherwise passthrough iterator.
+    Steps:
+    1. Resolve action name and video display name.
+    2. Build unified progress label `<action>:<stage> [video]`.
+    3. Return tqdm-wrapped iterator for frame-by-frame processing.
+    """
+    action = str(params.get("action", action_hint))
     video_name = resolve_video_name_for_progress(params)
     return tqdm(
         iterable,

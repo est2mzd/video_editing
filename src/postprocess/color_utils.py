@@ -2,6 +2,14 @@ from __future__ import annotations
 
 
 def extract_target_color(instruction: str) -> str | None:
+    """Extract a target color keyword from natural-language instruction text.
+
+    Tools: none (string matching only).
+    Steps:
+    1. Lowercase instruction text.
+    2. Scan predefined color phrases in deterministic order.
+    3. Return first matched color name or None.
+    """
     names = [
         "navy blue", "violet", "purple", "red", "blue", "green",
         "yellow", "orange", "pink", "black", "white", "silver",
@@ -14,6 +22,14 @@ def extract_target_color(instruction: str) -> str | None:
 
 
 def target_color_bgr(name: str | None) -> tuple[int, int, int]:
+    """Map a color name to OpenCV BGR tuple used in synthetic fills.
+
+    Tools: OpenCV color convention only (BGR ordering).
+    Steps:
+    1. Normalize color name to lowercase.
+    2. Look up fixed LUT tuned for visible replacement colors.
+    3. Return default orange-like fallback when unknown.
+    """
     lut = {
         "red": (40, 40, 220),
         "orange": (0, 128, 255),

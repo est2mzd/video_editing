@@ -11,13 +11,22 @@ from .progress import iter_frames_with_progress
 def stylize(
     frames: list[np.ndarray], params: dict[str, Any]
 ) -> list[np.ndarray]:
-    style = str(params.get("style", params.get("style_name", "anime")))
+    """Apply style-transfer pipeline to all frames.
+
+    Tools: apply_style_ver5 backend (diffusion/style pipeline).
+    Steps: resolve style label and delegate batch processing.
+    """
+    style = str(params.get("style", "anime"))
     return apply_style_frames(frames, style)
 
 
 def blur_or_brightness(
     frames: list[np.ndarray], params: dict[str, Any]
 ) -> list[np.ndarray]:
+    """Apply blur effect or brightness adjustment frame-wise.
+
+    Tools: OpenCV GaussianBlur / convertScaleAbs.
+    """
     mode = str(params.get("mode", "blur"))
     if mode == "brightness":
         alpha = float(params.get("alpha", 1.05))
@@ -46,6 +55,10 @@ def blur_or_brightness(
 def sharpness(
     frames: list[np.ndarray], params: dict[str, Any]
 ) -> list[np.ndarray]:
+    """Sharpen frames with configurable convolution kernel strength.
+
+    Tools: OpenCV filter2D.
+    """
     strength = float(params.get("strength", 0.5))
     kernel = (
         np.array(
@@ -69,6 +82,10 @@ def sharpness(
 def histogram_match(
     frames: list[np.ndarray], params: dict[str, Any]
 ) -> list[np.ndarray]:
+    """Equalize luminance channel for simple appearance normalization.
+
+    Tools: OpenCV YUV conversion + equalizeHist.
+    """
     out: list[np.ndarray] = []
     for frame in iter_frames_with_progress(
         frames,
@@ -85,4 +102,8 @@ def histogram_match(
 def identity(
     frames: list[np.ndarray], params: dict[str, Any]
 ) -> list[np.ndarray]:
+    """No-op passthrough used as safe fallback operation.
+
+    Tools: none.
+    """
     return frames
