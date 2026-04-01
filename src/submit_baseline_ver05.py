@@ -58,7 +58,7 @@ from src.parse.instruction_parser_ver19 import (
     parse_annotations_jsonl,
     MULTI_CFG_BEST,
 )
-from src.postprocess import task_rules_ver05_functions as task_rule_funcs
+from src.postprocess import dispatcher as task_rule_funcs
 
 
 # ---------------------------------------------------------------------------
@@ -592,7 +592,7 @@ def write_video(
 
 
 # ---------------------------------------------------------------------------
-# フレーム処理関数は src/posteprocess/task_rules_ver05_functions.py を参照
+# フレーム処理関数は src/postprocess/dispatcher.py を参照
 # ---------------------------------------------------------------------------
 
 
