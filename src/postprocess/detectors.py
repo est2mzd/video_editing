@@ -141,7 +141,38 @@ def split_target_keywords(text: str) -> list[str]:
     t = (text or "").lower()
     t = re.sub(r"[^a-z0-9_\s,]", " ", t)
     tokens = [x.strip() for x in re.split(r"[,\s]+", t) if x.strip()]
-    return [x for x in tokens if len(x) >= 3]
+    normalized: list[str] = []
+    token_aliases = {
+        "mas": "man",  # tolerate typo like "mas's face"
+    }
+    for token in tokens:
+        token = token_aliases.get(token, token)
+        if len(token) >= 3:
+            normalized.append(token)
+    return normalized
+
+
+def build_detection_prompts(
+    target: str,
+    instruction: str,
+) -> list[str]:
+    """Build prompt candidates from target/instruction for robust detection."""
+    prompts: list[str] = []
+
+    raw_target = (target or "").strip()
+    if raw_target:
+        prompts.append(raw_target)
+
+    keys = split_target_keywords(target) + split_target_keywords(instruction)
+    seen: set[str] = set()
+    for key in keys:
+        if key not in seen:
+            prompts.append(key.replace("_", " ") + " .")
+            seen.add(key)
+
+    if not prompts:
+        prompts = ["face .", "person .", "object ."]
+    return prompts
 
 
 def resolve_target_union_box(

@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 
 from .detectors import (
+    build_detection_prompts,
     detect_primary_box,
     get_sam_mask_from_box,
     resolve_target_union_box,
@@ -148,22 +149,36 @@ def stable_zoom_in(
     if not frames:
         return frames
 
-    # text_promptは params["target"]から取得する
-    default_target = "face . person . object"
+    default_target = "face"
     target = params.get("target", default_target)
+    instruction = str(params.get("instruction", ""))
 
-    # target を text_prompt に変換する
     if isinstance(target, str):
-        text_prompt = target
+        target_text = target
     elif isinstance(target, (list, tuple, set)):
-        text_prompt = " . ".join(
+        target_text = " ".join(
             str(t).strip() for t in target if str(t).strip()
         )
     else:
-        text_prompt = str(target).strip()
+        target_text = str(target).strip()
 
     h, w = frames[0].shape[:2]
-    box = detect_primary_box(frames[0], text_prompt=text_prompt, logger=logger)
+    box: tuple[float, float, float, float] | None = None
+    for prompt in build_detection_prompts(target_text, instruction):
+        box = detect_primary_box(frames[0], text_prompt=prompt, logger=logger)
+        if box is not None:
+            break
+
+    if box is None:
+        union_box = resolve_target_union_box(
+            frames[0],
+            params,
+            instruction,
+            logger,
+        )
+        if union_box is not None:
+            box = tuple(float(v) for v in union_box)
+
     if box is None:
         box = (w * 0.3, h * 0.2, w * 0.7, h * 0.8)
 

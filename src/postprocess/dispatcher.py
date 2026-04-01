@@ -44,6 +44,33 @@ def _normalize_target_text(targets: Any) -> str:
     return str(targets).strip()
 
 
+def _resolve_action(action: str, params: dict[str, Any]) -> str:
+    """Resolve action from schema-first keys, then notebook-style fallbacks."""
+    direct = str(action or "").strip()
+    if direct:
+        return direct
+
+    for key in ("action", "_action"):
+        value = str(params.get(key, "")).strip()
+        if value:
+            return value
+
+    method = str(params.get("method", "")).strip().lower()
+    method_to_action = {
+        "stylize": "apply_style",
+        "object_zoom_in": "dolly_in",
+        "stable_zoom_in": "zoom_in",
+        "zoom_out": "zoom_out",
+        "perspective_warp": "change_camera_angle",
+        "horizontal_shift": "orbit_camera",
+        "blur_or_brightness": "add_effect",
+        "replace_background": "replace_background",
+        "change_background_color": "change_color",
+        "inpaint": "remove_object",
+    }
+    return method_to_action.get(method, "")
+
+
 def run_method(
     action: str,
     targets: Any,
@@ -67,14 +94,18 @@ def run_method(
     3. Route primarily by action from annotation schema.
     4. Use method-based fallback for backward compatibility.
     """
-    resolved_action = str(action or params.get("action", "")).strip()
+    resolved_action = _resolve_action(action, params)
     target_text = _normalize_target_text(
-        targets if targets is not None else params.get("target")
+        targets
+        if targets is not None
+        else params.get("target", params.get("targets"))
     )
 
     params["action"] = resolved_action
     if target_text:
         params["target"] = target_text
+    if "constraints" not in params and "_constraints" in params:
+        params["constraints"] = params.get("_constraints")
     params.setdefault("instruction", instruction)
 
     if resolved_action in {"add_object", "increase_amount"}:
