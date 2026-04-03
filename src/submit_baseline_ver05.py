@@ -58,7 +58,7 @@ from src.parse.instruction_parser_ver19 import (
     parse_annotations_jsonl,
     MULTI_CFG_BEST,
 )
-from src.posteprocess import task_rules_ver05_functions as task_rule_funcs
+from src.postprocess import dispatcher as task_rule_funcs
 
 
 # ---------------------------------------------------------------------------
@@ -592,7 +592,7 @@ def write_video(
 
 
 # ---------------------------------------------------------------------------
-# フレーム処理関数は src/posteprocess/task_rules_ver05_functions.py を参照
+# フレーム処理関数は src/postprocess/dispatcher.py を参照
 # ---------------------------------------------------------------------------
 
 
@@ -634,11 +634,13 @@ def apply_task_to_frames(
 
     try:
         return task_rule_funcs.run_method(
-            method=method,
+            action=action,
+            targets=task.get("targets", task.get("target")),
             frames=frames,
             params=params,
             instruction=instruction,
             logger=logger,
+            method=method,
         )
     except Exception as e:
         if "out of memory" in str(e).lower() or ("cuda" in str(e).lower() and "memory" in str(e).lower()):

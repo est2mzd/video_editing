@@ -181,3 +181,56 @@ mask を拡大すると、対象の上端がフレーム外へはみ出して頭
 - フレームごとの mask 再推定により、境界がわずかに揺れる可能性がある
 - inpaint の補完結果は背景テクスチャによっては不自然になる可能性がある
 - 必要であれば、mask 境界の feathering や時系列平滑化を追加する余地がある
+
+
+## 6. style 適用ロジックの反映（2026-03-31 追記）
+
+[src/test/test_lora.py](src/test/test_lora.py) で実施した style 指定と prompt 生成の変更を、
+[src/postprocess/apply_style_ver2.py](src/postprocess/apply_style_ver2.py) に反映した。
+
+### 6.1 反映目的
+
+- style 名の表記ゆれを吸収しつつ、利用可能 style を明示する。
+- style ごとに統一フォーマットの prompt を生成できるようにする。
+- 既存の `apply_style_frame/apply_style_frames` の I/F は維持し、既存呼び出しを壊さない。
+
+### 6.2 変更ファイル
+
+- [src/postprocess/apply_style_ver2.py](src/postprocess/apply_style_ver2.py)
+
+### 6.3 実装変更点
+
+1. style 定数リストを追加
+
+- `APPLY_STYLES` を追加。
+- 対象 style は以下の 8 種:
+- `ukiyo-e`
+- `ghibli`
+- `pixel_art`
+- `anime`
+- `cyberpunk`
+- `watercolor`
+- `oil_painting`
+- `american_comic`
+
+2. prompt 生成ヘルパーを追加
+
+- `build_style_prompts(styles=None)` を追加。
+- 既定では `APPLY_STYLES` を使い、`apply style of <style>` 形式の dict を返す。
+- `get_style_prompt(style)` を追加。
+- `normalize_style()` 後の style 名で単体 prompt を返す。
+
+3. style 正規化の整合
+
+- `normalize_style()` のマッピングで、`ukiyo-e` を正規化先として扱うよう調整。
+- Dispatcher 側でも `ukiyo-e` / `ukiyoe` の双方を受け付ける分岐を追加。
+
+4. 既存処理との互換性維持
+
+- 既存の `apply_style_frame()` / `apply_style_frames()` は継続利用可能。
+- `src/postprocess/task_rules_ver05_functions.py` からの既存呼び出しには影響しない。
+
+### 6.4 補足
+
+- 今回は style/prompt の反映を主目的とし、OpenCV ベースの style 変換本体ロジックは変更していない。
+- 追加した関数は将来的に instruction 生成やログ出力へ再利用可能。
