@@ -79,3 +79,7 @@ def show_before_after(video_in: str | Path, video_out: str | Path, width: int = 
     display(Video(Path(video_in).as_posix(), embed=True, width=width))
     display(HTML(f"<h3>After: {Path(video_out).name}</h3>"))
     display(Video(Path(video_out).as_posix(), embed=True, width=width))
+    
+    
+def show_video(video_path: str | Path, width: int = 560) -> None:
+    display(Video(Path(video_path).as_posix(), embed=True, width=width))

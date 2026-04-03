@@ -5,20 +5,20 @@ from typing import Any
 
 import numpy as np
 
-from .add_object_service import add_object_frames
-from .background_ops import (
+from .trials.add_object_service import add_object_frames
+from .trials.background_ops import (
     change_background_color,
     inpaint,
     replace_background,
 )
-from .camera_ops import (
+from .trials.camera_ops import (
     horizontal_shift,
     perspective_warp,
     stable_zoom_in,
     stable_object_zoom_in,
     zoom_out,
 )
-from .style_ops import (
+from .trials.style_ops import (
     blur_or_brightness,
     stylize,
     # histogram_match,

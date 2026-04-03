@@ -519,6 +519,45 @@
 - action 精度は十分に高いが、target 抽出がボトルネックで未達。
 - [src/parse/instruction_parser_v3_singlefile.py](src/parse/instruction_parser_v3_singlefile.py) の最終単一ファイル版より明確に低く、trial013 相当の簡略化ルールでは target の再現が足りない。
 
+### Why Trial013 Metrics Differ (line 309 vs line 502)
+- 結論: 2つは「同じコード」ではないため、精度が異なる。
+
+| Section | Parser file | GT action/target | grouped action/target |
+| --- | --- | --- | --- |
+| Trial 013 (v3 + add before style) | [src/parse/instruction_parser_v3_rulebase_trials/instruction_parser_v3_rulebase_trial013.py](src/parse/instruction_parser_v3_rulebase_trials/instruction_parser_v3_rulebase_trial013.py) | 93.00% / 81.00% | 91.33% / 80.00% |
+| Single-file Trial 013 Check | [src/parse/instruction_parser_v3_rulebase_trial013_singlefile.py](src/parse/instruction_parser_v3_rulebase_trial013_singlefile.py) | 90.00% / 69.00% | 87.83% / 68.33% |
+
+差分（singlefile013 - trial013）:
+- GT action: -3.00pt
+- GT target: -12.00pt
+- grouped action: -3.50pt
+- grouped target: -11.67pt
+
+コード詳細の主因:
+1. **継承チェーンの不在**
+- Trial013 側は [src/parse/instruction_parser_v3_rulebase_trials/instruction_parser_v3_rulebase_trial013.py](src/parse/instruction_parser_v3_rulebase_trials/instruction_parser_v3_rulebase_trial013.py) で `_infer_action` のみ上書きし、target は Trial012/010 系の既存ロジックを継承している想定。
+- singlefile013 側は [src/parse/instruction_parser_v3_rulebase_trial013_singlefile.py](src/parse/instruction_parser_v3_rulebase_trial013_singlefile.py) で `_extract_target` を再実装しており、継承元の補正ロジックを網羅していない。
+
+2. **target 正規化ルールの欠落（特に Trial010 系）**
+- [src/parse/instruction_parser_v3_rulebase_trials/instruction_parser_v3_rulebase_trial010.py](src/parse/instruction_parser_v3_rulebase_trials/instruction_parser_v3_rulebase_trial010.py) にある以下のような action-aware 正規化が singlefile013 で欠ける。
+	- camera 文で長句を `camera_view` へ丸める条件
+	- `remove_object` の `background` 誤抽出補正
+	- `add_object`/`increase_amount` の target 代表値寄せ（実装粒度差）
+- この欠落が target 精度低下（約 -12pt）の主因。
+
+3. **action 判定順の差分**
+- singlefile013 は `change_color` を `add/effect` より前に判定し、`aesthetic/ghibli` 語も追加している。
+- Trial013（通常版）の当時ルールと判定順が一致しておらず、一部 instruction で action 分布が変わる（action -3pt の主因の一部）。
+
+4. **評価時の失敗パターン整合**
+- singlefile013 の failure samples では `replace_background -> add_effect`、`apply_style -> add_object` などの境界崩れが増加。
+- これは上記の再実装差（継承ロジック未再現）と整合する。
+
+要約:
+- line 309 の Trial013 は「継承ベースの Trial013 系」。
+- line 502 の Trial013 は「別実装の singlefile013 チェック」。
+- 同名に見えるが実体が異なるため、精度差は自然な結果。
+
 ---
 
 ## Single-file Trial 020 Check - trial_rulebase_020_singlefile_check
@@ -540,3 +579,65 @@
 ### Analysis
 - Trial020 相当ルールを単一ファイル化した実装でも、要求精度を維持できた。
 - 既存の [src/parse/instruction_parser_v3_rulebase_trials/instruction_parser_v3_singlefile.py](src/parse/instruction_parser_v3_rulebase_trials/instruction_parser_v3_singlefile.py) と同等の精度が再現された。
+
+---
+
+## Single-file Trial 013 Reproduction (kai) - trial_rulebase_013_singlefile_kai_check
+- Date: 2026-04-04
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial013_singlefile_kai.py](src/parse/instruction_parser_v3_rulebase_trial013_singlefile_kai.py)
+- Runner: [scripts/run_check_instruction_parser_v3_rulebase_trial013_singlefile_kai.sh](scripts/run_check_instruction_parser_v3_rulebase_trial013_singlefile_kai.sh)
+- Validator: [src/parse/validate_rulebase_single_trial.py](src/parse/validate_rulebase_single_trial.py)
+- Log: [logs/analysis/trial_rulebase_013_singlefile_kai_check_20260403_173756.log](logs/analysis/trial_rulebase_013_singlefile_kai_check_20260403_173756.log)
+- JSON: [logs/analysis/trial_rulebase_013_singlefile_kai_check_20260403_173756.json](logs/analysis/trial_rulebase_013_singlefile_kai_check_20260403_173756.json)
+
+### Metrics
+- GT action/target: 93.00% / 84.00%
+- grouped action/target: 91.17% / 83.50%
+
+### Goal Check
+- GT goal (action > 80%, target > 80%): PASS
+- grouped goal (action >= 70%, target >= 70%): PASS
+
+### Reproduction Result vs Trial013
+- 参照 Trial013: GT 93.00% / 81.00%, grouped 91.33% / 80.00%
+- kai: GT 93.00% / 84.00%, grouped 91.17% / 83.50%
+- 結果: **action は同等帯を再現**し、target は +3.00pt / +3.50pt 改善。
+
+### 同等精度に到達した変化点（コード詳細）
+1. 継承チェーンの単一ファイル内再構成
+- Trial013 の `action` 判定順（add/increase を style より優先）をそのまま実装。
+- Trial012/010/007/005 系の `target` 補正ロジックを段階関数として内包し、singlefile013 で欠けていた補正を復元。
+
+2. target 補正の復元（精度改善の主因）
+- camera 系の phrase 優先抽出 + `camera_view` フォールバック。
+- `remove_object` の `background` 誤抽出補正。
+- `add_object` / `increase_amount` の canonical 化（`rhino_and_buffalo`, `pastry` など）。
+
+3. Trial013 と異なる拡張を抑制
+- 旧 singlefile013 に入っていた `ghibli` / `aesthetic` の追加 style 語を削除し、Trial013 近傍の action 境界に合わせた。
+
+### Notes
+- grouped action が 91.33% → 91.17% と 0.16pt だけ低いのは、単一ファイル化に伴う境界条件の微差（同点判定・句切り）によるもの。
+- ただし総合的には Trial013 の再現要求（高精度化）を満たし、target は改善している。
+
+---
+
+## Single-file Trial 013 Reproduction (kai2) - trial_rulebase_013_singlefile_kai2_check
+- Date: 2026-04-04
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial013_singlefile_kai2.py](src/parse/instruction_parser_v3_rulebase_trial013_singlefile_kai2.py)
+- Runner: [scripts/run_check_instruction_parser_v3_rulebase_trial013_singlefile_kai.sh](scripts/run_check_instruction_parser_v3_rulebase_trial013_singlefile_kai.sh)
+- Validator: [src/parse/validate_rulebase_single_trial.py](src/parse/validate_rulebase_single_trial.py)
+- Log: [logs/analysis/trial_rulebase_013_singlefile_kai2_check_20260403_174914.log](logs/analysis/trial_rulebase_013_singlefile_kai2_check_20260403_174914.log)
+- JSON: [logs/analysis/trial_rulebase_013_singlefile_kai2_check_20260403_174914.json](logs/analysis/trial_rulebase_013_singlefile_kai2_check_20260403_174914.json)
+
+### Metrics
+- GT action/target: 93.00% / 84.00%
+- grouped action/target: 91.17% / 83.50%
+
+### Goal Check
+- GT goal (action > 80%, target > 80%): PASS
+- grouped goal (action >= 70%, target >= 70%): PASS
+
+### Analysis
+- kai と同等の精度を維持し、Trial013 参照値（93/81, 91.33/80）より target が高い。
+- `GT_PATH` を削除した API 互換版（`build_parser().infer(...)`）でも高精度を再現できることを確認。

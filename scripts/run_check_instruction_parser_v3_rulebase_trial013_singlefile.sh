@@ -6,7 +6,7 @@ LOG_DIR="$ROOT/logs/analysis"
 mkdir -p "$LOG_DIR"
 
 PARSER_FILE="${PARSER_FILE:-$ROOT/src/parse/instruction_parser_v3_rulebase_trial013_singlefile.py}"
-VALIDATOR_FILE="${VALIDATOR_FILE:-$ROOT/src/parse/other_trials/validate_rulebase_single_trial.py}"
+VALIDATOR_FILE="${VALIDATOR_FILE:-$ROOT/src/parse/validate_rulebase_single_trial.py}"
 TRIAL_NAME="${TRIAL_NAME:-trial_rulebase_013_singlefile_check}"
 EVAL_BATCH_SIZE="${EVAL_BATCH_SIZE:-1}"
 SHOW_PROGRESS="${SHOW_PROGRESS:-1}"

@@ -1,0 +1,15 @@
+
+
+annotation_path: /workspace/data/annotations.jsonl
+video_dir: /workspace/data/videos
+output_dir: /workspace/logs/submit
+
+groundingdino:
+  config_path: /workspace/third_party/GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py
+  checkpoint: /workspace/weights/groundingdino_swint_ogc.pth
+
+sam:
+  checkpoint: /workspace/weights/sam_vit_h_4b8939.pth
+
+zoom_in:
+  zoom_factor: 1.0
