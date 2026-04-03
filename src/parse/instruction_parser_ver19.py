@@ -500,7 +500,7 @@ def build_predictions(
         base_records.append({
             "video_path": row["video_path"],
             "instruction": row.get("instruction", ""),
-            "gt_tasks": row.get("tasks", []),
+            "gt_tasks": row.get("tasks", []), # annotationの tasksのtaskを抽出
         })
 
     noun_bank, video_to_tasks = build_noun_bank(base_records)

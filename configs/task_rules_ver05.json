@@ -1,0 +1,711 @@
+{
+  "_comment": "ver05 task execution rules. action -> tool chain and fallback strategy.",
+  "version": "ver05",
+  "actions": {
+    "zoom_in": {
+      "primary_tool": "opencv",
+      "method": "crop_resize",
+      "params": {
+        "max_scale": 1.3
+      },
+      "fallback": null,
+      "gpu_required": false,
+      "notes": "2D幾何変換のみ。frame数・解像度は変わらない",
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "zoom_out": {
+      "primary_tool": "opencv",
+      "method": "resize_pad",
+      "params": {
+        "min_scale": 0.8
+      },
+      "fallback": null,
+      "gpu_required": false,
+      "notes": "縮小+パディング",
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "dolly_in": {
+      "primary_tool": "opencv",
+      "method": "progressive_crop_resize",
+      "params": {
+        "start_scale": 1.0,
+        "end_scale": 1.3
+      },
+      "fallback": null,
+      "gpu_required": false,
+      "notes": "徐々にズームイン。dolly_inはOpenCVで近似",
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "dolly_out": {
+      "primary_tool": "opencv",
+      "method": "progressive_resize_pad",
+      "params": {
+        "start_scale": 1.0,
+        "end_scale": 0.8
+      },
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "change_camera_angle": {
+      "primary_tool": "opencv",
+      "method": "perspective_warp",
+      "params": {
+        "strength": 0.07
+      },
+      "fallback": null,
+      "gpu_required": false,
+      "notes": "low_angle/high_angleを疑似射影変換で近似",
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "orbit_camera": {
+      "primary_tool": "opencv",
+      "method": "horizontal_shift",
+      "params": {
+        "max_shift_ratio": 0.1
+      },
+      "fallback": null,
+      "gpu_required": false,
+      "notes": "水平方向シフトで擬似orbit",
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "replace_background": {
+      "primary_tool": "opencv",
+      "method": "segment_and_replace",
+      "params": {
+        "blur_background": true
+      },
+      "fallback": "opencv_blur",
+      "gpu_required": true,
+      "gpu_oom_fallback": "opencv_blur",
+      "notes": "SAM2でFG mask → 背景をぼかしまたはグレースケール化",
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "opencv_blur",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    },
+    "change_color": {
+      "primary_tool": "opencv",
+      "method": "hsv_retarget",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "notes": "全体 or SAM mask 領域の HSV 変換",
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    },
+    "add_object": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "notes": "物体追加は現状passthrough（生成モデル未統合）",
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    },
+    "remove_object": {
+      "primary_tool": "opencv",
+      "method": "inpaint",
+      "params": {
+        "inpaint_radius": 5
+      },
+      "fallback": "passthrough",
+      "gpu_required": false,
+      "gpu_oom_fallback": "passthrough",
+      "notes": "TELEA inpaint。マスクはSAM2 or 顔検出",
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    },
+    "replace_object": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "notes": "passthrough（生成モデル未統合）",
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    },
+    "edit_motion": {
+      "primary_tool": "vace",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "notes": "人物動作生成はWan未統合のためpassthrough",
+      "secondary_tool": "wan",
+      "tool_candidates": [
+        "vace",
+        "wan"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "apply_style": {
+      "primary_tool": "opencv",
+      "method": "stylize",
+      "params": {},
+      "fallback": "passthrough",
+      "gpu_required": false,
+      "notes": "opencvのstylizationフィルタ",
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "add_effect": {
+      "primary_tool": "opencv",
+      "method": "blur_or_brightness",
+      "params": {},
+      "fallback": "passthrough",
+      "gpu_required": false,
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "increase_amount": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "edit_expression": {
+      "primary_tool": "vace",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "wan",
+      "tool_candidates": [
+        "vace",
+        "wan"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "preserve_foreground": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "notes": "制約タスク：何もしない",
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "preserve_objects": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "preserve_identity": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "preserve_focus": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "preserve_framing": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "preserve_layout": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "preserve_material_appearance": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "align_replacement": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    },
+    "match_appearance": {
+      "primary_tool": "opencv",
+      "method": "histogram_match",
+      "params": {},
+      "fallback": "passthrough",
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "match_lighting": {
+      "primary_tool": "opencv",
+      "method": "histogram_match",
+      "params": {},
+      "fallback": "passthrough",
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "match_background_camera_properties": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "match_effect_lighting": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "match_scene_interaction": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "stabilize_instances": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "stabilize_edit": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "stabilize_motion": {
+      "primary_tool": "vace",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "wan",
+      "tool_candidates": [
+        "vace",
+        "wan"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "stabilize_style": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "stabilize_effect": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "stabilize_composite": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "stabilize_inpaint": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "refine_mask": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    },
+    "blend_instances": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    },
+    "inpaint_background": {
+      "primary_tool": "opencv",
+      "method": "inpaint",
+      "params": {
+        "inpaint_radius": 8
+      },
+      "fallback": "passthrough",
+      "gpu_required": false,
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    },
+    "adjust_perspective": {
+      "primary_tool": "opencv",
+      "method": "perspective_warp",
+      "params": {
+        "strength": 0.05
+      },
+      "fallback": "passthrough",
+      "gpu_required": false,
+      "secondary_tool": "raft",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "track_effect": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": null,
+      "gpu_required": false,
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    },
+    "enhance_style_details": {
+      "primary_tool": "opencv",
+      "method": "sharpness",
+      "params": {
+        "strength": 0.5
+      },
+      "fallback": "passthrough",
+      "gpu_required": false,
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough"
+    },
+    "_default": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": "passthrough",
+      "gpu_required": false,
+      "notes": "未定義actionのデフォルト: passthrough",
+      "secondary_tool": "raft",
+      "secondary_method": "identity",
+      "tool_candidates": [
+        "opencv",
+        "raft"
+      ],
+      "gpu_oom_fallback": "passthrough"
+    },
+    "stabilize_object": {
+      "primary_tool": "opencv",
+      "method": "identity",
+      "params": {},
+      "fallback": "passthrough",
+      "gpu_required": false,
+      "notes": "object安定化は現状identity",
+      "secondary_tool": "vace",
+      "tool_candidates": [
+        "opencv",
+        "vace"
+      ],
+      "secondary_method": "identity",
+      "gpu_oom_fallback": "passthrough",
+      "mask_pipeline": [
+        "groundingdino",
+        "sam2_opencv"
+      ]
+    }
+  },
+  "tool_priority": [
+    "opencv",
+    "raft",
+    "vace",
+    "wan"
+  ]
+}
