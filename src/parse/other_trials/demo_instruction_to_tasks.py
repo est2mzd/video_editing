@@ -22,7 +22,7 @@ GT_PATH = WORKSPACE / "data" / "annotations_gt_task_ver10.json"
 # PythonパスにWORKSPACEを追加
 sys.path.insert(0, str(WORKSPACE))
 
-from src.parse.instruction_parser_ver19 import (
+from parse.other_trials.instruction_parser_ver19 import (
     build_noun_bank,
     build_predictions,
     MULTI_CFG_BEST,

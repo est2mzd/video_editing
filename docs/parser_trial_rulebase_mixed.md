@@ -1,8 +1,6 @@
-# parser_trial_mixed
+# parser_trial_rulebase_mixed
 
-LLM + RuleBase の混合試行ログ。
-
-> RuleBase 表記を明確化したファイル名: [docs/parser_trial_rulebase_mixed.md](docs/parser_trial_rulebase_mixed.md)
+RuleBase main + LLM 補助の混合試行ログ。
 
 ## Goal
 - GT: action > 80%, target > 80%

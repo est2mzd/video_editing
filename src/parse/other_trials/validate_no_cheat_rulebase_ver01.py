@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from src.parse.parser_no_cheat_rulebase_ver01 import NoCheatRuleParserV01
+from parse.other_trials.parser_no_cheat_rulebase_ver01 import NoCheatRuleParserV01
 
 WORKSPACE = Path("/workspace")
 GT_PATH = WORKSPACE / "data" / "annotations_gt_task_ver10.json"

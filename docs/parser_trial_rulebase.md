@@ -29,7 +29,7 @@
 ## Trial 001 (v3 base) - trial_001_v3_base
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved.py](src/parse/prototype_instruction_parser_v3_improved.py)
+- Parser: [src/parse/instruction_parser_v3_improved.py](src/parse/instruction_parser_v3_improved.py)
 - Validator: [src/parse/validate_rulebase_single_trial.py](src/parse/validate_rulebase_single_trial.py)
 - Log: [logs/analysis/trial_001_v3_base_20260402_144959.log](logs/analysis/trial_001_v3_base_20260402_144959.log)
 - JSON: [logs/analysis/trial_001_v3_base_20260402_145000.json](logs/analysis/trial_001_v3_base_20260402_145000.json)
@@ -59,7 +59,7 @@
 ## Trial 002 (v3 + preserve suppression) - trial_002_v3_preserve_fix
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_trial_002.sh](scripts/run_validate_trial_002.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial002.py](src/parse/prototype_instruction_parser_v3_improved_trial002.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial002.py](src/parse/instruction_parser_v3_rulebase_trial002.py)
 - Validator: [src/parse/validate_rulebase_single_trial.py](src/parse/validate_rulebase_single_trial.py)
 - Log: [logs/analysis/trial_002_v3_preserve_fix_20260402_145048.log](logs/analysis/trial_002_v3_preserve_fix_20260402_145048.log)
 - JSON: [logs/analysis/trial_002_v3_preserve_fix_20260402_145048.json](logs/analysis/trial_002_v3_preserve_fix_20260402_145048.json)
@@ -97,7 +97,7 @@
 ## Trial 003 (v3 + missing actions) - trial_003_v3_add_missing_actions
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial003.py](src/parse/prototype_instruction_parser_v3_improved_trial003.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial003.py](src/parse/instruction_parser_v3_rulebase_trial003.py)
 - Log: [logs/analysis/trial_003_v3_add_missing_actions_20260402_145412.log](logs/analysis/trial_003_v3_add_missing_actions_20260402_145412.log)
 - JSON: [logs/analysis/trial_003_v3_add_missing_actions_20260402_145412.json](logs/analysis/trial_003_v3_add_missing_actions_20260402_145412.json)
 
@@ -117,7 +117,7 @@
 ## Trial 004 (v3 + regex boundary fix) - trial_004_v3_regex_boundary_fix
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial004.py](src/parse/prototype_instruction_parser_v3_improved_trial004.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial004.py](src/parse/instruction_parser_v3_rulebase_trial004.py)
 - Log: [logs/analysis/trial_004_v3_regex_boundary_fix_20260402_145536.log](logs/analysis/trial_004_v3_regex_boundary_fix_20260402_145536.log)
 - JSON: [logs/analysis/trial_004_v3_regex_boundary_fix_20260402_145536.json](logs/analysis/trial_004_v3_regex_boundary_fix_20260402_145536.json)
 
@@ -138,7 +138,7 @@
 ## Trial 005 (v3 + action-conditioned target) - trial_005_v3_action_conditioned_target
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial005.py](src/parse/prototype_instruction_parser_v3_improved_trial005.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial005.py](src/parse/instruction_parser_v3_rulebase_trial005.py)
 - Log: [logs/analysis/trial_005_v3_action_conditioned_target_20260402_145643.log](logs/analysis/trial_005_v3_action_conditioned_target_20260402_145643.log)
 - JSON: [logs/analysis/trial_005_v3_action_conditioned_target_20260402_145643.json](logs/analysis/trial_005_v3_action_conditioned_target_20260402_145643.json)
 
@@ -159,7 +159,7 @@
 ## Trial 006 (v3 + intent router) - trial_006_v3_intent_router
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial006.py](src/parse/prototype_instruction_parser_v3_improved_trial006.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial006.py](src/parse/instruction_parser_v3_rulebase_trial006.py)
 - Log: [logs/analysis/trial_006_v3_intent_router_20260402_145715.log](logs/analysis/trial_006_v3_intent_router_20260402_145715.log)
 - JSON: [logs/analysis/trial_006_v3_intent_router_20260402_145715.json](logs/analysis/trial_006_v3_intent_router_20260402_145715.json)
 
@@ -180,7 +180,7 @@
 ## Trial 007 (v3 + camera phrase target) - trial_007_v3_camera_phrase_target
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial007.py](src/parse/prototype_instruction_parser_v3_improved_trial007.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial007.py](src/parse/instruction_parser_v3_rulebase_trial007.py)
 - Log: [logs/analysis/trial_007_v3_camera_phrase_target_20260402_145801.log](logs/analysis/trial_007_v3_camera_phrase_target_20260402_145801.log)
 - JSON: [logs/analysis/trial_007_v3_camera_phrase_target_20260402_145801.json](logs/analysis/trial_007_v3_camera_phrase_target_20260402_145801.json)
 
@@ -201,7 +201,7 @@
 ## Trial 008 (v3 + intent boundary refine) - trial_008_v3_intent_boundary_refine
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial008.py](src/parse/prototype_instruction_parser_v3_improved_trial008.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial008.py](src/parse/instruction_parser_v3_rulebase_trial008.py)
 - Log: [logs/analysis/trial_008_v3_intent_boundary_refine_20260402_145909.log](logs/analysis/trial_008_v3_intent_boundary_refine_20260402_145909.log)
 - JSON: [logs/analysis/trial_008_v3_intent_boundary_refine_20260402_145909.json](logs/analysis/trial_008_v3_intent_boundary_refine_20260402_145909.json)
 
@@ -222,7 +222,7 @@
 ## Trial 009 (v3 + add-priority over style) - trial_009_v3_add_priority_over_style
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial009.py](src/parse/prototype_instruction_parser_v3_improved_trial009.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial009.py](src/parse/instruction_parser_v3_rulebase_trial009.py)
 - Log: [logs/analysis/trial_009_v3_add_priority_over_style_20260402_145946.log](logs/analysis/trial_009_v3_add_priority_over_style_20260402_145946.log)
 - JSON: [logs/analysis/trial_009_v3_add_priority_over_style_20260402_145946.json](logs/analysis/trial_009_v3_add_priority_over_style_20260402_145946.json)
 
@@ -243,7 +243,7 @@
 ## Trial 010 (v3 + target normalization) - trial_010_v3_target_normalization
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial010.py](src/parse/prototype_instruction_parser_v3_improved_trial010.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial010.py](src/parse/instruction_parser_v3_rulebase_trial010.py)
 - Log: [logs/analysis/trial_010_v3_target_normalization_20260402_150042.log](logs/analysis/trial_010_v3_target_normalization_20260402_150042.log)
 - JSON: [logs/analysis/trial_010_v3_target_normalization_20260402_150042.json](logs/analysis/trial_010_v3_target_normalization_20260402_150042.json)
 
@@ -268,7 +268,7 @@
 ## Trial 011 (v3 + action boundary fix) - trial_011_v3_action_boundary_fix
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial011.py](src/parse/prototype_instruction_parser_v3_improved_trial011.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial011.py](src/parse/instruction_parser_v3_rulebase_trial011.py)
 - Log: [logs/analysis/trial_011_v3_action_boundary_fix_20260402_150128.log](logs/analysis/trial_011_v3_action_boundary_fix_20260402_150128.log)
 - JSON: [logs/analysis/trial_011_v3_action_boundary_fix_20260402_150128.json](logs/analysis/trial_011_v3_action_boundary_fix_20260402_150128.json)
 
@@ -289,7 +289,7 @@
 ## Trial 012 (v3 + camera subject priority) - trial_012_v3_camera_subject_priority
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial012.py](src/parse/prototype_instruction_parser_v3_improved_trial012.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial012.py](src/parse/instruction_parser_v3_rulebase_trial012.py)
 - Log: [logs/analysis/trial_012_v3_camera_subject_priority_20260402_150202.log](logs/analysis/trial_012_v3_camera_subject_priority_20260402_150202.log)
 - JSON: [logs/analysis/trial_012_v3_camera_subject_priority_20260402_150202.json](logs/analysis/trial_012_v3_camera_subject_priority_20260402_150202.json)
 
@@ -309,7 +309,7 @@
 ## Trial 013 (v3 + add before style) - trial_013_v3_add_before_style
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial013.py](src/parse/prototype_instruction_parser_v3_improved_trial013.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial013.py](src/parse/instruction_parser_v3_rulebase_trial013.py)
 - Log: [logs/analysis/trial_013_v3_add_before_style_20260402_150252.log](logs/analysis/trial_013_v3_add_before_style_20260402_150252.log)
 - JSON: [logs/analysis/trial_013_v3_add_before_style_20260402_150252.json](logs/analysis/trial_013_v3_add_before_style_20260402_150252.json)
 
@@ -333,7 +333,7 @@
 ## Trial 014 (v3 + replace boundary fix) - trial_014_v3_replace_boundary_fix
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial014.py](src/parse/prototype_instruction_parser_v3_improved_trial014.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial014.py](src/parse/instruction_parser_v3_rulebase_trial014.py)
 - Log: [logs/analysis/trial_014_v3_replace_boundary_fix_20260402_150337.log](logs/analysis/trial_014_v3_replace_boundary_fix_20260402_150337.log)
 - JSON: [logs/analysis/trial_014_v3_replace_boundary_fix_20260402_150337.json](logs/analysis/trial_014_v3_replace_boundary_fix_20260402_150337.json)
 
@@ -353,7 +353,7 @@
 ## Trial 015 (v3 + target canonical map) - trial_015_v3_target_canonical_map
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial015.py](src/parse/prototype_instruction_parser_v3_improved_trial015.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial015.py](src/parse/instruction_parser_v3_rulebase_trial015.py)
 - Log: [logs/analysis/trial_015_v3_target_canonical_map_20260402_150425.log](logs/analysis/trial_015_v3_target_canonical_map_20260402_150425.log)
 - JSON: [logs/analysis/trial_015_v3_target_canonical_map_20260402_150425.json](logs/analysis/trial_015_v3_target_canonical_map_20260402_150425.json)
 
@@ -377,7 +377,7 @@
 ## Trial 016 (v3 + style/replace disambiguation) - trial_016_v3_disambiguate_style_replace
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial016.py](src/parse/prototype_instruction_parser_v3_improved_trial016.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial016.py](src/parse/instruction_parser_v3_rulebase_trial016.py)
 - Log: [logs/analysis/trial_016_v3_disambiguate_style_replace_20260402_150456.log](logs/analysis/trial_016_v3_disambiguate_style_replace_20260402_150456.log)
 - JSON: [logs/analysis/trial_016_v3_disambiguate_style_replace_20260402_150456.json](logs/analysis/trial_016_v3_disambiguate_style_replace_20260402_150456.json)
 
@@ -401,7 +401,7 @@
 ## Trial 017 (v3 + orbit camera) - trial_017_v3_add_orbit_camera
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial017.py](src/parse/prototype_instruction_parser_v3_improved_trial017.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial017.py](src/parse/instruction_parser_v3_rulebase_trial017.py)
 - Log: [logs/analysis/trial_017_v3_add_orbit_camera_20260402_150601.log](logs/analysis/trial_017_v3_add_orbit_camera_20260402_150601.log)
 - JSON: [logs/analysis/trial_017_v3_add_orbit_camera_20260402_150601.json](logs/analysis/trial_017_v3_add_orbit_camera_20260402_150601.json)
 
@@ -425,7 +425,7 @@
 ## Trial 018 (v3 + camera object fallback) - trial_018_v3_camera_object_fallback
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial018.py](src/parse/prototype_instruction_parser_v3_improved_trial018.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial018.py](src/parse/instruction_parser_v3_rulebase_trial018.py)
 - Log: [logs/analysis/trial_018_v3_camera_object_fallback_20260402_150627.log](logs/analysis/trial_018_v3_camera_object_fallback_20260402_150627.log)
 - JSON: [logs/analysis/trial_018_v3_camera_object_fallback_20260402_150627.json](logs/analysis/trial_018_v3_camera_object_fallback_20260402_150627.json)
 
@@ -445,7 +445,7 @@
 ## Trial 019 (v3 + edit_motion target person) - trial_019_v3_edit_motion_person
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial019.py](src/parse/prototype_instruction_parser_v3_improved_trial019.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial019.py](src/parse/instruction_parser_v3_rulebase_trial019.py)
 - Log: [logs/analysis/trial_019_v3_edit_motion_person_20260402_150652.log](logs/analysis/trial_019_v3_edit_motion_person_20260402_150652.log)
 - JSON: [logs/analysis/trial_019_v3_edit_motion_person_20260402_150652.json](logs/analysis/trial_019_v3_edit_motion_person_20260402_150652.json)
 
@@ -465,7 +465,7 @@
 ## Trial 020 (v3 + camera-angle target norm) - trial_020_v3_camera_angle_target_norm
 - Date: 2026-04-02
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
-- Parser: [src/parse/prototype_instruction_parser_v3_improved_trial020.py](src/parse/prototype_instruction_parser_v3_improved_trial020.py)
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial020.py](src/parse/instruction_parser_v3_rulebase_trial020.py)
 - Log: [logs/analysis/trial_020_v3_camera_angle_target_norm_20260402_150715.log](logs/analysis/trial_020_v3_camera_angle_target_norm_20260402_150715.log)
 - JSON: [logs/analysis/trial_020_v3_camera_angle_target_norm_20260402_150715.json](logs/analysis/trial_020_v3_camera_angle_target_norm_20260402_150715.json)
 
@@ -485,7 +485,7 @@
 
 ## Single-file Consolidation Check - trial_singlefile_v3_final
 - Date: 2026-04-03
-- Parser: [src/parse/prototype_instruction_parser_v3_singlefile.py](src/parse/prototype_instruction_parser_v3_singlefile.py)
+- Parser: [src/parse/instruction_parser_v3_singlefile.py](src/parse/instruction_parser_v3_singlefile.py)
 - Runner: [scripts/run_validate_rulebase_single_trial.sh](scripts/run_validate_rulebase_single_trial.sh)
 - Log: [logs/analysis/trial_singlefile_v3_final_20260402_151051.log](logs/analysis/trial_singlefile_v3_final_20260402_151051.log)
 - JSON: [logs/analysis/trial_singlefile_v3_final_20260402_151051.json](logs/analysis/trial_singlefile_v3_final_20260402_151051.json)
@@ -496,3 +496,47 @@
 
 ### Conclusion
 - 多段importを解消した単一ファイル版でも、要求精度を満たすことを確認。
+
+---
+
+## Single-file Trial 013 Check - trial_rulebase_013_singlefile_check
+- Date: 2026-04-04
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial013_singlefile.py](src/parse/instruction_parser_v3_rulebase_trial013_singlefile.py)
+- Runner: [scripts/run_check_instruction_parser_v3_rulebase_trial013_singlefile.sh](scripts/run_check_instruction_parser_v3_rulebase_trial013_singlefile.sh)
+- Validator: [src/parse/other_trials/validate_rulebase_single_trial.py](src/parse/other_trials/validate_rulebase_single_trial.py)
+- Log: [logs/analysis/trial_rulebase_013_singlefile_check_20260403_170106.log](logs/analysis/trial_rulebase_013_singlefile_check_20260403_170106.log)
+- JSON: [logs/analysis/trial_rulebase_013_singlefile_check_20260403_170106.json](logs/analysis/trial_rulebase_013_singlefile_check_20260403_170106.json)
+
+### Metrics
+- GT action/target: 90.00% / 69.00%
+- grouped action/target: 87.83% / 68.33%
+
+### Goal Check
+- GT goal (action > 80%, target > 80%): FAIL
+- grouped goal (action >= 70%, target >= 70%): FAIL
+
+### Analysis
+- action 精度は十分に高いが、target 抽出がボトルネックで未達。
+- [src/parse/instruction_parser_v3_singlefile.py](src/parse/instruction_parser_v3_singlefile.py) の最終単一ファイル版より明確に低く、trial013 相当の簡略化ルールでは target の再現が足りない。
+
+---
+
+## Single-file Trial 020 Check - trial_rulebase_020_singlefile_check
+- Date: 2026-04-04
+- Parser: [src/parse/instruction_parser_v3_rulebase_trial020_singlefile.py](src/parse/instruction_parser_v3_rulebase_trial020_singlefile.py)
+- Runner: [scripts/run_check_instruction_parser_v3_rulebase_trial020_singlefile.sh](scripts/run_check_instruction_parser_v3_rulebase_trial020_singlefile.sh)
+- Validator: [src/parse/validate_rulebase_single_trial.py](src/parse/validate_rulebase_single_trial.py)
+- Log: [logs/analysis/trial_rulebase_020_singlefile_check_20260403_170918.log](logs/analysis/trial_rulebase_020_singlefile_check_20260403_170918.log)
+- JSON: [logs/analysis/trial_rulebase_020_singlefile_check_20260403_170918.json](logs/analysis/trial_rulebase_020_singlefile_check_20260403_170918.json)
+
+### Metrics
+- GT action/target: 98.00% / 87.00%
+- grouped action/target: 95.67% / 84.00%
+
+### Goal Check
+- GT goal (action > 80%, target > 80%): PASS
+- grouped goal (action >= 70%, target >= 70%): PASS
+
+### Analysis
+- Trial020 相当ルールを単一ファイル化した実装でも、要求精度を維持できた。
+- 既存の [src/parse/instruction_parser_v3_rulebase_trials/instruction_parser_v3_singlefile.py](src/parse/instruction_parser_v3_rulebase_trials/instruction_parser_v3_singlefile.py) と同等の精度が再現された。

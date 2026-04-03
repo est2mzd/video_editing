@@ -396,7 +396,7 @@ InstructionParser クラス
 
 改善設計のプロトタイプを実装・検証：
 
-新規: `/workspace/src/parse/prototype_instruction_parser_class.py`
+新規: `/workspace/src/parse/instruction_parser_class.py`
 - `build_knowledge_db()`: GT から統計知識を抽出
   - action_patterns: 13 個（正規表現）
   - action_target_vocab: 42 個（アクション別target候補）
@@ -431,8 +431,8 @@ Step 4: DB 内容確認
 
 ### 実行ログ
 
-- スクリプト: `/workspace/scripts/run_prototype_instruction_parser_class.sh`
-- ログ出力: `/workspace/logs/analysis/prototype_instruction_parser_class_20260402_140359.log`
+- スクリプト: `/workspace/scripts/run_instruction_parser_class.sh`
+- ログ出力: `/workspace/logs/analysis/instruction_parser_class_20260402_140359.log`
 
 ### 今後のステップ
 
@@ -477,7 +477,7 @@ class InstructionParser:
 
 ### v2 の実装
 
-新規: `/workspace/src/parse/prototype_instruction_parser_class_v2_no_cheat.py`
+新規: `/workspace/src/parse/instruction_parser_class_v2_no_cheat.py`
 
 **知識 DB の構成**:
 ```python
@@ -527,8 +527,8 @@ knowledge_db = {
 
 ### 実行ログ
 
-- スクリプト: `/workspace/scripts/run_prototype_v2_no_cheat.sh`
-- ログファイル: `/workspace/logs/analysis/prototype_v2_no_cheat_20260402_140826.log`
+- スクリプト: `/workspace/scripts/run_v2_no_cheat.sh`
+- ログファイル: `/workspace/logs/analysis/v2_no_cheat_20260402_140826.log`
 
 ### DB チェックリスト
 

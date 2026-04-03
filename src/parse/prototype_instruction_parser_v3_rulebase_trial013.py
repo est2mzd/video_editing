@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Trial 013 based on v3.
-
-Rulebase 表記を明確化した別名ファイル:
-- src/parse/prototype_instruction_parser_v3_rulebase_trial013.py
+"""Rulebase Trial 013 based on v3.
 
 Single countermeasure:
 - Prioritize increase/add object actions before style detection.
+
+Note:
+- This file is a rulebase-explicit alias of improved trial 013.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ from parse.prototype_instruction_parser_v3_improved_trials.prototype_instruction
 GT_PATH = Path("/workspace/data/annotations_gt_task_ver10.json")
 
 
-class InstructionParserV3Trial013(InstructionParserV3Trial012):
+class InstructionParserV3RulebaseTrial013(InstructionParserV3Trial012):
     def _infer_action(self, instruction: str) -> str:
         text = instruction.lower()
 
@@ -71,6 +71,6 @@ class InstructionParserV3Trial013(InstructionParserV3Trial012):
         return super()._infer_action(instruction)
 
 
-def build_parser() -> InstructionParserV3Trial013:
+def build_parser() -> InstructionParserV3RulebaseTrial013:
     kb = build_knowledge_db_v3(GT_PATH)
-    return InstructionParserV3Trial013(kb)
+    return InstructionParserV3RulebaseTrial013(kb)
