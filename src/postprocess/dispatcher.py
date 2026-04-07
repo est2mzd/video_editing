@@ -5,20 +5,20 @@ from typing import Any
 
 import numpy as np
 
-from .trials.add_object_service import add_object_frames
-from .trials.background_ops import (
+from .add_object_service import add_object_frames
+from .background_ops import (
     change_background_color,
     inpaint,
     replace_background,
 )
-from .trials.camera_ops import (
+from .camera_ops import (
     horizontal_shift,
     perspective_warp,
     stable_zoom_in,
     stable_object_zoom_in,
     zoom_out,
 )
-from .trials.style_ops import (
+from .style_ops import (
     blur_or_brightness,
     stylize,
     # histogram_match,
@@ -122,29 +122,43 @@ def run_method(
         "track_effect",
         "stabilize_object",
     }
+    
+    
+    
     if resolved_action in passthrough_actions:
+        print("--------------- Passthrough ---------------")
         return frames
 
     # 準備できた関数
     if resolved_action == "apply_style":
+        print(f"--------------- {resolved_action} ---------------")
         return stylize(frames, params)
     if resolved_action == "replace_background":
+        print(f"--------------- {resolved_action} ---------------")
         return replace_background(frames, params, instruction)
     if resolved_action == "change_color":
+        print(f"--------------- {resolved_action} ---------------")
         return change_background_color(frames, instruction)
     if resolved_action == "zoom_in":
+        print(f"--------------- {resolved_action} ---------------")
         return stable_zoom_in(frames, params, logger)
     if resolved_action == "dolly_in":
+        print(f"--------------- {resolved_action} ---------------") 
         return stable_object_zoom_in(frames, params, instruction, logger)
     if resolved_action == "zoom_out":
+        print(f"--------------- {resolved_action} ---------------")
         return zoom_out(frames, params)
     if resolved_action == "change_camera_angle":
+        print(f"--------------- {resolved_action} ---------------")
         return perspective_warp(frames, params)
     if resolved_action == "orbit_camera":
+        print(f"--------------- {resolved_action} ---------------")
         return horizontal_shift(frames, params)
     if resolved_action == "add_effect":
+        print(f"--------------- {resolved_action} ---------------")
         return blur_or_brightness(frames, params)
     if resolved_action == "remove_object":
+        print(f"--------------- {resolved_action} ---------------")
         return inpaint(frames, params)
 
     return frames
