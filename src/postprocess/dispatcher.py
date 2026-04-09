@@ -122,29 +122,43 @@ def run_method(
         "track_effect",
         "stabilize_object",
     }
+    
+    
+    
     if resolved_action in passthrough_actions:
+        print("--------------- Passthrough ---------------")
         return frames
 
     # 準備できた関数
     if resolved_action == "apply_style":
+        print(f"--------------- {resolved_action} ---------------")
         return stylize(frames, params)
     if resolved_action == "replace_background":
+        print(f"--------------- {resolved_action} ---------------")
         return replace_background(frames, params, instruction)
     if resolved_action == "change_color":
+        print(f"--------------- {resolved_action} ---------------")
         return change_background_color(frames, instruction)
     if resolved_action == "zoom_in":
+        print(f"--------------- {resolved_action} ---------------")
         return stable_zoom_in(frames, params, logger)
     if resolved_action == "dolly_in":
+        print(f"--------------- {resolved_action} ---------------") 
         return stable_object_zoom_in(frames, params, instruction, logger)
     if resolved_action == "zoom_out":
+        print(f"--------------- {resolved_action} ---------------")
         return zoom_out(frames, params)
     if resolved_action == "change_camera_angle":
+        print(f"--------------- {resolved_action} ---------------")
         return perspective_warp(frames, params)
     if resolved_action == "orbit_camera":
+        print(f"--------------- {resolved_action} ---------------")
         return horizontal_shift(frames, params)
     if resolved_action == "add_effect":
+        print(f"--------------- {resolved_action} ---------------")
         return blur_or_brightness(frames, params)
     if resolved_action == "remove_object":
+        print(f"--------------- {resolved_action} ---------------")
         return inpaint(frames, params)
 
     return frames

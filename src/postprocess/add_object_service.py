@@ -5,7 +5,7 @@ from typing import Any
 
 import numpy as np
 
-from src.postprocess import add_object_versions as versions
+from postprocess import add_object_versions as versions
 
 
 def add_object_frames(

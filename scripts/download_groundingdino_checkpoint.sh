@@ -6,7 +6,7 @@ DIR_PATH=$(dirname "$FILE_PATH")
 PARENT_DIR=$(dirname "$DIR_PATH")
 cd "$PARENT_DIR"
 
-TARGET_PATH="/workspace/weights/groundingdino_swint_ogc.pth"
+TARGET_PATH="/workspace/weights/groundingdino/groundingdino_swint_ogc.pth"
 URL="https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth"
 
 FORCE=0

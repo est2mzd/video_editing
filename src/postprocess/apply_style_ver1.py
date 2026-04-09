@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 
-from src.postprocess import apply_style_common as common
+from postprocess import apply_style_common as common
 
 # ===============================
 # Style normalization

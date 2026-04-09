@@ -156,10 +156,23 @@ RUN apt update && \
     python3 -m pip install "huggingface_hub[cli]" modelscope
 
 # Style Transfer 用
-RUN apt update && python3 -m pip install diffusers transformers accelerate safetensors
-RUN apt update && python3 -m pip install opencv-python pillow
+RUN apt update && python3 -m pip install \
+    diffusers \
+    transformers \
+    accelerate \
+    safetensors \
+    opencv-python \
+    pillow
 RUN apt update && python3 -m pip install -U peft
 
+# YOLOv8 用
+RUN apt update && python3 -m pip install ultralytics
+
+# Hugging Face Hub CLI 用
+RUN apt update && python3 -m pip install huggingface_hub git-lfs
+
+# Google Drive からのダウンロード用
+RUN apt update && python3 -m pip install gdown
 
 ENV LD_LIBRARY_PATH=/usr/local/lib/python3.10/dist-packages/torch/lib:$LD_LIBRARY_PATH
 ENV PYTHONPATH=/workspace/third_party/VACE:$PYTHONPATH

@@ -36,7 +36,7 @@ print("VIDEO_DIR:  ", list(VIDEO_DIR.glob("*.mp4"))[:3])
 print("task_rules: ", TASK_RULES_PATH)
 
 
-from src.parse.instruction_parser_ver19 import (
+from parse.other_trials.instruction_parser_ver19 import (
     parse_annotations_jsonl,
     build_predictions,
     build_noun_bank,

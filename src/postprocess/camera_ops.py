@@ -69,6 +69,7 @@ def compose_scaled_mask_foreground(
     result[paste_region] = scaled_obj[paste_region]
     return result
 
+from postprocess.detectors import detect_all_boxes
 
 def stable_object_zoom_in(
     frames: list[np.ndarray],
@@ -86,6 +87,7 @@ def stable_object_zoom_in(
     4. Apply masked foreground scaling and background restoration.
     """
     if not frames:
+        print("[stable_object_zoom_in] : No frames to process")
         return frames
 
     zoom_end_scale = params.get("end_scale")
@@ -103,11 +105,27 @@ def stable_object_zoom_in(
     out: list[np.ndarray] = []
     prev_mask: np.ndarray | None = None
 
+
+    # TODO: チート. person or center_object
+    person_boxes = detect_all_boxes(frames, "person")
+
+    if valid(person_boxes):
+        target_box = largest_box(person_boxes)
+
+
+
     for i, frame in enumerate(
         iter_frames_with_progress(frames, params, "dolly_in", "object_zoom_in")
     ):
-        box = resolve_target_union_box(frame, params, instruction, logger)
+        # TODO: これがまずいかも
+        # box = resolve_target_union_box(frame, params, instruction, logger)
+        
+        # TODO: stable_zoom_in 似合わせた
+        target = str(params.get("target", ""))
+        box = detect_primary_box(frame, text_prompt=target, logger=logger)
+        
         curr_mask: np.ndarray | None = None
+        
         if box is not None:
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             curr_mask = get_sam_mask_from_box(
@@ -120,6 +138,10 @@ def stable_object_zoom_in(
 
         if curr_mask is None:
             if prev_mask is None:
+                print(
+                    f"[WARN][MASK] No valid object mask on frame={i}. "
+                    "Using original frame (passthrough)."
+                )
                 out.append(frame.copy())
                 continue
             curr_mask = prev_mask

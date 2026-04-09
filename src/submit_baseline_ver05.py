@@ -53,12 +53,12 @@ import cv2
 import numpy as np
 
 # ver19 パーサー
-from src.parse.instruction_parser_ver19 import (
+from parse.other_trials.instruction_parser_ver19 import (
     build_predictions,
     parse_annotations_jsonl,
     MULTI_CFG_BEST,
 )
-from src.postprocess import dispatcher as task_rule_funcs
+from postprocess import dispatcher as task_rule_funcs
 
 
 # ---------------------------------------------------------------------------

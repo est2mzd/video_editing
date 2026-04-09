@@ -42,6 +42,40 @@ STYLE_ALIASES = {
 
 _PIPE: StableDiffusionImg2ImgPipeline | None = None
 _PIPE_LOCK = threading.Lock()
+# Global fixed seed for diffusion reproducibility.
+# Set to None to disable fixed seeding behavior.
+# type is int or None. default is 42
+DIFFUSION_FIXED_SEED: int | None = 42
+
+
+def _generator_device(pipe: StableDiffusionImg2ImgPipeline) -> str:
+    device = getattr(pipe, "device", None)
+    if device is None:
+        return "cuda" if torch.cuda.is_available() else "cpu"
+    return str(device)
+
+
+def _build_generator(
+    pipe: StableDiffusionImg2ImgPipeline,
+) -> torch.Generator | None:
+    if DIFFUSION_FIXED_SEED is None:
+        return None
+    return torch.Generator(device=_generator_device(pipe)).manual_seed(
+        DIFFUSION_FIXED_SEED
+    )
+
+
+def _build_batch_generators(
+    pipe: StableDiffusionImg2ImgPipeline,
+    batch_size: int,
+) -> list[torch.Generator] | None:
+    if DIFFUSION_FIXED_SEED is None:
+        return None
+    device = _generator_device(pipe)
+    return [
+        torch.Generator(device=device).manual_seed(DIFFUSION_FIXED_SEED + i)
+        for i in range(batch_size)
+    ]
 
 
 def normalize_style_alias(
@@ -129,6 +163,9 @@ def run_img2img(
     }
     if num_inference_steps is not None:
         kwargs["num_inference_steps"] = num_inference_steps
+    generator = _build_generator(pipe)
+    if generator is not None:
+        kwargs["generator"] = generator
 
     out = pipe(**kwargs).images[0]
     return np.array(out)[:, :, ::-1]
@@ -144,12 +181,14 @@ def run_img2img_batch(
 ) -> list[np.ndarray]:
     """Run batched img2img inference from BGR frames."""
     images = [Image.fromarray(frame[:, :, ::-1]) for frame in frames_bgr]
+    generators = _build_batch_generators(pipe, len(images))
     outputs = pipe(
         prompt=[prompt] * len(images),
         image=images,
         strength=strength,
         guidance_scale=guidance_scale,
         num_inference_steps=num_inference_steps,
+        generator=generators,
     ).images
     return [np.array(out)[:, :, ::-1] for out in outputs]
 

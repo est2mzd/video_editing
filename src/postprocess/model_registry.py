@@ -15,6 +15,16 @@ XMEM_DEVICE: str | None = None
 XMEM_IMAGE_TO_TORCH: Any = None
 XMEMInferenceCore: Any = None
 
+sys.path.append("/workspace/third_party/GroundingDINO")
+sys.path.append("/workspace/third_party/LTX-Video")
+sys.path.append("/workspace/third_party/RAFT")
+sys.path.append("/workspace/third_party/recognize-anything")
+sys.path.append("/workspace/third_party/sam2")
+sys.path.append("/workspace/third_party/segment-anything")
+sys.path.append("/workspace/third_party/VACE")
+sys.path.append("/workspace/third_party/Wan2.1")
+sys.path.append("/workspace/third_party/XMem")
+
 
 def resolve_grounding_dino_checkpoint_path() -> Path | None:
     """Resolve GroundingDINO checkpoint path from known locations.
@@ -26,11 +36,7 @@ def resolve_grounding_dino_checkpoint_path() -> Path | None:
     3. Return None when no checkpoint is available.
     """
     candidates = [
-        Path("/workspace/weights/groundingdino_swint_ogc.pth"),
-        Path(
-            "/workspace/third_party/GroundingDINO/weights/"
-            "groundingdino_swint_ogc.pth"
-        ),
+        Path("/workspace/weights/groundingdino/groundingdino_swint_ogc.pth"),
     ]
     for path in candidates:
         if path.exists():
@@ -65,6 +71,11 @@ def load_grounding_dino_model(logger: logging.Logger | None = None) -> bool:
         )
         checkpoint = resolve_grounding_dino_checkpoint_path()
         if checkpoint is None or not Path(config_path).exists():
+            print(
+                "[ERROR][GroundingDINO] Model assets missing. "
+                f"config_exists={Path(config_path).exists()} "
+                f"checkpoint={checkpoint}"
+            )
             return False
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -76,6 +87,7 @@ def load_grounding_dino_model(logger: logging.Logger | None = None) -> bool:
     except Exception as exc:
         if logger is not None:
             logger.debug(f"GroundingDINO load failed: {exc}")
+        print(f"[ERROR][GroundingDINO] Failed to load model: {exc}")
         return False
 
 
@@ -96,8 +108,12 @@ def load_sam_predictor(logger: logging.Logger | None = None) -> bool:
         import torch
         from segment_anything import SamPredictor, sam_model_registry
 
-        sam_checkpoint = Path("/workspace/weights/sam_vit_h_4b8939.pth")
+        sam_checkpoint = Path("/workspace/weights/sam/sam_vit_h_4b8939.pth")
         if not sam_checkpoint.exists():
+            print(
+                "[ERROR][SAM] Checkpoint not found: "
+                f"{sam_checkpoint}"
+            )
             return False
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -108,6 +124,7 @@ def load_sam_predictor(logger: logging.Logger | None = None) -> bool:
     except Exception as exc:
         if logger is not None:
             logger.debug(f"SAM load failed: {exc}")
+        print(f"[ERROR][SAM] Failed to load predictor: {exc}")
         return False
 
 
@@ -129,7 +146,7 @@ def load_raft_model(logger: logging.Logger | None = None) -> bool:
         from types import SimpleNamespace
 
         raft_root = Path("/workspace/third_party/RAFT")
-        model_path = raft_root / "models" / "raft-things.pth"
+        model_path = Path("/workspace/weights/raft/raft-things.pth")
         if not raft_root.exists() or not model_path.exists():
             return False
 

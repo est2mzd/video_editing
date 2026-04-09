@@ -63,9 +63,11 @@ def detect_all_boxes(
     4. Convert normalized cxcywh boxes to pixel xyxy boxes.
     """
     if not registry.load_grounding_dino_model(logger=logger):
+        print("[ERROR][DINO] Model cannot be loaded.")
         return []
     try:
         import torch
+        from PIL import Image
         from groundingdino.util.inference import predict
 
         transform = registry.GROUNDING_DINO_TRANSFORMS.Compose([
@@ -77,7 +79,7 @@ def detect_all_boxes(
                 [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
             ),
         ])
-        image_t = transform(frame_rgb, None)[0]
+        image_t = transform(Image.fromarray(frame_rgb), None)[0]
         device = "cuda" if torch.cuda.is_available() else "cpu"
         boxes, _logits, _phrases = predict(
             model=registry.GROUNDING_DINO_MODEL,
@@ -125,6 +127,7 @@ def detect_primary_box(
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     boxes = detect_all_boxes(frame_rgb, text_prompt, logger=logger)
     if not boxes:
+        print(f"[WARN][BBOX] Primary bbox not found. prompt={text_prompt}")
         return None
     return boxes[0]
 
@@ -203,6 +206,10 @@ def resolve_target_union_box(
         all_boxes.extend(detect_all_boxes(frame_rgb, prompt, logger=logger))
 
     if not all_boxes:
+        print(
+            "[WARN][BBOX] No bbox detected for union-box. "
+            f"target={target} keys={keys} -> fallback center box"
+        )
         fallback = (w * 0.3, h * 0.2, w * 0.7, h * 0.8)
         all_boxes = [fallback]
 

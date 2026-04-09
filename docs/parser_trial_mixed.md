@@ -2,12 +2,14 @@
 
 LLM + RuleBase の混合試行ログ。
 
+> RuleBase 表記を明確化したファイル名: [docs/parser_trial_rulebase_mixed.md](docs/parser_trial_rulebase_mixed.md)
+
 ## Goal
 - GT: action > 80%, target > 80%
 - grouped: action >= 70%, target >= 70%
 
 ## Mixed Parser
-- File: [src/parse/prototype_instruction_parser_v3_mixed_trial001.py](src/parse/prototype_instruction_parser_v3_mixed_trial001.py)
+- File: [src/parse/instruction_parser_v3_mixed_trial001.py](src/parse/instruction_parser_v3_mixed_trial001.py)
 - Modes:
 	- `MIX_MODE=llm_main`: LLM を主、RuleBase を補助
 	- `MIX_MODE=rule_main`: RuleBase を主、LLM を補助
@@ -15,22 +17,22 @@ LLM + RuleBase の混合試行ログ。
 ## Execution Mapping
 - Trial 番号は「実行回数」の番号。
 - Parser ファイル番号は「実装バージョン」の番号。
-- そのため、Trial 004 が `prototype_instruction_parser_v3_mixed_trial004.py` を意味するわけではない。
+- そのため、Trial 004 が `instruction_parser_v3_mixed_trial004.py` を意味するわけではない。
 
 | Trial | Executed Parser File | MIX_MODE | Trial Name |
 | --- | --- | --- | --- |
-| 001 | `prototype_instruction_parser_v3_mixed_trial001.py` | `llm_main` | `mixed_trial_001_llm_main` |
-| 002 | `prototype_instruction_parser_v3_mixed_trial001.py` | `rule_main` | `mixed_trial_002_rule_main` |
-| 003 | `prototype_instruction_parser_v3_mixed_trial002.py` | `llm_main` | `mixed_trial_003_llm_main_regexfix` |
-| 004 | `prototype_instruction_parser_v3_mixed_trial002.py` | `rule_main` | `mixed_trial_004_rule_main_regexfix` |
-| 005 | `prototype_instruction_parser_v3_mixed_trial003.py` | `rule_main` | `mixed_trial_005_rule_main_action_fixes_v3_batched` |
+| 001 | `instruction_parser_v3_mixed_trial001.py` | `llm_main` | `mixed_trial_001_llm_main` |
+| 002 | `instruction_parser_v3_mixed_trial001.py` | `rule_main` | `mixed_trial_002_rule_main` |
+| 003 | `instruction_parser_v3_mixed_trial002.py` | `llm_main` | `mixed_trial_003_llm_main_regexfix` |
+| 004 | `instruction_parser_v3_mixed_trial002.py` | `rule_main` | `mixed_trial_004_rule_main_regexfix` |
+| 005 | `instruction_parser_v3_mixed_trial003.py` | `rule_main` | `mixed_trial_005_rule_main_action_fixes_v3_batched` |
 
 ## Trial 001 - mixed_trial_001_llm_main
 - Date: 2026-04-03
-- Parser: [src/parse/prototype_instruction_parser_v3_mixed_trial001.py](src/parse/prototype_instruction_parser_v3_mixed_trial001.py)
+- Parser: [src/parse/instruction_parser_v3_mixed_trial001.py](src/parse/instruction_parser_v3_mixed_trial001.py)
 - Mode: `MIX_MODE=llm_main`
 - Command:
-	`MIX_MODE=llm_main PARSER_FILE=/workspace/src/parse/prototype_instruction_parser_v3_mixed_trial001.py TRIAL_NAME=mixed_trial_001_llm_main EVAL_BATCH_SIZE=1 SHOW_PROGRESS=1 LLM_BATCH_SIZE=1 bash /workspace/scripts/run_validate_llm_single_trial.sh`
+	`MIX_MODE=llm_main PARSER_FILE=/workspace/src/parse/instruction_parser_v3_mixed_trial001.py TRIAL_NAME=mixed_trial_001_llm_main EVAL_BATCH_SIZE=1 SHOW_PROGRESS=1 LLM_BATCH_SIZE=1 bash /workspace/scripts/run_validate_llm_single_trial.sh`
 - Log: [logs/analysis/mixed_trial_001_llm_main_20260403_064458.log](logs/analysis/mixed_trial_001_llm_main_20260403_064458.log)
 - JSON: [logs/analysis/mixed_trial_001_llm_main_20260403_064459.json](logs/analysis/mixed_trial_001_llm_main_20260403_064459.json)
 
@@ -44,17 +46,17 @@ LLM + RuleBase の混合試行ログ。
 
 ### Analysis
 - LLM 主導でも action は高水準を維持。
-- target は [src/parse/prototype_instruction_parser_v3_llm_trial013.py](src/parse/prototype_instruction_parser_v3_llm_trial013.py) と同等帯で頭打ち。
+- target は [src/parse/instruction_parser_v3_llm_trial013.py](src/parse/instruction_parser_v3_llm_trial013.py) と同等帯で頭打ち。
 - RuleBase 補助は効いているが、target の曖昧文で改善が不足。
 
 ---
 
 ## Trial 002 - mixed_trial_002_rule_main
 - Date: 2026-04-03
-- Parser: [src/parse/prototype_instruction_parser_v3_mixed_trial001.py](src/parse/prototype_instruction_parser_v3_mixed_trial001.py)
+- Parser: [src/parse/instruction_parser_v3_mixed_trial001.py](src/parse/instruction_parser_v3_mixed_trial001.py)
 - Mode: `MIX_MODE=rule_main`
 - Command:
-	`MIX_MODE=rule_main PARSER_FILE=/workspace/src/parse/prototype_instruction_parser_v3_mixed_trial001.py TRIAL_NAME=mixed_trial_002_rule_main EVAL_BATCH_SIZE=1 SHOW_PROGRESS=1 LLM_BATCH_SIZE=1 bash /workspace/scripts/run_validate_llm_single_trial.sh`
+	`MIX_MODE=rule_main PARSER_FILE=/workspace/src/parse/instruction_parser_v3_mixed_trial001.py TRIAL_NAME=mixed_trial_002_rule_main EVAL_BATCH_SIZE=1 SHOW_PROGRESS=1 LLM_BATCH_SIZE=1 bash /workspace/scripts/run_validate_llm_single_trial.sh`
 - Log: [logs/analysis/mixed_trial_002_rule_main_20260403_071353.log](logs/analysis/mixed_trial_002_rule_main_20260403_071353.log)
 - JSON: [logs/analysis/mixed_trial_002_rule_main_20260403_071353.json](logs/analysis/mixed_trial_002_rule_main_20260403_071353.json)
 
@@ -82,11 +84,11 @@ LLM + RuleBase の混合試行ログ。
 
 ## Trial 003 - mixed_trial_003_llm_main_regexfix
 - Date: 2026-04-03
-- Parser: [src/parse/prototype_instruction_parser_v3_mixed_trial002.py](src/parse/prototype_instruction_parser_v3_mixed_trial002.py)
+- Parser: [src/parse/instruction_parser_v3_mixed_trial002.py](src/parse/instruction_parser_v3_mixed_trial002.py)
 - Mode: `MIX_MODE=llm_main`
 - Changes from Trial 001: `\\b` → `\b` regex fix in motion_verbs/camera patterns; stopword (video/scene/frame/clip/shot) removal for edit_motion candidate
 - Command:
-	`MIX_MODE=llm_main PARSER_FILE=/workspace/src/parse/prototype_instruction_parser_v3_mixed_trial002.py TRIAL_NAME=mixed_trial_003_llm_main_regexfix EVAL_BATCH_SIZE=1 SHOW_PROGRESS=1 LLM_BATCH_SIZE=1 bash /workspace/scripts/run_validate_llm_single_trial.sh`
+	`MIX_MODE=llm_main PARSER_FILE=/workspace/src/parse/instruction_parser_v3_mixed_trial002.py TRIAL_NAME=mixed_trial_003_llm_main_regexfix EVAL_BATCH_SIZE=1 SHOW_PROGRESS=1 LLM_BATCH_SIZE=1 bash /workspace/scripts/run_validate_llm_single_trial.sh`
 - Log: [logs/analysis/mixed_trial_003_llm_main_regexfix_20260403_075956.log](logs/analysis/mixed_trial_003_llm_main_regexfix_20260403_075956.log)
 - JSON: [logs/analysis/mixed_trial_003_llm_main_regexfix_20260403_075956.json](logs/analysis/mixed_trial_003_llm_main_regexfix_20260403_075956.json)
 
@@ -107,11 +109,11 @@ LLM + RuleBase の混合試行ログ。
 
 ## Trial 004 - mixed_trial_004_rule_main_regexfix
 - Date: 2026-04-03
-- Parser: [src/parse/prototype_instruction_parser_v3_mixed_trial002.py](src/parse/prototype_instruction_parser_v3_mixed_trial002.py)
+- Parser: [src/parse/instruction_parser_v3_mixed_trial002.py](src/parse/instruction_parser_v3_mixed_trial002.py)
 - Mode: `MIX_MODE=rule_main`
 - Changes from Trial 002: 同上（regex fix + stopword removal）
 - Command:
-	`MIX_MODE=rule_main PARSER_FILE=/workspace/src/parse/prototype_instruction_parser_v3_mixed_trial002.py TRIAL_NAME=mixed_trial_004_rule_main_regexfix EVAL_BATCH_SIZE=1 SHOW_PROGRESS=1 LLM_BATCH_SIZE=1 bash /workspace/scripts/run_validate_llm_single_trial.sh`
+	`MIX_MODE=rule_main PARSER_FILE=/workspace/src/parse/instruction_parser_v3_mixed_trial002.py TRIAL_NAME=mixed_trial_004_rule_main_regexfix EVAL_BATCH_SIZE=1 SHOW_PROGRESS=1 LLM_BATCH_SIZE=1 bash /workspace/scripts/run_validate_llm_single_trial.sh`
 - Log: [logs/analysis/mixed_trial_004_rule_main_regexfix_20260403_082841.log](logs/analysis/mixed_trial_004_rule_main_regexfix_20260403_082841.log)
 - JSON: [logs/analysis/mixed_trial_004_rule_main_regexfix_20260403_082841.json](logs/analysis/mixed_trial_004_rule_main_regexfix_20260403_082841.json)
 
@@ -137,10 +139,10 @@ LLM + RuleBase の混合試行ログ。
 
 ## Trial 005 - mixed_trial_005_rule_main_action_fixes_v3_batched
 - Date: 2026-04-03
-- Parser: [src/parse/prototype_instruction_parser_v3_mixed_trial003.py](src/parse/prototype_instruction_parser_v3_mixed_trial003.py)
+- Parser: [src/parse/instruction_parser_v3_mixed_trial003.py](src/parse/instruction_parser_v3_mixed_trial003.py)
 - Mode: `MIX_MODE=rule_main`
 - Command:
-	`MIX_MODE=rule_main PARSER_FILE=/workspace/src/parse/prototype_instruction_parser_v3_mixed_trial003.py TRIAL_NAME=mixed_trial_005_rule_main_action_fixes_v3_batched EVAL_BATCH_SIZE=16 SHOW_PROGRESS=1 LLM_BATCH_SIZE=8 bash /workspace/scripts/run_validate_llm_single_trial.sh`
+	`MIX_MODE=rule_main PARSER_FILE=/workspace/src/parse/instruction_parser_v3_mixed_trial003.py TRIAL_NAME=mixed_trial_005_rule_main_action_fixes_v3_batched EVAL_BATCH_SIZE=16 SHOW_PROGRESS=1 LLM_BATCH_SIZE=8 bash /workspace/scripts/run_validate_llm_single_trial.sh`
 - Log: [logs/analysis/mixed_trial_005_rule_main_action_fixes_v3_batched_20260403_094801.log](logs/analysis/mixed_trial_005_rule_main_action_fixes_v3_batched_20260403_094801.log)
 - JSON: [logs/analysis/mixed_trial_005_rule_main_action_fixes_v3_batched_20260403_094801.json](logs/analysis/mixed_trial_005_rule_main_action_fixes_v3_batched_20260403_094801.json)
 
