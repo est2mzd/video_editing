@@ -266,11 +266,13 @@ def run_change_color_gradual_pipeline(
     saturation_boost_gain: float = 0.2,
     value_scale: float = 1.0,
     value_min: float = 30.0,
+    gradual: bool = True,
     transition_speed: float = 1.0,
 ) -> dict:
     """Run color change with gradual hue transition across frames.
 
     Args:
+        gradual: If False, apply target color immediately from the first frame.
         transition_speed: Controls how fast the color transition completes.
             1.0 = linear, full transition by the last frame (default).
             2.0 = full transition by the midpoint (faster).
@@ -286,8 +288,11 @@ def run_change_color_gradual_pipeline(
     num_frames = len(frames)
 
     for frame_idx, frame in enumerate(tqdm(frames, desc='change_color_gradual')):
-        raw_progress = frame_idx / max(num_frames - 1, 1)
-        progress = min(raw_progress * transition_speed, 1.0)
+        if gradual:
+            raw_progress = frame_idx / max(num_frames - 1, 1)
+            progress = min(raw_progress * transition_speed, 1.0)
+        else:
+            progress = 1.0
 
         target_mask = estimate_target_mask_gdino_sam(
             frame_bgr=frame,
@@ -329,11 +334,12 @@ def run_change_color_gradual_pipeline(
         'value_scale': value_scale,
         'value_min': value_min,
         'transition_speed': transition_speed,
+        'gradual_requested': gradual,
         'fps': fps,
         'width': width,
         'height': height,
         'num_frames': num_frames,
-        'gradual': True,
+        'gradual': gradual,
     }
 
 # ──────────────────────────────────────────────

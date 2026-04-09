@@ -11,6 +11,9 @@ max_task_num: 1
 debug_mode: False
 target_subclass: "" # "Zoom in"
 
+# dispatcher_v2 uses this config file via run_video_editor_v2.py
+# All frames are processed; no frame cap is applied.
+
 
 # ----------------------------------------------------#
 # unused
