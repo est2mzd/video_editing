@@ -6,6 +6,9 @@ Submission files are available below:
 
 [videos.zip in Google Drive](https://drive.google.com/drive/folders/1IK7exchc_GJ7HtC0l1OOzmifw_XApu7D?usp=sharing)
 
+## Fact Sheet
+[markdown]()
+
 ---
 
 ## How to Run (Validation)
