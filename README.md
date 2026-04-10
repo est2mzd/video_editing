@@ -7,9 +7,9 @@ Submission files are available below:
 [videos.zip in Google Drive](https://drive.google.com/drive/folders/1IK7exchc_GJ7HtC0l1OOzmifw_XApu7D?usp=sharing)
 
 ## Fact Sheet
-- [markdown](./docs/fact_sheet.md)
+- [Fact Sheet (Markdown)](./docs/fact_sheet.md)
 
-- [pdf](./docs/fact_sheet.pdf)
+- [Fact Sheet (PDF)](./docs/fact_sheet.pdf)
 
 ---
 
