@@ -21,6 +21,7 @@ from .change_color import (
 from .dolly_in import run_dolly_in_with_instruction
 from .replace_background import (
     ReplaceBackgroundConfig,
+    infer_background_effect_from_instruction,
     infer_foreground_prompt_by_yolo,
     run_replace_background_color_pipeline,
 )
@@ -207,17 +208,48 @@ def _run_change_color(
 def _run_replace_background(
     frames: list[np.ndarray],
     params: dict[str, Any],
+    instruction: str,
+    logger: logging.Logger,
 ) -> list[np.ndarray]:
     fg_prompt = infer_foreground_prompt_by_yolo(frames)
-    effect_name = str(params.get("effect_name", "hsv_shift"))
+    default_effect_name = "color_tint"
     default_effect_params = {
-        "hue_shift": 8,
-        "saturation_scale": 1.15,
-        "value_scale": 0.95,
+        "tint_bgr": (30, 200, 255),
+        "strength": 0.5,
     }
-    effect_params = params.get("effect_params", default_effect_params)
+
+    has_explicit_effect_name = "effect_name" in params
+    has_explicit_effect_params = (
+        "effect_params" in params
+        and isinstance(params.get("effect_params"), dict)
+    )
+
+    inferred = infer_background_effect_from_instruction(instruction)
+    if has_explicit_effect_name or has_explicit_effect_params:
+        effect_name = str(params.get("effect_name", default_effect_name))
+        effect_params = params.get("effect_params", default_effect_params)
+        effect_source = "params"
+    elif inferred is not None:
+        effect_name, effect_params = inferred
+        effect_source = "instruction"
+    else:
+        effect_name = default_effect_name
+        effect_params = default_effect_params
+        effect_source = "default"
+
     if not isinstance(effect_params, dict):
         effect_params = default_effect_params
+
+    params["_resolved_effect_name"] = effect_name
+    params["_resolved_effect_params"] = dict(effect_params)
+    params["_resolved_effect_source"] = effect_source
+    logger.info(
+        "replace_background resolved effect: "
+        "source=%s, effect_name=%s, effect_params=%s",
+        effect_source,
+        effect_name,
+        effect_params,
+    )
 
     with tempfile.TemporaryDirectory(prefix="dispatch_bg_") as tmp_dir:
         tmp = Path(tmp_dir)
@@ -311,7 +343,7 @@ def run_method(
                 "dispatch replace_background via "
                 "run_replace_background_color_pipeline"
             )
-            return _run_replace_background(frames, params)
+            return _run_replace_background(frames, params, instruction, logger)
 
         if resolved_action == "change_color":
             logger.info(

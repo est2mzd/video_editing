@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
 import sys
+import re
 
 import cv2
 import numpy as np
@@ -15,6 +16,45 @@ sys.path.append('/workspace/src/utils')
 
 from postprocess.detectors import detect_all_boxes, get_sam_mask_from_box
 from video_utility import load_video, write_video, show_before_after
+
+
+# Simple debug switch:
+# When True, force background color to DEBUG_BG_COLOR_BGR regardless of effect settings.
+DEBUG_MODE_ = False
+DEBUG_BG_COLOR_BGR: tuple[int, int, int] = (255, 255, 255)
+
+# Global effect intensity controls (1.0 = keep current behavior).
+# You can tune each method without editing dispatcher/default params.
+#
+# How to read each value:
+# - 1.0: keep the original inferred/default intensity
+# - >1.0: strengthen that effect family
+# - 0.0: neutralize that effect family (almost no visible change)
+#
+# GLOBAL_COLOR_TINT_INTENSITY
+# - Scales color_tint strength.
+# - Example: 0.5 -> lighter tint overlay, 1.5 -> stronger color overlay.
+#
+# GLOBAL_HSV_SHIFT_INTENSITY
+# - Scales hue/saturation/value shifts around the neutral point.
+# - Example: 0.5 -> smaller hue/sat/value shift, 1.5 -> stronger tone shift.
+#
+# GLOBAL_BRIGHTNESS_CONTRAST_INTENSITY
+# - Scales brightness/contrast deltas from neutral values.
+# - Example: 0.5 -> milder exposure/contrast change, 1.5 -> punchier look.
+#
+# GLOBAL_GAUSSIAN_BLUR_INTENSITY
+# - Scales blur kernel size/sigma.
+# - Example: 0.5 -> weaker blur, 2.0 -> much softer background.
+#
+# GLOBAL_CLAHE_INTENSITY
+# - Scales CLAHE clip_limit.
+# - Example: 0.5 -> softer local contrast, 1.5 -> stronger local contrast.
+GLOBAL_COLOR_TINT_INTENSITY = 1.5
+GLOBAL_HSV_SHIFT_INTENSITY = 1.5
+GLOBAL_BRIGHTNESS_CONTRAST_INTENSITY = 1.5
+GLOBAL_GAUSSIAN_BLUR_INTENSITY = 2.0
+GLOBAL_CLAHE_INTENSITY = 1.5
 
 
 def infer_foreground_prompt_by_yolo(
@@ -89,11 +129,10 @@ class ReplaceBackgroundConfig:
     max_frames: int | None = None
 
     # Generic cv2 effect interface
-    effect_name: str = 'hsv_shift'
+    effect_name: str = 'color_tint'
     effect_params: dict = field(default_factory=lambda: {
-        'hue_shift': 8,
-        'saturation_scale': 1.15,
-        'value_scale': 0.95,
+        'tint_bgr': (30, 200, 255),
+        'strength': 0.35,
     })
 
 
@@ -337,6 +376,54 @@ def effect_gaussian_blur(frame_bgr: np.ndarray, params: dict) -> np.ndarray:
     return cv2.GaussianBlur(frame_bgr, (ksize, ksize), sigmaX=sigma)
 
 
+def _apply_global_effect_intensity(effect_name: str, params: dict) -> dict:
+    """Apply file-level global intensity knobs to effect parameters.
+
+    Each intensity knob scales the method-specific parameters around a neutral point.
+    """
+    out = dict(params)
+
+    if effect_name == 'color_tint':
+        strength = float(out.get('strength', 0.25))
+        strength *= float(max(0.0, GLOBAL_COLOR_TINT_INTENSITY))
+        out['strength'] = float(np.clip(strength, 0.0, 1.0))
+        return out
+
+    if effect_name == 'hsv_shift':
+        k = float(max(0.0, GLOBAL_HSV_SHIFT_INTENSITY))
+        out['hue_shift'] = float(out.get('hue_shift', 0.0)) * k
+        sat = 1.0 + (float(out.get('saturation_scale', 1.0)) - 1.0) * k
+        val = 1.0 + (float(out.get('value_scale', 1.0)) - 1.0) * k
+        out['saturation_scale'] = float(np.clip(sat, 0.0, 5.0))
+        out['value_scale'] = float(np.clip(val, 0.0, 5.0))
+        return out
+
+    if effect_name == 'brightness_contrast':
+        k = float(max(0.0, GLOBAL_BRIGHTNESS_CONTRAST_INTENSITY))
+        contrast = 1.0 + (float(out.get('contrast', 1.0)) - 1.0) * k
+        brightness = float(out.get('brightness', 0.0)) * k
+        out['contrast'] = float(np.clip(contrast, 0.0, 5.0))
+        out['brightness'] = float(np.clip(brightness, -255.0, 255.0))
+        return out
+
+    if effect_name == 'gaussian_blur':
+        k = float(max(0.0, GLOBAL_GAUSSIAN_BLUR_INTENSITY))
+        base_ksize = float(out.get('ksize', 11))
+        ksize = int(max(1, round(base_ksize * k)))
+        if ksize % 2 == 0:
+            ksize += 1
+        out['ksize'] = ksize
+        out['sigma'] = float(max(0.0, float(out.get('sigma', 0.0)) * k))
+        return out
+
+    if effect_name == 'clahe':
+        k = float(max(0.0, GLOBAL_CLAHE_INTENSITY))
+        out['clip_limit'] = float(max(0.01, float(out.get('clip_limit', 2.0)) * k))
+        return out
+
+    return out
+
+
 EFFECT_REGISTRY: dict[str, Callable[[np.ndarray, dict], np.ndarray]] = {
     'hsv_shift': effect_hsv_shift,
     'brightness_contrast': effect_brightness_contrast,
@@ -394,7 +481,19 @@ def run_replace_background_color_pipeline(cfg: ReplaceBackgroundConfig) -> dict:
     prev_box: tuple[float, float, float, float] | None = None
     prev_fg_mask: np.ndarray | None = None
 
-    for frame in tqdm(frames, desc='replace_background_gdino_sam'):
+    effect_name = cfg.effect_name
+    effect_params = dict(cfg.effect_params)
+    if DEBUG_MODE_:
+        effect_name = 'color_tint'
+        effect_params = {
+            'tint_bgr': DEBUG_BG_COLOR_BGR,
+            'strength': 1.0,
+        }
+
+    # Apply global per-method intensity knobs once per run.
+    effect_params = _apply_global_effect_intensity(effect_name, effect_params)
+
+    for idx, frame in enumerate(tqdm(frames, desc='replace_background_gdino_sam')):
         bg_mask, prev_box, prev_fg_mask = estimate_background_mask_gdino_sam(
             frame_bgr=frame,
             foreground_prompt=cfg.foreground_prompt,
@@ -406,22 +505,26 @@ def run_replace_background_color_pipeline(cfg: ReplaceBackgroundConfig) -> dict:
         edited = apply_background_effect(
             frame_bgr=frame,
             background_mask_u8=bg_mask,
-            effect_name=cfg.effect_name,
-            effect_params=cfg.effect_params,
+            effect_name=effect_name,
+            effect_params=effect_params,
         )
         out_frames.append(edited)
 
     write_video(cfg.output_video, out_frames, fps, width, height)
-    return {
+    summary = {
         'input_video': cfg.input_video,
         'output_video': cfg.output_video,
         'fps': fps,
         'width': width,
         'height': height,
         'num_frames': len(out_frames),
-        'effect_name': cfg.effect_name,
-        'effect_params': cfg.effect_params,
+        'effect_name': effect_name,
+        'effect_params': effect_params,
+        'debug_mode': bool(DEBUG_MODE_),
     }
+    if DEBUG_MODE_:
+        summary['debug_color_bgr'] = list(DEBUG_BG_COLOR_BGR)
+    return summary
 
 
 # Presets: color variations with descriptions
@@ -510,6 +613,92 @@ EFFECT_PRESETS: dict[str, dict] = {
         },
     },
 }
+
+
+_COLOR_TINT_BRG_MAP: dict[str, tuple[int, int, int]] = {
+    "green": (0, 200, 0),
+    "pink": (180, 120, 200),
+    "blue": (220, 120, 40),
+    "red": (40, 40, 220),
+    "orange": (40, 130, 220),
+    "purple": (170, 80, 170),
+}
+
+
+def _extract_color_tint_params_from_instruction(instruction: str) -> dict | None:
+    """Extract color tint parameters from instruction text.
+
+    Returns None when no color keyword is detected.
+    """
+    text = str(instruction or "").lower()
+    if not text:
+        return None
+
+    strength = 0.22
+    if re.search(r"\b(slight|subtle|light|薄い|うっすら)\b", text):
+        strength = 0.15
+    elif re.search(r"\b(strong|deep|vivid|濃い|強い)\b", text):
+        strength = 0.35
+
+    for color, bgr in _COLOR_TINT_BRG_MAP.items():
+        if re.search(rf"\b{re.escape(color)}\b", text):
+            return {
+                "tint_bgr": bgr,
+                "strength": strength,
+            }
+    return None
+
+
+def infer_background_effect_from_instruction(
+    instruction: str,
+) -> tuple[str, dict] | None:
+    """Infer (effect_name, effect_params) from free-form instruction.
+
+    Rule priority:
+    1. Blur/defocus instructions -> gaussian_blur
+    2. Explicit color words -> color_tint
+    3. Brightness/contrast words -> brightness_contrast
+    4. Style tone words -> named preset mapping
+    """
+    text = str(instruction or "").lower().strip()
+    if not text:
+        return None
+
+    if re.search(r"\b(blur|blurry|defocus|bokeh|ぼかし|ぼかす)\b", text):
+        return "gaussian_blur", {"ksize": 17, "sigma": 0.0}
+
+    tint_params = _extract_color_tint_params_from_instruction(text)
+    if tint_params is not None:
+        return "color_tint", tint_params
+
+    if re.search(r"\b(bright|brighter|dark|darker|contrast|明る|暗く|コントラスト)\b", text):
+        contrast = 1.0
+        brightness = 0
+        if re.search(r"\b(bright|brighter|明る)\b", text):
+            contrast = 1.08
+            brightness = 10
+        elif re.search(r"\b(dark|darker|暗く)\b", text):
+            contrast = 1.10
+            brightness = -12
+        if re.search(r"\b(contrast|コントラスト)\b", text):
+            contrast = max(contrast, 1.15)
+        return "brightness_contrast", {
+            "contrast": contrast,
+            "brightness": brightness,
+        }
+
+    style_to_preset = [
+        (r"\b(cyberpunk|neon|night)\b", "cool_neon_night"),
+        (r"\b(warm|cinematic|movie)\b", "warm_cinematic"),
+        (r"\b(clean|commercial|bright and clean)\b", "bright_clean_commercial"),
+        (r"\b(pastel|soft)\b", "soft_pastel"),
+        (r"\b(drama|dramatic|deep contrast)\b", "deep_contrast_drama"),
+    ]
+    for pattern, preset in style_to_preset:
+        if re.search(pattern, text):
+            return get_effect_preset(preset)
+
+    return None
 
 
 def list_effect_presets() -> None:

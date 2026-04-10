@@ -1,0 +1,9 @@
+annotation_path: /workspace/data/annotations.jsonl
+video_dir: /workspace/data/videos
+output_dir: /workspace/logs/submit
+
+parser_version: "v2"
+max_task_num: 1
+
+debug_mode: false
+target_subclass: ""

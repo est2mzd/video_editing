@@ -1,5 +1,6 @@
 
 from datetime import datetime
+import argparse
 import json
 import logging
 import os
@@ -38,7 +39,16 @@ def _read_jsonl(path: str) -> list[dict]:
 
 
 def _main() -> None:
-    config_path = "/workspace/configs/base_config_v2.yaml"
+    parser_args = argparse.ArgumentParser(description="Run video editor v2")
+    parser_args.add_argument(
+        "--config",
+        type=str,
+        default="/workspace/configs/base_config_v2.yaml",
+        help="Path to YAML config file",
+    )
+    args = parser_args.parse_args()
+
+    config_path = args.config
     with open(config_path, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
@@ -80,6 +90,7 @@ def _main() -> None:
     log_dir.mkdir(parents=True, exist_ok=True)
 
     logger = _build_logger(output_dir / "run_video_editor_v2.log")
+    logger.info("config_path=%s", config_path)
     logger.info("start processing: rows=%d", len(rows))
 
     max_task_num = int(config.get("max_task_num", 1))
