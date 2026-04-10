@@ -8,9 +8,9 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 echo "SCRIPT_DIR: $SCRIPT_DIR"
 echo "ROOT_DIR  : $ROOT_DIR"
 
-echo "=== Step1: Download weights ==="
-cd "$SCRIPT_DIR/scripts"
-./download_weights.sh
+#echo "=== Step1: Download weights ==="
+#cd "$SCRIPT_DIR/scripts"
+#./download_weight_from_gdrive.sh
 
 echo "=== Step2: Build & Start Docker ==="
 cd "$SCRIPT_DIR/docker/vace"
