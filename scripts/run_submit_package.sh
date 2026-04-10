@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CONFIG_PATH="${1:-/workspace/config/submit.yaml}"
+CONFIG_PATH="${1:-/workspace/configs/submit.yaml}"
 OUT_ROOT="/workspace/logs/submit"
 
 if [[ ! -f "$CONFIG_PATH" ]]; then

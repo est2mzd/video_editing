@@ -3,7 +3,7 @@
 ## Submission Run
 
 ### Files
-- Config: `/workspace/config/submit.yaml`
+- Config: `/workspace/configs/submit.yaml`
 - Main runner: `/workspace/scripts/run_submit_package.sh`
 - Wrapper: `/workspace/src/run_submit.sh`
 
@@ -12,17 +12,31 @@
 2. Writes submission mp4 files under `/workspace/logs/submit/all_<timestamp>/`
 3. Creates zip at `/workspace/logs/submit/all_<timestamp>/submission_mp4.zip`
 
-### Run
+### For validation
+Change the path of the config file. 
+
+Config: `/workspace/configs/submit.yaml`
+```yaml
+annotation_path: /workspace/data/annotations.jsonl
+video_dir: /workspace/data/videos
+```
+
+### Build Continer and Run
+```bash
+./run_all.sh
+```
+
+### If you want to run in the container
 
 ```bash
 chmod +x /workspace/scripts/run_submit_package.sh /workspace/src/run_submit.sh
-/workspace/scripts/run_submit_package.sh /workspace/config/submit.yaml
+/workspace/scripts/run_submit_package.sh /workspace/configs/submit.yaml
 ```
 
 or
 
 ```bash
-/workspace/src/run_submit.sh /workspace/config/submit.yaml
+/workspace/scripts/run_submit.sh /workspace/configs/submit.yaml
 ```
 
 ### Output
