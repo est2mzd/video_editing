@@ -18,6 +18,7 @@ from .change_color import (
 from .dolly_in import run_dolly_in_with_instruction
 from .replace_background import (
     ReplaceBackgroundConfig,
+    infer_foreground_prompt_by_yolo,
     run_replace_background_color_pipeline,
 )
 from .zoom_in import run_zoom_in_with_instruction
@@ -91,6 +92,7 @@ def _run_apply_style(
     instruction: str,
 ) -> list[np.ndarray]:
     style = str(params.get("style", params.get("style_name", "oil_painting")))
+    # apply_style はモジュール既定の person foreground を使う。
     text_prompt = _target_to_prompt(str(params.get("target", "person")))
 
     with tempfile.TemporaryDirectory(prefix="dispatch_style_") as tmp_dir:
@@ -148,6 +150,7 @@ def _run_change_color(
     params: dict[str, Any],
     instruction: str,
 ) -> list[np.ndarray]:
+    # change_color.py の instruction parser を使って target を決める。
     parsed = parse_color_change_instruction(instruction)
     target_prompt = _target_to_prompt(
         str(parsed.target_object or "object"),
@@ -195,57 +198,11 @@ def _run_change_color(
     return out_frames
 
 
-def _detect_foreground_prompt_by_yolo(frames: list[np.ndarray]) -> str:
-    """Choose foreground class for replace_background via YOLOv8.
-
-    Priority:
-    1. person が見つかれば "person ."
-    2. それ以外は最頻クラス名を "<class> ."
-    3. 失敗時は "person ."
-    """
-    weights_path = "/workspace/weights/yolo/yolov8m.pt"
-    try:
-        from ultralytics import YOLO
-
-        model = YOLO(weights_path)
-        stats: dict[str, float] = {}
-        max_scan = min(3, len(frames))
-        for frame in frames[:max_scan]:
-            results = model(frame, verbose=False)
-            if not results:
-                continue
-            boxes = getattr(results[0], "boxes", None)
-            if boxes is None or boxes.cls is None:
-                continue
-
-            names = results[0].names
-            cls_ids = boxes.cls.detach().cpu().numpy().astype(int).tolist()
-            if boxes.conf is not None:
-                confs = boxes.conf.detach().cpu().numpy().tolist()
-            else:
-                confs = [1.0] * len(cls_ids)
-            for cls_id, conf in zip(cls_ids, confs):
-                cls_name = str(names.get(cls_id, "")).strip().lower()
-                if not cls_name:
-                    continue
-                stats[cls_name] = stats.get(cls_name, 0.0) + float(conf)
-
-        if not stats:
-            return "person ."
-        if "person" in stats:
-            return "person ."
-
-        best_class = max(stats.items(), key=lambda kv: kv[1])[0]
-        return f"{best_class} ."
-    except Exception:
-        return "person ."
-
-
 def _run_replace_background(
     frames: list[np.ndarray],
     params: dict[str, Any],
 ) -> list[np.ndarray]:
-    fg_prompt = _detect_foreground_prompt_by_yolo(frames)
+    fg_prompt = infer_foreground_prompt_by_yolo(frames)
     effect_name = str(params.get("effect_name", "hsv_shift"))
     default_effect_params = {
         "hue_shift": 8,

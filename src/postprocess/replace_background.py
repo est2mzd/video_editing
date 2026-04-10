@@ -17,6 +17,55 @@ from postprocess.detectors import detect_all_boxes, get_sam_mask_from_box
 from video_utility import load_video, write_video, show_before_after
 
 
+def infer_foreground_prompt_by_yolo(
+    frames: list[np.ndarray],
+    weights_path: str = "/workspace/weights/yolo/yolov8m.pt",
+) -> str:
+    """Infer a stable foreground prompt from YOLO detections.
+
+    Priority:
+    1. Return "person ." when person is detected.
+    2. Otherwise return the highest-confidence class as "<class> .".
+    3. Fallback to "person ." on failure.
+    """
+    try:
+        from ultralytics import YOLO
+
+        model = YOLO(weights_path)
+        stats: dict[str, float] = {}
+        max_scan = min(3, len(frames))
+        for frame in frames[:max_scan]:
+            results = model(frame, verbose=False)
+            if not results:
+                continue
+            boxes = getattr(results[0], "boxes", None)
+            if boxes is None or boxes.cls is None:
+                continue
+
+            names = results[0].names
+            cls_ids = boxes.cls.detach().cpu().numpy().astype(int).tolist()
+            if boxes.conf is not None:
+                confs = boxes.conf.detach().cpu().numpy().tolist()
+            else:
+                confs = [1.0] * len(cls_ids)
+
+            for cls_id, conf in zip(cls_ids, confs):
+                cls_name = str(names.get(cls_id, "")).strip().lower()
+                if not cls_name:
+                    continue
+                stats[cls_name] = stats.get(cls_name, 0.0) + float(conf)
+
+        if not stats:
+            return "person ."
+        if "person" in stats:
+            return "person ."
+
+        best_class = max(stats.items(), key=lambda kv: kv[1])[0]
+        return f"{best_class} ."
+    except Exception:
+        return "person ."
+
+
 @dataclass
 class ReplaceBackgroundConfig:
     """Configuration for background color/style editing pipeline.

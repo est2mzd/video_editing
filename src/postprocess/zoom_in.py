@@ -48,9 +48,23 @@ def parse_zoom_instruction_rulebase(instruction: str) -> ZoomInstruction:
     )
     if m:
         obj = m.group(1).strip()
+        obj = re.split(
+            r"\b(?:as|while|with|during|throughout|and|that|which|to)\b",
+            obj,
+            maxsplit=1,
+        )[0].strip(" .,")
+        obj = re.sub(r"^(?:the|a|an)\s+", "", obj).strip()
+
+        # person-related mentions should use a stable generic prompt
+        if re.search(
+            r"\b(man|woman|person|speaker|face|profile|subject)\b",
+            obj,
+        ):
+            return ZoomInstruction(target_object="person")
+
         words = [w for w in obj.split() if w]
         if words:
-            return ZoomInstruction(target_object=" ".join(words[-4:]))
+            return ZoomInstruction(target_object=" ".join(words[:4]))
 
     for kw in [
         "man's face",

@@ -42,22 +42,69 @@ def parse_add_object_instruction_rulebase(instruction: str) -> AddObjectInstruct
     """Extract target noun phrase for add_object from instruction text."""
     text = re.sub(r"\s+", " ", instruction.strip().lower())
 
+    # Pattern: "... by adding <object> ..."
     m = re.search(
-        r"(?:add|insert|place|put|duplicate|copy|clone|create)\s+"
-        r"(?:another\s+|one\s+more\s+|a\s+|an\s+|the\s+)?"
-        r"([a-z0-9][a-z0-9\-\s]{0,50}?)(?:\s+(?:next\s+to|beside|near|on|at|in|to)\b|[,.]|$)",
+        r"\bby\s+adding\s+"
+        r"(?:another\s+|one\s+more\s+|more\s+|additional\s+|a\s+|an\s+|the\s+|second\s+)?"
+        r"([a-z0-9][a-z0-9_\-\s]{0,70}?)(?:\s+(?:next\s+to|beside|near|on|at|in|to|into|within)\b|[,.]|$)",
         text,
     )
     if m:
-        obj = m.group(1).strip()
+        obj = m.group(1).replace("_", " ").strip(" .,")
+        obj = re.split(
+            r"\b(?:in|on|at|within|throughout|while|with|and|to)\b",
+            obj,
+            maxsplit=1,
+        )[0]
+        words = [w for w in obj.split() if w]
+        if words:
+            return AddObjectInstruction(target_object=" ".join(words[-3:]))
+
+    # Pattern: "increase the number/amount of X"
+    m = re.search(
+        r"increase\s+(?:the\s+)?(?:number|amount)\s+of\s+"
+        r"([a-z0-9][a-z0-9_\-\s]{0,70}?)(?:\s+(?:by|to|in|on|at|within)\b|[,.]|$)",
+        text,
+    )
+    if m:
+        obj = m.group(1).replace("_", " ").strip(" .,")
+        obj = re.sub(r"^(?:more\s+|additional\s+)", "", obj)
+        obj = re.split(r"\b(?:in|on|at|within|throughout|while|with|and)\b", obj, maxsplit=1)[0]
+        words = [w for w in obj.split() if w]
+        if words:
+            return AddObjectInstruction(target_object=" ".join(words[-3:]))
+
+    # Pattern: "add/adding X"
+    m = re.search(
+        r"(?:add|adding|insert|place|put|duplicate|copy|clone|create|introduce)\s+"
+        r"(?:another\s+|one\s+more\s+|more\s+|additional\s+|a\s+|an\s+|the\s+)?"
+        r"([a-z0-9][a-z0-9_\-\s]{0,70}?)(?:\s+(?:next\s+to|beside|near|on|at|in|to|into|within)\b|[,.]|$)",
+        text,
+    )
+    if m:
+        obj = m.group(1).replace("_", " ").strip(" .,")
+        obj = re.split(r"\b(?:in|on|at|within|throughout|while|with|and)\b", obj, maxsplit=1)[0]
+        words = [w for w in obj.split() if w]
+        if words:
+            return AddObjectInstruction(target_object=" ".join(words[-3:]))
+
+    m = re.search(
+        r"(?:add|insert|place|put|duplicate|copy|clone|create|introduce)\s+"
+        r"(?:another\s+|one\s+more\s+|a\s+|an\s+|the\s+)?"
+        r"([a-z0-9][a-z0-9_\-\s]{0,50}?)(?:\s+(?:next\s+to|beside|near|on|at|in|to)\b|[,.]|$)",
+        text,
+    )
+    if m:
+        obj = m.group(1).replace("_", " ").strip()
         obj = re.sub(r"^(?:new|extra|same)\s+", "", obj).strip()
         words = [w for w in obj.split() if w]
         if words:
             return AddObjectInstruction(target_object=" ".join(words[-3:]))
 
-    m = re.search(r"(?:add|insert|place|put|duplicate|copy|clone|create)\s+(.+)$", text)
+    m = re.search(r"(?:add|insert|place|put|duplicate|copy|clone|create|introduce)\s+(.+)$", text)
     if m:
         obj = m.group(1)
+        obj = obj.replace("_", " ")
         obj = re.split(r"\b(?:next\s+to|beside|near|on|at|in|to|while|with|and)\b", obj, maxsplit=1)[0]
         obj = re.sub(r"^(?:another\s+|one\s+more\s+|a\s+|an\s+|the\s+)", "", obj).strip(" .,")
         words = [w for w in obj.split() if w]

@@ -64,14 +64,14 @@ def parse_add_effect_instruction(
         )
 
     target = "object"
-    if "strings of the bass guitar" in text:
+    if "his body" in text or "outlines his body" in text:
+        target = "person body"
+    elif "strings of the bass guitar" in text:
         target = "strings of the bass guitar"
     elif "bass guitar" in text:
         target = "bass guitar"
     elif "basketball player" in text:
         target = "basketball player"
-    elif "his body" in text or "outlines his body" in text:
-        target = "person body"
     else:
         match = re.search(
             r"(?:apply|add|enhance)\s+(?:a\s+|an\s+|the\s+)?(.+?)"
@@ -121,6 +121,8 @@ def parse_add_effect_instruction(
 def build_grounding_target(target: str) -> str:
     """Build a concise detector-friendly noun phrase."""
     text = target.lower().strip()
+    if "strings of the bass guitar" in text:
+        return "bass guitar strings"
     known = [
         "bass guitar strings",
         "bass guitar",
