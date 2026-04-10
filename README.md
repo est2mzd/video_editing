@@ -13,7 +13,7 @@ Submission files are available below:
 
 ---
 
-## How to Run (Validation)
+## How to Build and Run (Validation)
 ### Clone the repository
 
 ```bash
@@ -37,7 +37,12 @@ video_dir: /workspace/data/videos
 
 ### Build Container and Run
 ```bash
-./run_all.sh
+./build_and_run_video_editor.sh
+```
+
+### Run Only (After Build)
+```bash
+./run_video_editor.sh
 ```
 
 ### If you want to run commands manually inside the container:

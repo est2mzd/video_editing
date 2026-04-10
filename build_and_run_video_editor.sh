@@ -14,7 +14,12 @@ echo "ROOT_DIR  : $ROOT_DIR"
 
 echo "=== Step2: Build & Start Docker ==="
 cd "$SCRIPT_DIR/docker/vace"
+
+echo "=== Step2.1: Build Docker Image ==="
 ./build.sh
+echo "=== Step2.2: Remove Docker Container ==="
+./remove.sh
+echo "=== Step2.3: Start Docker Container ==="
 ./start.sh
 
 echo "=== Step3: Get container ==="
