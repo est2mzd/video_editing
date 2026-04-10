@@ -23,6 +23,7 @@ from postprocess.detectors import (  # noqa: E402
     get_sam_mask_from_box,
 )
 from utils.video_utility import load_video, show_before_after, write_video  # noqa: E402
+from normalize_target_for_functions import extract_effect_type  # noqa: E402
 
 
 @dataclass
@@ -52,14 +53,38 @@ class AddEffectConfig:
 def parse_add_effect_instruction(
     instruction: str,
 ) -> AddEffectInstruction:
-    """Extract target object, cv2-friendly effect type, and color."""
+    """Extract target object, cv2-friendly effect type, and color.
+    
+    Trial 12 改善: instruction から effect 種類を優先的に抽出
+    GT target は参照しない方針
+    """
     text = re.sub(r"\s+", " ", instruction.strip().lower())
+    
+    # === Trial 12: instruction から effect 種類を優先的に抽出 ===
+    effect_type = extract_effect_type(instruction)
+    how = "glow"  # デフォルト
+    if effect_type:
+        # effect_type を how にマッピング
+        effect_mapping = {
+            'glow': 'glow',
+            'lighting': 'brightness',
+            'motion_blur': 'blur',
+            'blur': 'blur',
+            'bloom': 'glow',
+            'fog': 'brightness',
+            'rain': 'brightness',
+            'particle': 'glow',
+            'lens_flare': 'glow',
+            'chromatic_aberration': 'glow',
+            'vignette': 'brightness',
+        }
+        how = effect_mapping.get(effect_type, 'glow')
 
     if "stage lighting" in text or "lighting decoration" in text:
         return AddEffectInstruction(
             target_object="stage lighting region",
-            grounding_target="upper scene",
-            how="stage_lighting",
+            grounding_target="lighting",
+            how="brightness",
             color="warm",
         )
 
@@ -83,22 +108,23 @@ def parse_add_effect_instruction(
         if "basketball player" in target:
             target = "basketball player"
 
-    how = "glow"
-    if "blur" in text or "blurry" in text:
-        how = "blur"
-    elif (
-        "bright" in text
-        or "brightness" in text
-        or "illuminate" in text
-    ):
-        how = "brightness"
-    elif (
-        "glow" in text
-        or "aura" in text
-        or "flames" in text
-        or "electric" in text
-    ):
-        how = "glow"
+    # === Trial 12: effect_type 優先の場合、既存の how 判定をスキップ ===
+    if not effect_type:
+        if "blur" in text or "blurry" in text:
+            how = "blur"
+        elif (
+            "bright" in text
+            or "brightness" in text
+            or "illuminate" in text
+        ):
+            how = "brightness"
+        elif (
+            "glow" in text
+            or "aura" in text
+            or "flames" in text
+            or "electric" in text
+        ):
+            how = "glow"
 
     color = None
     match = re.search(

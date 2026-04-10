@@ -10,7 +10,10 @@ import numpy as np
 from utils.video_utility import load_video, write_video
 from .add_effect import AddEffectConfig, run_add_effect_cv2
 from .add_object import AddObjectConfig, run_add_object_gdino_sam_cv2
-from .apply_style_ver5 import apply_style_video_foreground_background
+from .apply_style_ver6 import (
+    apply_style_video_v6,
+    extract_style_and_target,
+)
 from .change_color import (
     parse_color_change_instruction,
     run_change_color_gradual_pipeline,
@@ -91,9 +94,12 @@ def _run_apply_style(
     params: dict[str, Any],
     instruction: str,
 ) -> list[np.ndarray]:
-    style = str(params.get("style", params.get("style_name", "oil_painting")))
-    # apply_style はモジュール既定の person foreground を使う。
-    text_prompt = _target_to_prompt(str(params.get("target", "person")))
+    target_raw = params.get("target", None)
+    style, text_prompt = extract_style_and_target(
+        instruction=instruction,
+        target=str(target_raw) if target_raw is not None else None,
+        params=params,
+    )
 
     with tempfile.TemporaryDirectory(prefix="dispatch_style_") as tmp_dir:
         tmp = Path(tmp_dir)
@@ -101,7 +107,7 @@ def _run_apply_style(
         out_path = tmp / "output.mp4"
         h, w = frames[0].shape[:2]
         write_video(in_path, frames, 30.0, w, h)
-        apply_style_video_foreground_background(
+        apply_style_video_v6(
             in_path=in_path,
             out_path=out_path,
             style=style,
